@@ -174,7 +174,7 @@ path: %JAVA%/bin （子路径）
 //加上public后要求类名与文件名一致,demo.java,demo.class
 public class Demo {
     public static void main (String[] args) {
-        System.out.println("我真是太帅了！！！")
+        System.out.println("我真是太帅了！！！");
     }
 }
 ```
@@ -222,7 +222,7 @@ public class Demo {
 + 注解@interface；
 
 ```java
-class Demo {
+public class Demo {
     //源文件是存储在电脑硬盘中的文件，后缀名为.java
     public static void main (String[] args) {
     	    
@@ -254,7 +254,7 @@ class Demo {
 
 ​	6、javac,java的执行程序工作原理图：
 
-![](C:\Users\86180\Desktop\markdown笔记\typoraImg\java文件编译执行原理图.png)
+![](C:\Users\86180\Desktop\testGit\typoraImg\java文件编译执行原理图.png)
 
 
 ```java
@@ -276,7 +276,7 @@ public class Demo {
         
         float d = 3.4;
         //执行会报错double转化到float会有损失
-        //常量的存储形式是二进制形式存储的，系统为了保持精确程度，会默认给小数分配一个64bit的空间，这时在栈内存（开辟的是32bit的空间），所以存不下就会报错，解决float d = 3.4F；告诉计算机降低精度
+        //常量的存储形式是二进制形式存储的，系统为了保持精确程度，常量池会默认给小数分配一个64bit的空间，这时在栈内存（开辟的是32bit的空间），所以存不下就会报错，解决float d = 3.4F；告诉计算机降低精度
         long e = 2147483648;//2的32次方，报错：过大的整数，计算机会认为是你写错了，其实他内存有64bit，所以要告诉计算机我确实需要这么大的整数，long e = 2147483648L;告诉计算机我需要这么大的整数    
     }
 }
@@ -415,11 +415,11 @@ x = x + 2;//报错
 
       进制转化问题：
 
-      ![](C:\Users\86180\Desktop\markdown笔记\typoraImg\10进制转2进制.png)
+      ![](C:\Users\86180\Desktop\testGit\typoraImg\10进制转2进制.png)
 
       2进制转化为10进制：
 
-      > ^2^5 + 2^4 + 2^3 + 2^2 = 60
+      > 2^5 + 2^4 + 2^3 + 2^2 = 60
 
       我们为了便于记忆，将二进制分成小单元，进行记忆：
 
@@ -600,7 +600,7 @@ a = a^b;//0000 0010
              System.out.println("Summer");
       }else if (month >=9 ||  month <= 11 ) {
              System.out.println("Autumn");
-             }else {
+      }else {
                         System.out.println("Winter");
                     }
       ```
@@ -640,7 +640,7 @@ a = a^b;//0000 0010
 
       ```java
       //判断学生成绩所在区间
-      import java.util.Scaner;
+      import java.util.Scanner;
       public class Score {
           public static void main (String[] args) {
               Scanner input = new Scanner(System.in);
@@ -748,8 +748,8 @@ public class Array {
         String[] str;
         
         //静态初始化
-        int[] arr = new int[]{10, 20, 30}
-        int[] arr = {10, 20, 30, 40}
+        int[] arr = new int[]{10, 20, 30};
+        int[] arr = {10, 20, 30, 40};
         
         //取值（访问）
         int value = arr[0];
@@ -780,13 +780,16 @@ public class Array {
 
 ​	4）数组内部的存储类型可以是基本的，也可以是引用的数据类型
 
-![](C:\Users\86180\Desktop\markdown笔记\typoraImg\引用与基本数据类型存值.png)
+​	5）数组初始化时必须指定长度及内部存储元素类型
+
+![](C:\Users\86180\Desktop\testGit\typoraImg\引用与基本数据类型存值.png)
 
 ​	**小任务：**
 
 ​	*1.给定两个数组a{1,2,3,4} b{5,6,7,8}将两个数组内的元素进行互换*
 
 ```java
+//我的写法
 public class ChangeElem {
     public static void main (String[] args) {
         int[] a = {1, 2, 3, 4};
@@ -799,19 +802,39 @@ public class ChangeElem {
         }
     }
 }
+//老师写法
+public class Demo {
+    public static void main (String[] args) {
+        //1.利用中间变量交换
+        int a = {1,2,3,4};
+        int b = {5,6,7,8};
+        for(int i = 0;i < a.length; i++){
+            int x = a[i];
+            a[i] = b[i];
+            b[i] = x;
+        }
+        System.out.print(a);//[I015db9742 hashCode
+        
+        //2.交换地址(交换两个数组中存的堆内存首索引)
+        int[] temp = a;
+        a = b;
+        b = temp;  
+    }
+}
 ```
 
-​	*2.给定一个数组a{1,2,3,4,5,6}将数组中元素头尾对应位置互换*
+​	*<font color="yellow">2.给定一个数组a{1,2,3,4,5,6}将数组中元素头尾对应位置互换</font>*
 
 ```java
 public class Demo {
     public static void main (String[] args) {
         int[] a = {1,2,3,4,5,6};
-        a[a.length - 1] = a[0]^a[a.length - 1];
-        a[0] = a[0]^a[a.length - 1];
-        a[a.length - 1] = a[0]^a[a.length - 1];
-        System.out.println(a[0]);
-        System.out.println(a[a.length - 1]);
+        //a.length/2很精妙
+    	for (int i = 0; i < a.length/2; i++){
+            int x = a[i];
+            a[i] = a[a.length - 1 - i];
+            a[a.length - 1 - i] = x;
+        }
     }
 }
 ```
@@ -826,11 +849,11 @@ public class Demo {
         int[] a = {1,2,3};
         int[] b = {4,5};
         int len = a.length + b.length;
-        int[] c = new int[len];
-        for(int i = 0; i < len; i++){
+      	int[] c = new int[len];
+        for(int i = 0;i < len ; i++) {
             if(i < a.length) {
                 c[i] = a[i];
-            }else {
+            }else{
                 c[i] = b[i - a.length];
             }
         }
@@ -861,7 +884,7 @@ public class ArrayDemo {
             if(j <= index) {
                 arr1[j] = arr[j];
             }else {
-                //用索引减去上一个数组的长度，后面就能创建新数组
+        //用索引减去上一个数组的长度，后面就能创建新数组
                 arr2[j - index - 1] = arr[j];
             }
         }
@@ -906,16 +929,22 @@ public class ArrayDemo {
     public static void main (String[] args) {
         int[] arr = {1,2,3,0,0,4,5,0,6,0,7};
         //注意要去掉0，去掉0后的长度是7
-        int[] newArr = new int[7];
         int count = 0;
-        for(int i = 0; i < arr.length ; i++) {
-            if(arr[i] == 0) {
+        for(int val : arr){
+            if(val == 0){
                 count++;
-                continue;
-            }else {
-                newArr[i - count] = arr[i];
             }
         }
+        int index = 0;
+        int[] newArr = new int[arr.length - count];
+        for(int i = 0; i < arr.length ; i++) {
+            if(arr[i] != 0){
+                newArr[index] = arr[i];
+                index++;
+            }
+        }
+        //清除数组arr在栈内存中的堆内存地址，内存会被GC（garbage collection）回收
+        arr = null;
         for(int j : newArr) {
             System.out.println(j);
         }
@@ -925,7 +954,551 @@ public class ArrayDemo {
 
 
 
-​	*7.数组元素的排序（冒泡、快速、选择、希尔...）*
+​	*7、找到2-100之间的素数*
 
-​	*8.用户的登录认证* 
+```java
+public class Demo {
+    public static void main (String[] args) {
+        //素数只能被1和自身整除的数
+        int[] arr = new int[30];
+        int count = 0;
+        for(int i = 2; i <= 100; i++){
+            boolean b = false;
+            for(int j = 2; j <= Math.sqrt(i); j++){
+                if(i%j == 0){
+                    b = true;
+                    break;
+                }
+            }
+            if(!b){
+                arr[count] = i;
+                count++;
+            }
+        }
+        int[] newArr = new int[count];
+        int index = 0;
+        for(int j = 0; j <= count; j++){
+           newArr[index] = arr[j];
+        }
+        for(int k : arr){
+            System.out.println(k);
+        }
+    }
+}
+```
 
+
+
+​	*8.数组元素的排序（冒泡、快速、选择、希尔...）*
+
+```java
+public class Demo {
+    public static void main (String[] args) {
+        //冒泡排序1
+        int[] arr = [1,2,4,3,5,6,1];
+        //控制比较轮数
+        for(int i = 0; i < arr.length - 1; i++){
+            //控制每次比较的次数,每次确定一个最大的数
+            for(int j = 0; j < arr.length - i - 1; j++){
+                if(arr[j] > arr[j+1]){
+                    arr[j] = arr[j]^arr[j+1];
+                    arr[j+1] = arr[j]^arr[j+1];
+                    arr[j] = arr[j]^arr[j+1];
+                }
+            }
+        }
+    }
+}
+
+public class Demo {
+    public static void main (String[] args) {
+        int[] arr = [1,2,4,5,3,2];
+        for(int i = 0; i < arr.length - 1; i++){
+            for(int j = arr.length - 1; j >= i + 1 ; j--){
+                if(arr[j] < arr[j-1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j-1];
+                    arr[j-1] = temp;
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+​	*9.用户的登录认证* （用数组当做数据库）
+
+```java
+import java.util.Scanner;
+public class Demo {
+    public static void main (String[] args) {
+        //1.注册时将用户名和密码保存到一个数组中
+        //2.登录时将用户输入与数组中的数据进行比对
+        //先输入账号，因为账号时唯一存在的（主键约束primary key）
+        String[] userName = {"陈祥","朱敏","夹克"};
+        int[] password = {666,555,888};
+        System.out.println("请输入账号:");
+        Scanner input  = new Scanner(System.in);
+        String user = input.nextLine();
+        System.out.println("请输入密码:");
+        int pw = input.nextInt();
+        boolean key = true;
+        for(int i = 0; i < userName.length; i++){
+            if(userName[i].equals(user)){
+                if(password[i] == pw){
+                   key = false;
+                   System.out.println("登录成功！~~~"); 
+                }
+                //提升性能，终止循环
+                break;
+            }
+        }
+        if(key){
+            //防止提示信息太全，对方知道用户名后破解密码
+            System.out.println("用户名或密码错误，请重新核对.");
+        }
+    }
+}
+```
+
+
+
+​	*10、多维数组*
+
+​	数组：用来存储一组相同类型数据的容器（引用数据类型，存储元素可以是借基本数据类型和引用数据类型）
+
+​	二维数组：一个存储多个小数组的数组
+
+```java
+public class Demo {
+    public static void main (String[] args) {
+        //1.多维数组的定义/声明
+        //2.数组初始化（静态/动态）
+        int[][] arr = {{1,2},{3,4,5},{6,7}};
+        //3.数组元素的访问
+        int[] oArr = arr[0];//oArr是hashCode的值
+        oArr[0];//1，arr[0][0]
+        //4.数组元素的遍历/轮询
+        for(int i = 0; i < arr.length; i++){
+            for(int j = 0; j < arr[i].length; j++){
+                System.out.println(arr[i][j]);
+            }
+        }
+        //增强for循环遍历多维数组
+        for(int[] son : arr){
+            for(int val : son){
+                System.out.println(val);
+            }
+        }
+        
+        int[][] array = new int[3][];
+        //报错，空指针异常
+        
+        //三维数组：三维数组实际中少见，因为东西主要存在对象里
+        int[][][] array = {{1,2},{3,4},{2,6}},{{5,6},{7,8}},{{9,10}}};
+    }
+}
+```
+
+​	引用类型在内存中的存储结构：
+
+![](C:\Users\86180\Desktop\testGit\typoraImg\二维数组.png)
+
+```java
+public class Demo {
+    public static void main (String[] args) {
+        //面试题
+        int[][] array = new int[3][2];
+        array[0][0] = 10;
+        array[0][1] = 20;
+        array[1] = array[0];
+        array[0] = new int[4];
+        array[1][0] = 100;
+        System.out.println(array[0][0]);
+        //输出：0
+    }
+}
+```
+
+​	常见的运行时异常：
+
+​		1）InputMisMatchException：出入类型不匹配
+
+​		2）ArrayIndexOutOfBoundsException：数组索引越界
+
+​		3）NegativeArraySizeException：数组长度不合法（长度出现负数）
+
+​		4）NullPointerException：空指针异常（拿来使用会出错，最容易找到，也是最难找的）
+
+​	练习：模拟每个星期教室每一列的同学换位置
+
+```java
+import java.util.Scanner;
+public class ArrayDemo {
+    public static void main (String[] args) {
+        int[][] array = {{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}};
+        //每周最后一列到第一，其他三列依次换位置
+        Scanner input = new Scanner(System.in);
+        System.out.println("请输入周数：");
+        int week  = input.nextInt();
+        //每四周一个循环
+        //交换位置 
+        for(int i = 0; i < week%4 ; i++){
+             //后面的元素前移
+             int[] x = array[0];
+             for(int j = 0; j < array.length - 1; j++){
+				array[j] = array[j+1];
+			}
+             array[array.length - 1] = x;
+        }
+        /* //前面的元素后移
+        for(int i = 0; i < week%4; i++){
+        	int[] x = array[array.length - 1];
+        	for(int j = array.length - 1; j > 0; j--){
+        		array[j] = array[j-1];
+        		}
+        	array[0] = x;
+        }
+        */
+        for(int[] arr : array){
+            for(int val : arr) {
+                System.out.println(val);
+            }
+            System.out.println("~~~~~~~");
+        }
+        }
+}
+```
+
+​	main方法：
+
+​	1）public：访问权限修饰符，共有的，任何地方可以访问到
+
+​	2）static：特征修饰符，静态的，有且只有一份
+
+​	3）void：方法执行完没有返回值，是一个关键字
+
+​	4）main：方法名字，主要的，主方法不是我们调用的，是JVM虚拟机启动的时候，虚拟机调用的
+
+​	5）args：可以传参
+
+```java
+public class Demo {
+    public static void main (String[] args) {
+        System.out.println(args.length);
+        for(String val : args){
+            System.out.println(val);
+            //输出：3，hello，world，myJava
+        }
+    }
+}
+//cmd传参： java Demo "hello" "world" "myJava"
+```
+
+
+
+##### 12、Java编辑器的安装	
+
+> 使用编辑器：提高编码效率
+>
+> **1、**Eclipse（免费）、MyEclipse（付费编辑器）
+>
+> 电脑上搭建环境JDK--->配置环境变量--->下载应用程序(www.eclipse.org) --->压缩包，解压，运行eclipse.exe
+>
+> **2、**破解inteliJ IDEA（功能强大的付费编辑器www.jetbrains.com）
+>
+> *1）*Dowload下载Java
+>
+> *2）*根据系统选择系统版本：Windows
+>
+> *3）*ultimate旗舰版 community社区版
+>
+> *4）*安装（注意选择64bit）
+>
+> *5）*勾选Run InteliJ IDEA
+>
+> *6）*需要注册信息（idea.lanyus.com）
+>
+> *7）*将[^0.0.0.0 account.jetbrains.com]和[^0.0.0.0 www.jetbrains.com]添加到hosts中
+>
+> ​	此电脑/windows/System32/drivers/etc/hosts
+>
+> ​	 将网站中的注册码粘贴到我们勾选的第二种方式下，字体为绿色，就能正常使用了
+>
+> 8）如果此方法还是不行，下载网站提供的安装包下载地址（可能存在风险）https://idea.lanyus.com/jar/JetbrainsIdlesCrack-3.4-release-enc.jar
+>
+> ​	将这个安装包放在D:\IntelliJ IDEA 2019.1.2\bin(启动程序的文件夹)文件夹下
+>
+> ​	修改两个文件：idea.exe.vmoptions ，idea64.exe.vmoptions（使用记事本打开），最后一行添加[^-javaagent:JetbrainsIdlesCrack-3.4-release-enc.jar]
+>
+> *9）*利用编辑器打开，直接next啥都不勾选（没有过JDK下载JDK，然后new找到所在的文件夹）
+>
+> *10）*在src文件夹右键new中选择java class
+>
+> 卸载：不要自己直接卸载，找D:\IntelliJ IDEA 2019.1.2\bin\Uninstall.exe
+>
+> win + r 输入regedit打开注册表，寻找idea的残留然后删除
+
+##### 13、Java面向对象的编程思想
+
+​	面向过程：大象装冰箱，只能装大象，代码冗余，复用性差；
+
+​	面向对象：
+
+​		*1）*可以装任何符合要求的动物，复用性强，比如开门，关门操作都是一样的。引入开门、关门的代码，然后我们只需要写装狮子等其他动物的代码。
+
+​		*2）*解决问题的时候按照现实生活中的规律来思考问题，考虑问题的过程中，有几个实体参与进来。
+
+​		*3）*类：用来描述一类具有相同特征（属性）和行为（方法）的事物。
+
+​		*4）*对象：具体的事物
+
+​		*5）*计算机中利用面向对象思想来做事
+
+​			先定义一个类（有属性），在描述的类中擦黄建一个具体的个体出来，个体来做事（方法/属性）。
+
+```java
+public class Demo {
+    public static void main (String[] args) {
+        //修饰符 数据类型 属性名字 值
+        Person per = new Person();
+        per.name = "zhumin";
+        per.gender = "female";
+        per.age = 18;
+        System.out.println("My name is "+per.name+",I am "+per.age+" years old,I am a "+per.gender);
+    }
+    	Person pe2 = per;
+    	per2.name = "bessi";
+    	per2.age = 22;
+    	per2.gender = "female or male?";
+}
+
+public class Person {
+    String name;
+    String gender;
+    int age;
+}
+```
+
+​	以上代码的流程图：
+
+​	JVM根据项目中的类在方法区创建一个类模板，JVM会自己将主方法塞进执行栈，new的过程在堆内存中创建对象，对象的属性根据模板来画（刚开始默认值name:null,age:0,gender:null），通过方法完成我们想要的事情。
+
+![](C:\Users\86180\Desktop\testGit\typoraImg\类创建对象原理图.png)
+
+​	**方法介绍**：
+
+```java
+public class Person {
+    public String name;
+    public int age;
+    public String gender;
+    //无参数无返回值的方法
+    public void sleep () {
+        System.out.println("睡觉~~~");
+    }
+    //无参数，有返回值
+    public String sayName () {
+        return this.name;
+    }
+    //有参数，无返回值
+    public void eat (String food,int count) {
+        System.out.println("吃了"+count+"碗"+food);
+    }
+    //有参数有返回值
+    public int buyDrinks (String drinkName,int count) {
+        int price = 0;
+        if(drinkName.equals("GreanTea")){
+            price = 5;
+        }else if(drinkName.equals("RedTea")){
+            price = 3;
+        }else{
+            System.out.println("drink type is not exist...");
+        }
+        return count*price;
+    }
+}
+
+```
+
+​	设计一个方法：画星星
+
+```java
+//画星星方法
+public void drawStar (int line) {
+    /*输入4，打出以下图形：
+       *
+      **
+     ***
+    ****
+    */
+    for(int i = 0; i < line; i++){
+        for(int j = 0; j < line - 1 - i;j++){
+            System.out.print(" ");
+        }
+        for(int k = 0; k <= i; k++){
+            System.out.print("*");
+        }
+        System.out.println();
+    }
+}
+
+//通用，int line控制行数，boolean dir控制方向
+public void drawStar (int line,boolean dir) {
+    //dir为true，左边开始画星星
+    if(dir){
+        //控制行数
+        for(int i = 0; i < line; i++){
+            //控制星星
+            for(int j = 0; j <= i; j++){
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+    }else{
+        for(int k = 0; k < line; k++){
+            //控制空格
+            for(int l = 0; l < line - 1 - i; l++){
+                System.out.print(" ");
+            }
+            //控制星星
+            for(int m = 0; m <= k; m++){
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+    }
+}
+
+//优化
+public void drawStar (int line,boolean dir) {
+    for(int i = 0; i < line; i++){
+        if(!dir){
+            for(int j = 0; j < line - 1 - i; j++){
+                System.out.print(" ");
+            }
+        }
+        for(int j = 0; j <= i; j++){
+            System.out.print("*");
+        }
+        System.out.println();
+    }
+}
+```
+
+​	小任务：
+
+​	*1.反向三角形（既可左，又可以偏右）*
+
+​	*2、用来交换两个数组元素 a{1,2,3,4} b{5,6,7,8}*
+
+```java
+	//交换数组元素a{1,2,3,4} b{5,6,7,8}
+    public void exchangeElem (int[] arr1, int[] arr2){
+        for(int i = 0; i < arr1.length; i++){
+            arr1[i] = arr1[i]^arr2[i];
+            arr2[i] = arr1[i]^arr2[i];
+            arr1[i] = arr1[i]^arr2[i];
+        }
+        for(int val : arr1){
+            System.out.println("arr1:"+val);
+        }
+        for(int val : arr2){
+            System.out.println("arr2:"+val);
+        }
+    }
+//缺点：1.循环方式交换数组元素，性能比较慢
+//2.交换的时候要保证两个数组元素长度一致
+public void changeElem (int[] arr1,int[] arr2) {
+    int[] temp = arr1;
+    arr1 = arr2;
+    arr2 = temp;
+}
+```
+
+
+
+​	*3、用来交换一个数组（头尾互换）*
+
+​	*4、用来寻找给定元素是否在数组内存在*
+
+​	*5、合并两个数组*
+
+​	*6、用来将一个数组按照最大值位置拆分*
+
+​	*7、用来去掉数组中得0元素*
+
+​	*8、用来存储给定范围内的素数（2-100）*
+
+​	*9、用来给数组元素排序，既能升序，又能降序*
+
+​	*10、实现用户登录认证*
+
+​	**总结：**
+
+> 类：抽象笼统的概念，用来描述一组相同的特征和行为
+>
+> 属性：静态描述类的特征
+>
+> 属性的定义：权限修饰符 【特征修饰符】 属性类型 属性名字 【=值】
+>
+> 方法：动态描述类的行为
+>
+> 方法的定义：权限修饰符 【特征修饰符】 返回值类型 方法名字  (参数名字) 【抛出异常】【{方法执行体}】
+>
+> 方法的主要结构：方法的参数列表（行为发生的条件），方法的返回值类型（行为发生后得到的结果）
+>
+> 类的使用：类描述好后，不能直接用来执行，需要通过new的方式创建一个实例，然后才能调用类的方法（执行一次特定行为）和属性（存值和取值）
+>
+> **<font color="red">注意：方法设计很重要</font>**
+
+```java
+publc class Test {
+    public int changeNum (int x) {
+        x = 100;
+        return x;
+    }
+    public static void main (String[] args) {
+    //隐藏过程：加载类模板（此处为Test模板）的过程
+    Test t = new Test();
+    int a = 1;
+    a = t.changeNum(a); //10  
+    //堆内存中开辟空间,方法存在对象的内部空间中
+    //方法执行时会压到栈内存中执行，并根据传参和内部定义的变量开辟临时空间
+    //方法执行完毕后临时空间销毁
+    }
+}
+```
+
+​	方法执行原理图：
+
+![](C:\Users\86180\Desktop\testGit\typoraImg\方法执行内存原理.jpg)
+
+**形参和实参：**
+
+> ```java
+> public class Test {
+>     public void changeArray (int[] x) {
+>     	x[0] = 10;
+> 	}
+> 	public static void main (String[] args) {
+>         //加载Test的类模板
+>     	Test t = new Test();
+>         //栈中开辟变量t，保存的是指向对象的地址
+>         int[] arr = {1,2,3,4};
+>         //方法放到栈中执行时，开辟临时内存空间
+>         //将栈中的arr地址复制一份到x，指向同一个数组
+>         //更改堆内存中第一个元素的值为10
+>         t.changeArray(arr);
+>         System.out.println("arr[0]:"+arr[0]);//arr[0]:10
+> 	}
+> }
+> ```
+>
+> 形参：方法执行时的临时变量空间
+>
+> 实参：方法调用时会将实参的内容传递给形参（<font color="red">常量传递的是值，引用数据类型传递的是值</font>）
+
+  
