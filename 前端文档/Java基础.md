@@ -96,7 +96,9 @@
   - lib文件夹：包含了写好的Java类
   - src.zip：源代码
 
-##### 7、如何编写一段Java源代码（Java文件就是.java）
+##### 7、如何编写一段Java源代码
+
++ Java文件就是.java
 
 + 利用JDK包中提供的工具，进行代码的编译及执行
 
@@ -142,10 +144,10 @@ class Demo {
             //String[] args：arguments参数列表
             
             //输出不换行
-            System.out.print("I am handsome");
+            System.out.print("I am hansome");
             //输出后换行
-            System.out.println("I am handsome 2");
-            System.out.println("I am handsome 3");
+            System.out.println("I am hansome 2");
+            System.out.println("I am hansome 3");
             //输出结果：I am hansomeI am hansome 2 /n
 			//I am hansome 3 /n
         }
@@ -723,13 +725,12 @@ a = a^b;//0000 0010
         for(int i = 1;i < 40; i++){
             if(i*2 + (50-i)*4 == 160) {
                 System.out.print(i);//20
-                break;
             }
         }
-```
+        ```
+
         
-      
-  
+
 + 扩展："=="比较的是引用地址，引用数据类型比较相等应该用equals方法
 
 ##### 11、Java数组的使用
@@ -1242,264 +1243,3 @@ public class Demo {
 >
 > win + r 输入regedit打开注册表，寻找idea的残留然后删除
 
-##### 13、Java面向对象的编程思想
-
-​	面向过程：大象装冰箱，只能装大象，代码冗余，复用性差；
-
-​	面向对象：
-
-​		*1）*可以装任何符合要求的动物，复用性强，比如开门，关门操作都是一样的。引入开门、关门的代码，然后我们只需要写装狮子等其他动物的代码。
-
-​		*2）*解决问题的时候按照现实生活中的规律来思考问题，考虑问题的过程中，有几个实体参与进来。
-
-​		*3）*类：用来描述一类具有相同特征（属性）和行为（方法）的事物。
-
-​		*4）*对象：具体的事物
-
-​		*5）*计算机中利用面向对象思想来做事
-
-​			先定义一个类（有属性），在描述的类中擦黄建一个具体的个体出来，个体来做事（方法/属性）。
-
-```java
-public class Demo {
-    public static void main (String[] args) {
-        //修饰符 数据类型 属性名字 值
-        Person per = new Person();
-        per.name = "zhumin";
-        per.gender = "female";
-        per.age = 18;
-        System.out.println("My name is "+per.name+",I am "+per.age+" years old,I am a "+per.gender);
-    }
-    	Person pe2 = per;
-    	per2.name = "bessi";
-    	per2.age = 22;
-    	per2.gender = "female or male?";
-}
-
-public class Person {
-    String name;
-    String gender;
-    int age;
-}
-```
-
-​	以上代码的流程图：
-
-​	JVM根据项目中的类在方法区创建一个类模板，JVM会自己将主方法塞进执行栈，new的过程在堆内存中创建对象，对象的属性根据模板来画（刚开始默认值name:null,age:0,gender:null），通过方法完成我们想要的事情。
-
-![](C:\Users\86180\Desktop\testGit\typoraImg\类创建对象原理图.png)
-
-​	**方法介绍**：
-
-```java
-public class Person {
-    public String name;
-    public int age;
-    public String gender;
-    //无参数无返回值的方法
-    public void sleep () {
-        System.out.println("睡觉~~~");
-    }
-    //无参数，有返回值
-    public String sayName () {
-        return this.name;
-    }
-    //有参数，无返回值
-    public void eat (String food,int count) {
-        System.out.println("吃了"+count+"碗"+food);
-    }
-    //有参数有返回值
-    public int buyDrinks (String drinkName,int count) {
-        int price = 0;
-        if(drinkName.equals("GreanTea")){
-            price = 5;
-        }else if(drinkName.equals("RedTea")){
-            price = 3;
-        }else{
-            System.out.println("drink type is not exist...");
-        }
-        return count*price;
-    }
-}
-
-```
-
-​	设计一个方法：画星星
-
-```java
-//画星星方法
-public void drawStar (int line) {
-    /*输入4，打出以下图形：
-       *
-      **
-     ***
-    ****
-    */
-    for(int i = 0; i < line; i++){
-        for(int j = 0; j < line - 1 - i;j++){
-            System.out.print(" ");
-        }
-        for(int k = 0; k <= i; k++){
-            System.out.print("*");
-        }
-        System.out.println();
-    }
-}
-
-//通用，int line控制行数，boolean dir控制方向
-public void drawStar (int line,boolean dir) {
-    //dir为true，左边开始画星星
-    if(dir){
-        //控制行数
-        for(int i = 0; i < line; i++){
-            //控制星星
-            for(int j = 0; j <= i; j++){
-                System.out.print("*");
-            }
-            System.out.println();
-        }
-    }else{
-        for(int k = 0; k < line; k++){
-            //控制空格
-            for(int l = 0; l < line - 1 - i; l++){
-                System.out.print(" ");
-            }
-            //控制星星
-            for(int m = 0; m <= k; m++){
-                System.out.print("*");
-            }
-            System.out.println();
-        }
-    }
-}
-
-//优化
-public void drawStar (int line,boolean dir) {
-    for(int i = 0; i < line; i++){
-        if(!dir){
-            for(int j = 0; j < line - 1 - i; j++){
-                System.out.print(" ");
-            }
-        }
-        for(int j = 0; j <= i; j++){
-            System.out.print("*");
-        }
-        System.out.println();
-    }
-}
-```
-
-​	小任务：
-
-​	*1.反向三角形（既可左，又可以偏右）*
-
-​	*2、用来交换两个数组元素 a{1,2,3,4} b{5,6,7,8}*
-
-```java
-	//交换数组元素a{1,2,3,4} b{5,6,7,8}
-    public void exchangeElem (int[] arr1, int[] arr2){
-        for(int i = 0; i < arr1.length; i++){
-            arr1[i] = arr1[i]^arr2[i];
-            arr2[i] = arr1[i]^arr2[i];
-            arr1[i] = arr1[i]^arr2[i];
-        }
-        for(int val : arr1){
-            System.out.println("arr1:"+val);
-        }
-        for(int val : arr2){
-            System.out.println("arr2:"+val);
-        }
-    }
-//缺点：1.循环方式交换数组元素，性能比较慢
-//2.交换的时候要保证两个数组元素长度一致
-public void changeElem (int[] arr1,int[] arr2) {
-    int[] temp = arr1;
-    arr1 = arr2;
-    arr2 = temp;
-}
-```
-
-
-
-​	*3、用来交换一个数组（头尾互换）*
-
-​	*4、用来寻找给定元素是否在数组内存在*
-
-​	*5、合并两个数组*
-
-​	*6、用来将一个数组按照最大值位置拆分*
-
-​	*7、用来去掉数组中得0元素*
-
-​	*8、用来存储给定范围内的素数（2-100）*
-
-​	*9、用来给数组元素排序，既能升序，又能降序*
-
-​	*10、实现用户登录认证*
-
-​	**总结：**
-
-> 类：抽象笼统的概念，用来描述一组相同的特征和行为
->
-> 属性：静态描述类的特征
->
-> 属性的定义：权限修饰符 【特征修饰符】 属性类型 属性名字 【=值】
->
-> 方法：动态描述类的行为
->
-> 方法的定义：权限修饰符 【特征修饰符】 返回值类型 方法名字  (参数名字) 【抛出异常】【{方法执行体}】
->
-> 方法的主要结构：方法的参数列表（行为发生的条件），方法的返回值类型（行为发生后得到的结果）
->
-> 类的使用：类描述好后，不能直接用来执行，需要通过new的方式创建一个实例，然后才能调用类的方法（执行一次特定行为）和属性（存值和取值）
->
-> **<font color="red">注意：方法设计很重要</font>**
-
-```java
-publc class Test {
-    public int changeNum (int x) {
-        x = 100;
-        return x;
-    }
-    public static void main (String[] args) {
-    //隐藏过程：加载类模板（此处为Test模板）的过程
-    Test t = new Test();
-    int a = 1;
-    a = t.changeNum(a); //10  
-    //堆内存中开辟空间,方法存在对象的内部空间中
-    //方法执行时会压到栈内存中执行，并根据传参和内部定义的变量开辟临时空间
-    //方法执行完毕后临时空间销毁
-    }
-}
-```
-
-​	方法执行原理图：
-
-![](C:\Users\86180\Desktop\testGit\typoraImg\方法执行内存原理.jpg)
-
-**形参和实参：**
-
-> ```java
-> public class Test {
->     public void changeArray (int[] x) {
->     	x[0] = 10;
-> 	}
-> 	public static void main (String[] args) {
->         //加载Test的类模板
->     	Test t = new Test();
->         //栈中开辟变量t，保存的是指向对象的地址
->         int[] arr = {1,2,3,4};
->         //方法放到栈中执行时，开辟临时内存空间
->         //将栈中的arr地址复制一份到x，指向同一个数组
->         //更改堆内存中第一个元素的值为10
->         t.changeArray(arr);
->         System.out.println("arr[0]:"+arr[0]);//arr[0]:10
-> 	}
-> }
-> ```
->
-> 形参：方法执行时的临时变量空间
->
-> 实参：方法调用时会将实参的内容传递给形参（<font color="red">常量传递的是值，引用数据类型传递的是值</font>）
-
-  
