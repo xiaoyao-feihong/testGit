@@ -726,11 +726,11 @@ a = a^b;//0000 0010
                 break;
             }
         }
-```
-        
-      
-  
+        ```
+
 + 扩展："=="比较的是引用地址，引用数据类型比较相等应该用equals方法
+
+  
 
 ##### 11、Java数组的使用
 
@@ -747,31 +747,37 @@ public class Array {
         int[] arr;
         char[] charArr;
         String[] str;
-        
-        //静态初始化
-        int[] arr = new int[]{10, 20, 30};
-        int[] arr = {10, 20, 30, 40};
-        
-        //取值（访问）
-        int value = arr[0];
-        System.out.println(value);//10
-        arr[6];
-        //ArrayIndexOutOfBoundsException数组索引越界
-        
-        //遍历JDK1.5版本之后新特性，增强for循环，forEach
-        for(int val : arr){
-            //只能取值，不能存值
-            System.out.prinln(val);//10,20,30,40
-        }
-        
-        //动态初始化
-        int[] arr = new int[5];//定义数组长度为5
-        //整数默认值为0，浮点型默认值为0.0，char默认为0，看不到 String默认为null Boolean 默认为false
-    }
-}
 ```
 
-​	基本数据类型与引用数据类型的区别：
+​        
+
+```java
+    //静态初始化
+    int[] arr = new int[]{10, 20, 30};
+    int[] arr = {10, 20, 30, 40};
+    
+    //取值（访问）
+    int value = arr[0];
+    System.out.println(value);//10
+    arr[6];
+    //ArrayIndexOutOfBoundsException数组索引越界
+    
+    //遍历JDK1.5版本之后新特性，增强for循环，forEach
+    for(int val : arr){
+        //只能取值，不能存值
+        System.out.prinln(val);//10,20,30,40
+    }
+    
+    //动态初始化
+    int[] arr = new int[5];//定义数组长度为5
+    //整数默认值为0，浮点型默认值为0.0，char默认为0，看不到 String默认为null Boolean 默认为false
+}
+```
+}
+
+​	
+
+基本数据类型与引用数据类型的区别：
 
 ​	1）数组是一个引用数据类型
 
@@ -816,6 +822,8 @@ public class Demo {
         }
         System.out.print(a);//[I015db9742 hashCode
         
+```
+
         //2.交换地址(交换两个数组中存的堆内存首索引)
         int[] temp = a;
         a = b;
@@ -826,7 +834,7 @@ public class Demo {
 
 ​	*<font color="yellow">2.给定一个数组a{1,2,3,4,5,6}将数组中元素头尾对应位置互换</font>*
 
-```java
+​```java
 public class Demo {
     public static void main (String[] args) {
         int[] a = {1,2,3,4,5,6};

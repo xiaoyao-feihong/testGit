@@ -665,7 +665,7 @@ public class ArrayBox {
 
     //此方法用来返回新空间的数组
     private int[] grow (int[] arr) {
-        int[] newArr = new int[this.count + arr.length];
+        int[] newArr = new int[this.count + arr.length] ;
         return newArr;
     }
 
@@ -1164,7 +1164,7 @@ public class Functions {
 
 
 
-​	默认不写 	默认的，同包
+​	默认不写 	默认的，同包(跨包，子类也无法使用方法)
 
 ​	`private`		私有的，本类
 
@@ -1278,8 +1278,8 @@ public final class Demo {}
 //static final的应用
 public class BookStore {
     private static final int BOOKSTORE_ADMIN = 0;
-    private static final int BOOKSTORE_VIP = 0;
-    private static final int BOOKSTORE_NORMAL = 0;
+    private static final int BOOKSTORE_VIP = 1;
+    private static final int BOOKSTORE_NORMAL = 2;
     public void buyBooks (float price,int identity){
         switch(identity){
             case BOOKSTORE_ADMIN:
@@ -1395,7 +1395,7 @@ public class Singleton {
     //1.让构造方法私有：保证外面不能随意创建对象
     private Singleton () {}
     //2.只存在一份且不允许更改
-    private static Singleton singleton = new Singleton();
+    private static final Singleton singleton = new Singleton();
     //3.提供一个获取单个对象的方法
 
     public static Singleton getSingleton () {
@@ -1507,7 +1507,7 @@ public abstract A implements B,C {}
 
 圆环链表
 
-<font color="red"><strong>数组和链表的使用场景：使用数组，需要不断插入，删除操作，使用链表</strong></font>
+<font color="red"><strong>数组和链表的使用场景：需要不断插入，删除操作，使用链表</strong></font>
 
 **链表图：**
 
@@ -1642,7 +1642,7 @@ public abstract class AbstractBox implements Box {
         //抛出自定义异常
     }
 }
-public class ABox {
+public class ABox extends AbstractBox {
     //只需要重写add和get
     public void add(){}
     public void get(){}
@@ -1850,3 +1850,81 @@ public class Test {
 */
 ```
 
++ ###### 内部类
+
+  内部类：指的是Java中可以将一个类定义在另一个类的内部
+
+  
+
+  特点：
+
+  内部类可以定义在类的内部（与类的成员一致）
+
+  内部类可以定义在方法/块内部（与类成员相差一个层次，方法的局部变量一个层次）
+
+  若想要在内部类中通过对象.调用外部类成员写法：外部类.this.外部类成员
+
+  
+
+  划分：
+
+  1）成员内部类创建
+
+  `Demo d = new Demo();d.new InnerDemo()`;
+
+  `Demo.InnerDemo inner = new Demo.InnerDemo();`
+  
+  2）匿名内部类
+  
+  ```java
+  public interface Demo {
+      public abstract void test();
+  }
+  //让抽象方法也可以new,匿名类内部没有构造方法，也不能用任何修饰符修饰
+  Demo d = new Demo(){
+      public void test () {}
+  };
+  ```
+  
+  3）静态内部类
+  
+  
+  
+  
+  
+  优点：
+  
+  省略一个.java的文件，内部类可以使用外部类的属性和方法（不能使用this调用外部类的方法，因为this始终指向调用的对象）
+
+```java
+  public class Demo {
+      private String name = "minmin";
+      //成员内部类
+      public class InnerDemo {
+          private String name = "chen";
+          public void test () {
+              //调用外部重名的属性,方法
+              System.out.println(Demo.this.name);
+              
+ //局部内部类，不能用权限修饰符，特征修饰符只能使用abstract和final
+              //局部内部类命名规则，Demo$1InnerFunctionClass
+              //局部内部类使用的变量只能是final修饰
+              class InnerFunctionClass {
+                  
+              }
+          }
+      }
+  }
+
+import 包名.Demo.InnerDemo;
+public class Test {
+    public static void main (String[] args){
+        //使用点的方式调用
+        //不导包的写法Demo.InnerDemo innerdemo = Demo.new InnerDemo();
+        InnerDemo id = new InnerDemo();
+        //匿名内部类
+    }
+}
+```
+
+  
