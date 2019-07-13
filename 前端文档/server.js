@@ -1,1 +1,0 @@
-console.log('my first try on new computer for Git')

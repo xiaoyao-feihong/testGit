@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        function myMap() {
+            //规定桶的长度为8
+            this.bucketLength = 8
+            this.init()
+        }
+        myMap.prototype.init = function () {
+            //初始化一个桶
+            this.bucket = new Array(this.bucketLength)
+            for (let i = 0; i < this.bucket.length; i++) {
+                this.bucket[i] = {
+                    type: 'bucket_' + i,
+                    next: null
+                }
+            }
+        }
+        myMap.prototype.makeHash = function (key) {
+            //哈希算法：范围限定[0,8) 重复算值固定
+            let hash = 0
+            if (typeof key !== 'string') {
+                //判断数字类型，将NaN区分开
+                if (typeof key ===  'number') {
+                    //Object.is()可以判断NaN，原理是NaN + '' === 'NaN'，严格相等
+                    hash = Object.is(key, NaN) ? 0 : key;
+                }
+        //判断对象类型
+        else if (typeof key === 'object') {
+                    //{} [] null
+                    hash = 1
+                }
+                //判断布尔值
+                else if (typeof key === 'boolean') {
+                    hash = Number(key)
+                } else {
+                    //undefined和function
+                    hash = 2
+                }
+            } else {
+                //string类型 
+                //长度大于等于3，前三个字符ASCII累加
+                for (let i = 0; i < 3; i++) {
+                    //防止字符串太小报错进行存在的判断
+                    hash += key[i] ? key[i].charCodeAt() : 0;
+                }
+            }
+            //让hash在一个0-8的范围
+            return hash % 8;
+        }
+
+        //查找链表,进行值得设置
+        myMap.prototype.set = function (key, value) {
+            //根据这个值判断方进哪个桶
+            let hash = this.makeHash(key)
+            //当前桶的值
+            let oTempBucket = this.bucket[hash]
+            //如果当前桶有值，就去看下一个next的值
+            while (oTempBucket.next) {
+                //如果键名重复，就进行值的覆盖
+                if (oTempBucket.next.key === key) {
+                    oTempBucket.next.value = value
+                } else {
+                    oTempBucket = oTempBucket.next
+                }
+            }
+            //键名不存在，进行存值
+            oTempBucket.next = { key, value, next: null };
+        }
+
+        //找值
+        myMap.prototype.get = function (key) {
+            let hash = this.makeHash(key)
+            let oTempBucket = this.bucket[hash]
+            //优化：跳出第一个存取type的,这不是我们存取的，不进行判断
+            while (oTempBucket.next) {
+                oTempBucket = oTempBucket.next;
+                if (oTempBucket.key === key) {
+                    return oTempBucket.value;
+                }
+            }
+            return false;
+        }
+
+        myMap.prototype.delete = function (key) {
+            let hash = this.makeHash(key)
+            let oTempBucket = this.bucket[hash]
+            while (oTempBucket.next) {
+                //原文较绕，进行更改
+                oTempBucket = oTempBucket.next;
+                console.log(oTempBucket)
+                if (oTempBucket.key === key) {
+                    //直接用后面的值覆盖前面的值，完成删除
+                    oTempBucket = oTempBucket.next;
+                    console.log(oTempBucket)
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        myMap.prototype.has = function (key) {
+            let hash = this.makeHash(key)
+            let oTempBucket = this.bucket[hash]
+            while (oTempBucket.next) {
+                oTempBucket = oTempBucket.next;
+                if (oTempBucket.key === key) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        myMap.prototype.clear = function () {
+            this.init()
+        }
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="show"></div>
+
+    <script>
+        var oDiv = document.getElementById('show')
+        var oData = {
+            val: 'chenxiang',
+            age: 20,
+            obj: {
+                son: 'xinyu',
+                daughter: 'minmin'
+            },
+            arr: ['chen']
+        }
+
+        //更新视图函数
+        function update() {
+            oDiv.innerHTML = oData.arr[0]
+        }
+
+        //将原始数值更新到视图中去
+        update()
+
+        //监听数据变化函数
+        function Observer(data) {
+            //如果data不是对象或者不存在，直接返回数据
+            if (!data || typeof data !== 'object') {
+                return data;
+            } else {
+                //Object.keys()会将对象的键名全部放入一个新数组并返回
+                Object.keys(data).forEach(key => {
+                    defineReactive(data, key, data[key])
+                })
+            }
+        }
+        //执行给形成绑定oData数据的闭包
+        Observer(oData)
+
+        //响应式函数
+        function defineReactive(data, key, value) {
+            //递归，监听所有对象属性
+            Observer(value)
+            Object.defineProperty(data, key, {
+                set(newValue) {
+                    if (value === newValue) {
+                        return;
+                    }
+                    //数据改变触发视图更新
+                    value = newValue
+                    update()
+                },
+                get() {
+                    return value
+                }
+            })
+        }
+
+        // Object.defineProperty()无法对数组进行更新
+        // Vue中的支持的数变异方法都是重写
+        var arr = [];
+        //将数组变异方法提取出来
+        let { push, pop, unshift, shift, splice, sort, reverse } = Array.prototype
+        var fnArr = [push, pop, unshift, shift, splice, sort, reverse]
+        fnArr.forEach(fn => {
+            Object.defineProperty(Array.prototype, fn.name, {
+                value: updateArr(arr, fn)
+            })
+        })
+
+        function updateArr(arr, fn) {
+            return (...arg) => {
+                fn.apply(arr, arg)
+                update();
+            }
+        }
+
+        window.onerror = (e) => {
+            console.log('haha')
+        }
+        console.log(a)
+        console.log(haha)
+    </script>
+</body>
+
+</html>

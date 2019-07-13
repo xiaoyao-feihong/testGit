@@ -498,7 +498,7 @@ public class Demo {
 >    /*
 >    结构上没有返回值类型，但是实际中会返回一个对象
 >    特点：
->    1.每一个类都有构造方法，类中没有定义，系统会默认会调用默认构造方法
+>    1.每一个类都有构造方法，类中没有定义，系统会调用默认构造方法
 >    2.如果有构造方法定义，会对默认构造方法进行覆盖
 >    3.存在构造方法重载
 >    作用：
@@ -550,7 +550,7 @@ public class Demo {
 
 ​	（1）模拟一个计算器
 
-​	知识补充：`Scanner`有阻塞的效果，`nextInt() next()nextDouble()`以回车符作为截止，不会读取回车符，`nextLine`会读取回车符
+​	知识补充：`Scanner`有阻塞的效果，`nextInt() next() nextDouble()`以回车符作为截止，不会读取回车符，`nextLine`会读取回车符
 
 ​	String转换为int类型：包装类`int-->Integer char-->Character byte-->Byte float-->Float `，`Integet.parseInt("123")-->int 123`，`123+""-->"123"`
 
@@ -636,7 +636,7 @@ public class Calculator {
 
 ​	（2）设计一个类，替代一个数组可以做的事情（增删改查）
 
-​	**<font color="red">面向对象，每一个方法只干一个具体的事情</font>**
+​	**<font color="red">面向对象，每一个方法只干一个具体的事情（低耦合）</font>**
 
 ```java
 public class ArrayBox {
@@ -668,6 +668,26 @@ public class ArrayBox {
         int[] newArr = new int[this.count + arr.length] ;
         return newArr;
     }
+    
+    /****
+    源码：
+    //minCapacity为此次需要得长度
+    private void grow(int minCapacity) {
+        // overflow-conscious code
+        int oldCapacity = elementData.length;
+        //1.5倍扩容
+        int newCapacity = oldCapacity + (oldCapacity >> 1);
+        //如果新长度扩容后还是比需要少，使用minCpacity
+        if (newCapacity - minCapacity < 0)
+            newCapacity = minCapacity;
+        //超过数组最大允许长度
+        if (newCapacity - MAX_ARRAY_SIZE > 0)
+            newCapacity = hugeCapacity(minCapacity);
+        // minCapacity is usually close to size, so this is a win:
+        //按照新长度进行扩容，老数组为elementData
+        elementData = Arrays.copyOf(elementData, newCapacity);
+    }
+    ***/
 
     //此方法用来添加元素
     public void add (int...x) {
@@ -761,7 +781,7 @@ public class ArrayBox {
 
 > 1、子类继承父类，通过关键字extends
 >
-> 2、子类对象可以调用父类中的（public protected）属性和方法，当作自己的来用
+> 2、子类对象可以调用父类中的（public protected default）属性和方法，当作自己的来用
 >
 > 3、子类可以添加自己独有的属性和方法
 >
@@ -810,6 +830,7 @@ public class Animal () {
 public class Person extends Animal () {
     public void Person () {
         //隐藏了一行代码：super();创建父类的过程
+        //如果父类没有无参构造方法，必须显示的利用super(name,18)...传递所需参数
         System.out.println("我是Person的构造方法");
     }
     public void Person (int a) {
@@ -941,7 +962,7 @@ public Test () {
 
 设计类关系的遵循的原则：高内聚，低耦合
 
-耦合度：紧密程度	<font color="pink">继承 > 包含 > 依赖</font>
+耦合度：紧密程度	<font color="red">继承 > 包含 > 依赖</font>
 
 ```java
 //屠夫与猪 屠夫的行为：杀猪 猪：被杀了会叫
@@ -1170,7 +1191,7 @@ public class Functions {
 
 
 
-​		权限修饰符：
+​	权限修饰符：
 
 ​			权限修饰符可以用来修饰类和类中的成员（除程序块）
 
@@ -1178,7 +1199,7 @@ public class Functions {
 
 
 
-​	Java面向对象的四个特征
+Java面向对象的四个特征
 
 ​		继承	封装	多态	（抽象）
 
@@ -1188,7 +1209,7 @@ public class Functions {
 
 ​		方法本身就是封装，封装了执行的过程，保护过程的安全，隐藏了执行细节，增强了代码的复用性
 
-​		对属性本身的封装：私有属性（封装在类中），提供操作属性的方式（共有的方法，属性不要公有，非常不安全）
+​		对属性本身的封装：私有属性（封装在类中），提供操作属性的方式（公有的方法，属性不要公有，非常不安全）
 
 ```java
 package packb;
@@ -1223,6 +1244,14 @@ public class TestSymbol extends TestA {
 
 ​	可以修饰变量，属性，方法，类
 
+​	`final`修饰类，类不可以被继承
+
+​	`final`修饰方法，方法不可以被子类重写
+
+​	`final`修饰属性，属性必须赋初始值，否则报错
+
+​	`final`修饰变量，变量为原始类型，值不能改变，引用数据类型地址不能改变
+
 ```java
 final int a = 10;//不赋值会报错，赋值以后也不可以更改值
 a = 20;//报错
@@ -1248,13 +1277,21 @@ public final class Demo {}
 
 ​	程序的设计问题:
 
-​	1）可读性，名字，缩进，注释 	2）健壮性，判断严谨		3）优化：结构，性能，内存	4）复用性，方法，类	5）扩展性，抽象，接口，面向配置文件
+​	1）可读性，名字，缩进，注释 	
+
+​	2）健壮性，判断严谨		
+
+​	3）优化：结构，性能，内存
+
+​	4）复用性，方法，类	
+
+​	5）扩展性，抽象，接口，面向配置文件
 
 
 
 ​	`static`		静态的
 
-​	可以修饰属性，方法，块，内，内部类
+​	可以修饰属性，方法，块，内部类
 
 ​	特点：
 
@@ -1497,7 +1534,9 @@ public interface TestInterface {
 public abstract A implements B,C {}
 ```
 
-*封装一个LinkedBox 解决Array不适合插入和删除的问题*
+
+
+封装一个LinkedBox 解决Array不适合插入和删除的问题*
 
 解决插入、删除效率低的问题（不适合遍历）：
 
@@ -1888,10 +1927,6 @@ public class Test {
   
   3）静态内部类
   
-  
-  
-  
-  
   优点：
   
   省略一个.java的文件，内部类可以使用外部类的属性和方法（不能使用this调用外部类的方法，因为this始终指向调用的对象）
@@ -1922,8 +1957,15 @@ public class Test {
         //使用点的方式调用
         //不导包的写法Demo.InnerDemo innerdemo = Demo.new InnerDemo();
         InnerDemo id = new InnerDemo();
-        //匿名内部类
+        //匿名内部类，可以认为mi是一个实现MyInterface接口的子类
+        MyInterface mi = new MyInterface(){
+            public void eat(){System.out.println("I am eating.");}
+        }
+        mi.eat();//I am eating
     }
+}
+public interface MyInterface (){
+    void eat();
 }
 ```
 
