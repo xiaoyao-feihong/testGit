@@ -1088,9 +1088,11 @@ public class DBCPTest {
 
 （2）使用方便文档，引入包更少
 
-（3）使用时需要导入c3p0-0.9.5.4，mchange-commons-java-0.2.15两个jar包
+（3）**使用时需要导入c3p0-0.9.5.4，mchange-commons-java-0.2.15两个jar包**
 
 （4）<font color="blue">注意：c3p0数据库连接池的辅助包，没有这个包系统启动的时候会报classnotfoundexception，这是c3p0-0.9.2版本后分离出来的包，0.9.1的时候是一个包就搞定的</font>
+
+（5）c3p0-config.xml写在src目录下
 
 
 
@@ -1108,10 +1110,10 @@ cpds.setPassword(password);
 
 可以使用XML，properties文件配置
 
-mysql5.7的配置信息
+mysql5.7 c3p0的配置信息
 
 ```java
-//卸载src路径下的xml配置文件，文件名c3p0-config.xml
+//写在src路径下的xml配置文件，文件名c3p0-config.xml
 //注意XML下不能直接使用&符号，得使用&amp;表示&符
 <c3p0-config>
   <default-config>
@@ -1189,7 +1191,7 @@ public class DBUtils {
             System.out.println("获得驱动URL："+meta.getDriverName());
             System.out.println("获得用户名："+meta.getUserName());
             //获取主键
-            ResultSet rs = meta.getPrimaryKey(null,bull,"student");
+            ResultSet rs = meta.getPrimaryKey(null,null,"student");
         }catch(Exception e){
             e.printStackTrace();
         }

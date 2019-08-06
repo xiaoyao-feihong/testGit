@@ -24,7 +24,7 @@
 
 ##### 2、XML作用
 
-##### （1）传输数据，存取数据（数据量比较大）（2）软件的配置文件（结构更加清晰）
+（1）传输数据，存取数据（数据量比较大）（2）软件的配置文件（结构更加清晰）
 
 
 
@@ -718,7 +718,7 @@ void removeAttribute(String name);//用来移除属性
 >
 > ```java
 > //获取初始化参数的值，传入username，获取root
-> String getInitPatameter(String name);
+> String getInitParameter(String name);
 > //获取所有初始化参数的名字:username,password...
 > Enumeration getInitParameterNames();
 > 
@@ -847,4 +847,231 @@ public class Demo extends HttpServlet {
 ```
 
 
+
+### 五、Request和Response
+
+##### 1、需求
+
+​	页面登录成功后，页面跳转到下载的列表页面，点击列表的某些链接，下载文件
+
+
+
+##### 2、需求分析
+
+（1）Response对象
+
+​	代表响应对象，从服务器向浏览器输出的内容
+
+> 1、响应行：
+>
+> `void setStatus(int src);`设置响应行的状态码
+>
+> 2、响应头：
+>
+> `void addDataHeader(String name,long date);`根据给定的名字和日期值设置响应头
+>
+> `void addHeader(String name,String value);`根据给定的键值**添加**响应头（不是覆盖，是增加）
+>
+> `void addIntHeader(String name,int value);`添加给定名称和int类型的键值
+>
+> 针对一个key对应多个value的头信息：
+>
+> `void setDateHeader(String name,long date);`设置时间类型的响应头
+>
+> `void setHeader(String name,String value);`设置字符串型的响应头
+>
+> `void setIntHeader(String name,int value);`设置整型类型的响应头
+>
+> 3、响应体
+>
+> 利用ServletResponse对象的常用方法
+>
+> `ServletOutputStream getOutputStream();`获取输出流
+>
+> `PrintWriter getWriter();`返回一个读取流
+
+（2）文件下载的方式
+
+​	1）超链接下载
+
+​	**直接将文件的路径写到超链接的href中（前提：文件类型，浏览器不支持，如果支持浏览器会直接打开文件，不支持，比如zip格式的文件，直接下载）**
+
+​	2）手动编写代码的方式完成文件的下载
+
+​	设置两个头和一个流：
+
+​	Content-Type：文件的MIME类型
+
+​	Content-Disposition：以下载形式打开文件
+
+​	InputStream：文件的输入流
+
+
+
+（3）Request对象
+
+​	1）代表用户的请求对象`ServletRequest`
+
+​	2）对象里包含的方法
+
+> 1、获取请求方式
+>
+> `String getMethod();`获得请求对象的请求方式，get,post,put等
+>
+> 2、获取请求的路径
+>
+> `String getRequestURI();`获取请求对象的URL（/web/...）
+>
+> `String getRequestURL();`获取请求对象的（http://...）
+>
+> 3、获得客户机相关的
+>
+> `String getRemoteAddr();`获取IP地址（比如拦截不允许访问的IP，记录某个IP的访问次数）
+>
+> `String getContextPath();`获取工程名
+>
+> 4、获取页面中提交的数据
+>
+> `String getParameter(String name);`获取某个具体的参数值
+>
+> `Map getParameterMap();`获取所有请求键值对构成的Map对象
+>
+> `Enumeration getPatameterNames();`获取所有的参数名
+>
+> `String[] getParameterValues();`
+>
+> 5、作为域对象存储数据
+>
+> `void removeAttributes(String name);`删除请求中的一个属性
+>
+> `void setAttribute(String name,Object o);`设置请求中的属性
+>
+> `Object getAttribute(String name);`获取某个属性，没有返回null
+
+
+
+
+
+##### 3、代码实现
+
+```java
+public class Download extends HttpServlet {
+    public void doGet (...) throws Exception {
+        //中文的解决
+        //1.获取文件名
+        
+        //解决参数中的中文乱码
+        String filename = new String(request.getPatameter("filename")).getBytes("ISO-8859-1","UTF-8");
+        
+        //2.完成文件下载的三步：
+        //2.1 设置Content-Type为文件的MIME类型
+        String type = this.getServletContext().getMimeType();
+        response.setHeader("Content-Type",type);
+        
+        //2.2 设置Content-Disposition
+        response.setHeader("Content-Disposition","attachment;filename="+filename);
+        
+        //2.3 获取输入流，输出流完成下载
+        String realPath = this.getServletContext().getRealPath("/download/"+filename);
+        InputStream is = new FileInputStream(realPath);
+        
+        //根据浏览器的类型选择编码方式
+        String agent = request.getHeader("User-Agent");
+        if(agent.contains("Firefox")){
+            filename = base64EncodeFileName(filename);
+        }else{
+            filename = URLEncoder.encode(filename,"UTF-8");
+        }
+        
+        OutputStream os = response.getOutputStream();
+        byte[] b = new byte[1024];
+        int count = is.read(b);
+        while(count!=-1){
+            os.write(b,0,count);
+            count = is.read(b);
+        }
+        
+        //关闭管道
+        is.close();
+        os.close();
+    }
+    public static String base64EncodeFileName(String filename){
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+        try{
+            return "?UTF-8?B?"+ new String(base64Encoder.encode(filename.getBytes("UTF-8"))) + "?=";
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+    public voud doPost () {}
+}
+```
+
+html:
+
+```html
+<h1>下载页面</h1>
+<div>
+    <p>a链接下载:</p>
+    <a>1.txt</a><br>
+	<a>1.jpg</a><br>
+	<a>1.zip</a><br>
+</div>
+
+<div>
+    <p>a手动下载:</p>
+    <a href="/dowload?filename=1.txt">1.txt</a><br>
+	<a href="/dowload?filename=1.jpg">1.jpg</a><br>
+	<a href="/dowload?filename=爱情.zip">1.zip</a><br>
+</div>
+```
+
+查看浏览器编码格式：
+
+```js
+//Edge
+document.characterSet;//默认utf-8
+document.charset;
+
+//chrome
+document.characterSet;//默认UTF-8
+document.charset;
+```
+
+
+
+<font color="blue">response的字符缓冲区的默认编码是ISO-8859-1,编码根本不支持中文</font>
+
+<font color="blue">所以使用字符流中文一定会乱码</font>
+
+解决办法：
+
+设置浏览器默认打开文件的编码
+
+设置字符流缓冲区的编码
+
+```java
+public class Demo extends HttpServlet {
+    protected void doGet () {
+        //设置response字符缓冲区的编码方式
+        response.setCharacterEncoding("UTF-8");
+        //设置浏览器默认打开的编码方式
+        response.setHeader("Content-Type","text/html;charset=utf-8");
+        response.getWriter().println("中文");
+        
+        //第二种:编码简化写法
+        resposne.setContentType("text/html;charset=utf-8");
+        
+        /***同理：
+        *response.setStatus(302);
+        *response.setHeader("Location","/web/success.html");
+        *相当于:
+        *response.sendRedirect("/web/success.html");
+        **/
+        
+        response.getWriter().println("中文");
+	}
+}
+```
 

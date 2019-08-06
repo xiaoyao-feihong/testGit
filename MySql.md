@@ -855,3 +855,74 @@ drop database test;//删除数据库
 > 查看隔离级别：
 >
 > `select @@tx_isolation;`
+
+
+
+##### 12、SQL原理
+
+**模拟SQL**
+
+需求分析：
+
+1.获取命令行窗口命令
+
+2.执行操作
+
+```java
+//模拟命令行窗口
+public class CommandLineClient {
+    public void open () {
+        Scanner input = new Scanner(System.in);
+        System.out.println("HerSQL>");
+        String sql = input.nextLine();
+        //将这个sql通过网络通信发给服务器
+       createSocketAndSendSQL(sql);
+    }
+    //负责创建Socket连接，并将sql发送出去
+    private void createSocketAndSendSQL (String sql) {
+        //创建连接
+        try{
+            Socket socket = new Scocket("localhost",9999);
+            //创建一个高级流，可以发送中文
+            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            writer.println(sql);
+            writer.flush();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+
+```java
+public class Server {
+    private Socket socket;
+    //模拟数据库底层服务
+    public void startServer () {
+        ServerScocket server = new ServerSocket(9999);
+        //等待连接
+        Socket socket = server.accept();
+        this.socket = socket();
+        //读取sql
+        this.readSQLandParse();
+        //解析sql
+    }
+    
+    private void readSQLandParse (){
+        //包装流
+        BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        //读取sql语句
+        String sql = bf.readLine();
+        //解析
+        sql = sql.toUpperCase();
+        if(sql.startsWith("SELECT")){
+            
+        }else if(){
+            
+        }
+    }
+}
+```
+
