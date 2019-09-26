@@ -272,6 +272,7 @@ public class HttpRequest {
 class HttpResponse {
     private StringBuilder content = new StringBuilder();
     public void write (String msg){
+        //这里不要使用+，底层使用的是concat性能太差(两次循环)
         content.append(msg);
         //让信息换行
         content.append("\n");
@@ -380,14 +381,24 @@ web容器（软件）---服务器（硬件）
 （3）了解Tomcat容器的文件夹结构
 
 + bin：服务器启动相关的配置
+
 + conf：存储的都是配置文件（web.properties,server.properties,web.xml,server.xml）
-  - server.xml：端口号，编码等信息
+  - server.xml：**端口号**，**编码**等信息
   - web.xml：请求与处理类的映射关系等
+  
 + lib：jar形式的包
+
 + log：日志信息
+
 + temp：临时文件
+
 + <font color="blue">webapps</font>：用来存放部署在容器中的项目资源的（IDEA认为这个过程很麻烦，所以放进去的是引用路径，减少往服务器写资源的时间）
+
 + <font color="blue">work</font>：用来存放解析JSP（包含Java代码和HTML）后形成的Java文件
+
+  真实编译在IDEA的工程下：
+
+  C:\Users\86180\.IntelliJIdea2019.1\system\tomcat\Tomcat9_JSPDemo\work\Catalina\localhost\JSPDemo\org\apache\jsp\demo_jsp.java
 
 
 
@@ -399,11 +410,13 @@ web容器（软件）---服务器（硬件）
 >
 > 3）搭建启动环境
 >
-> ​	1、Run/Debug Configurations/server右边config按钮，VM Options添加`-Dfile-encoding=UTF-8`
+> ​	1、Run/Debug Configurations/server右边config按钮
 >
-> ​	2、选择Tomcat的路径
+> ​	2、选择Tomcat的路径，VM Options添加`-Dfile-encoding=UTF-8`
 >
-> ​	3、导入Tomcat下的jsp-api.jar和serclet-api.jar包
+> ​	3、在web文件夹下新建lib文件夹，将需要依赖的包导入进去（导入Tomcat下的jsp-api.jar和servlet-api.jar包
+>
+> ​			在File/Project Structure/libraries点击+号添加web文件夹下的lib文件夹作为库文件）
 >
 > ​	4、Deployment点击+号添加映射，修改工程名
 >
@@ -551,6 +564,25 @@ get请求的处理的方式：
 
 Tomcat的默认处理字符集配置在web.xml中，如果版本较老，要更改字符集为UTF-8
 
+```xml
+<filter>
+        <filter-name>setCharacterEncodingFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <!--这就是Tomcat的默认对请求的编码字符集-->
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <async-supported>true</async-supported>
+    </filter>
+```
+
+
+
+
+
+
+
 <font color="blue">post请求的处理方式：</font>
 
 发送请求的时候，请求名字在协议头中，请求的参数信息在协议体中（协议体中只能传字节），控制层接收的时候，request对象是按照平台的默认字符集组成String的（电脑的默认字符集，Windows是GBK）
@@ -629,7 +661,7 @@ public class Demo extends HttpServlet {
 	<servlet-name>test</servlet-name>
     <servlet-class>test.TestController</servlet-class>
     
-    <!---->
+    <!--初始化参数-->
     <init-param>
     	<param-name>key1</param-name>
         <param-value>value1</param-value>
@@ -703,6 +735,8 @@ public interface ServletConfig {
 }
 ```
 
+
+
 HttpServlet抽象类的作用：
 
 具体化，与协议有关的属性，都与协议有关
@@ -743,7 +777,7 @@ JSP与JS区别：
 
 
 
-JSP使用：
+JSP使用
 
 1）浏览器只能识别HTML代码，虚拟机只能识别Java代码，JSP让Tomcat编译，最后还是浏览器展示
 
@@ -753,9 +787,9 @@ JSP使用：
 <!--头标签，通常包含Content-Type和language-->
 <% @page Content-Type="text/html;charset=UTF-8" language="Java" pageEncoding="UTF-8"%>
 <!--
-	1、Content-Type：用来说明当前JSP里面拼接好的相应信息浏览器该如何解析
+	1、Content-Type：用来说明当前JSP里面拼接好的响应信息浏览器该如何解析
 	2、language：用来说明当前JSP中可以包含的语言
-	3、pageEncoding="UTF-8"：告知Tomcat以这种字符集进行编译，不写会根据Content-Type中的字符集进行编译
+	3、pageEncoding="UTF-8"：告知Tomcat以这种字符集进行编译jsp文件，不写会根据Content-Type中的字符集进行编译
 	4、Content-Type必须写，另外的可以不用写，因为JSP只能包含Java语言，默认字符集也会根据Content-Type中的字符集编译
 -->
 
@@ -804,7 +838,7 @@ public class IndexController extends HttpServlet {
 
 
 
-JSP编译原理
+##### 6、JSP编译原理
 
 > 1、浏览器发送/login请求
 >
@@ -820,6 +854,8 @@ JSP编译原理
 >
 > 文件路径：C:\Users\86180\\.IntelliJIdea2019.1\system\tomcat\Unnamed_webServletDemo\work\Catalina\localhost\web\org\apache\jsp
 
+
+
 编译原理图：
 
 ![](C:\Users\86180\Desktop\testGit\typoraImg\请求过程和JSP编译原理.jpg)
@@ -833,7 +869,7 @@ JSP本质上就是Servlet，从请求的配置文件和真正生成的类XXX_jsp
 JSP含有的标签作用：
 
 ```jsp
-<%@ %> 说明性的标记，通常会放在文件的顶部（最后不放在最后的html里）
+<%@ %> 说明性的标记，通常会放在文件的顶部（最后不放在最后的html里，而是获取键值对，设置ContentType等属性）
 <%! %> 包含普通的Java代码 _jspService方法外部（可以定义属性和方法，但是无法使用Request和Response对象）
 <% %>  包含普通的Java代码，_jspService方法内部
 <%= %> 可以包含Java代码，_jspService方法内部 通常用来赋值
@@ -854,9 +890,11 @@ JSP含有的标签作用：
 
 
 
-JSP的9大内置对象
+##### 7、JSP的9大内置对象
 
 **1）HttpServletRequest	request**
+
+​	常用方法：
 
 > 1、用来获取请求携带的参数信息
 >
@@ -894,7 +932,7 @@ JSP的9大内置对象
 > <input type="checkbox" name="hobby" value="barber">barber
 > 
 > <%
-> 	String[] values = req.getParameterNames("hobby");
+> 	String[] values = req.getParameterValues("hobby");
 > %>
 > ```
 >
@@ -927,6 +965,8 @@ JSP的9大内置对象
 > 14、获取Cookie
 >
 > `Cookie[] req.getCookies()`
+
+
 
 实现切换国际化版本（Internationalization）
 
@@ -972,7 +1012,35 @@ password=password
 
 
 
-浏览器常见状态码：
+**2）HttpServletResponse	response**
+
+>1、获取流
+>
+>`PrintWriter res.getWriter();`
+>
+>2、获取状态码
+>
+>`int res.getStatus();`
+>
+>3、设置状态码
+>
+>`res.setStatus();`
+>
+>4、添加cookie
+>
+>Cookie是在客户端存储的一个记录，session是存在服务器端的一个记录
+>
+>创建Cookie：`new Cookie("key","value");`
+>
+>`res.addCookie();`
+>
+>5、请求重定向
+>
+>`res.sendRedirect("path");`
+
+
+
+浏览器常见状态码（由服务器发送的）：
 
 404：没有找到资源
 
@@ -982,23 +1050,190 @@ password=password
 
 
 
-**2）HttpServletResponse	response**
+请求重定向和转发的区别：
 
->PrintWriter res.getWriter();
->
->int res.getStatus();
->
->res.setStatus();
->
->Cookie是在客户端存储的一个记录
->
->res.addCookie();
+```java
+public class Demo extends HttpServlet {
+    public void doGet (... req,... res) {
+        RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
+        rd.forward(req,res);
+        res.sendRedirect("path");
+    }
+}
+```
+
+
+
+转发jsp操作资源过程：
+
+一次请求
+
+浏览器发送请求/index，服务器解析请求，生成request,resposne对象，根据xml配置文件找到处理的类IndexConctroller，IndexController利用request的RequestDispatcher对象告知服务器请求的demo.jsp资源，服务器找到对应的demo.jsp资源，通过forward方法将reqeust,response对象给到JSPServlet,JSPServlet将jsp文件解析成demo_jsp.java，最后将响应信息写回到浏览器
+
+
+
+重定向过程：
+
+两次请求
+
+浏览器发送请求/index，服务器解析请求，找到IndexController，IndexController发送重定向的资源名(demo.jsp)给浏览器，浏览器重新发送请求/index/index.jsp的请求，获得文件，所以重定向是没有原来request，response对象的
+
+
+
+<font color="blue">转发和重定向的区别：</font>
+
++ 转发是一次请求，重定向是两次请求，第二次请求的request和response发生改变；
+
++ 转发的URL不会改变，重定向浏览器的URL会发生改变；
+
++ 转发是request对象的方法，重定向是response对象的方法
++ 转发只能在当前服务器工程的内部；重定向可以发给新服务器或新的工程
+
+
 
 **3）HttpSession	session**
 
+多次请求，一次会话，session会话
+
+session的常用方法：
+
+> 1、设置属性
+>
+> `session.setAttribute("key",Object)`
+>
+> 2、获取属性
+>
+> `Object session.getAttribute("key")`
+>
+> 3、获取所有属性名
+>
+> `Enumeration session.getAttributeNames()`
+>
+> 4、删除属性
+>
+> `session.removeAttribute("key")`
+>
+> 5、获取session
+>
+> `HttpSession request.getSession()`
+>
+> 6、设置session的最大活跃时间（单位秒）
+>
+> `session.setMaxInactiveInterval(int second)`
+>
+> 7、设置session对象失效（消除session）
+>
+> `session.invalidate()`
+>
+> 8、获取session的ID
+>
+> `String session.getId()`
+
+
+
+demo:
+
+```jsp
+<!--index.jsp-->
+<%
+	request.setCharacterEncoding("UTF-8");
+	String test = request.getParameter("test");
+	request.setAttribute("test",test);
+	session.setAttribute("test",test);
+%>
+
+<!--index2.jsp-->
+<%
+	String test = (String)request.getAttibute("test");
+	String test2 = (String)session.getAttribute("test");
+%>
+
+<!--无法显示-->
+<%= test%>
+<!--可以显示-->
+<%= test2%>
+```
+
+
+
+<font color="blue">注意：session针对每一个用户都是不一样的，因为是不同的线程产生的session，当多次请求都需要使用的属性存进去</font>
+
+session不安全，要设置失效时间和sessionID
+
+session最大的不活跃时间，默认1800秒（30分钟），一般配合filter设置为3分钟，3分钟不活跃要求用户重新登录
+
+
+
 **4）ServletContext	application**
 
+全局上下文对象，所有的用户都可以访问，很不安全，用来保存公有的属性
+
+ServletContext的方法：
+
+> 1、获取ServletContext
+>
+> `ServletContext context = req.getServletContext()`
+>
+> 2、设置属性
+>
+> `context.setAttribute("key",Object);`
+>
+> 3、获取属性
+>
+> `Object context.getAttribute("key")`
+>
+> 4、删除属性
+>
+> `context.removeAttribute()`
+>
+> 5、获取所有键名
+>
+> `Enumeration context.getAttributeNames()`
+>
+> 6、获取初始化参数
+>
+> `context.getInitParameter("name")`
+>
+> Tomcat启动的时候就会获取产生全局对象
+>
+> ```xml
+> <context-param>
+> 	<param-name>name</param-name>
+>     <param-value>chenxiang</param-value>
+> </context-param>
+> ```
+>
+> 也可以使用`context.getRequestDispatcher().forward()`
+>
+> 7、获取文件部署的路径
+>
+> `String realPath = context.getRealPath("/")`
+
+
+
 5）ServletConfig	config
+
+作用是加载一些我们需要初始化的参数
+
+方法：
+
+> 1、获取初始化参数值
+>
+> `String value = config.getInitParameter("key");`
+>
+> 2、获取所有初始化参数键名
+>
+> `Enumeration en = config.getInitParameterNames();`
+>
+> 3、获取类名
+>
+> `String name = config.getServletName();`
+>
+> 4、获取全局上下文对象
+>
+> `ServletContext application = config.getServletContext();`
+
+
 
 6）PageContext	pageContext
 
@@ -1007,6 +1242,27 @@ password=password
 8）Object	page
 
 9）Exception
+
+```jsp
+error.jsp
+<!--设置isErrorPage="true"才会胜场异常-->
+<%page contentType="text/html;charset=UTF-8" isErroPage="true"%>
+<html>
+    <body>
+        哎呀，出异常啦啦啦啦啦。。。
+    </body>
+</html>
+
+otehr.jsp
+在其他页面头部添加
+<%page erroPage="error.jsp" contentType="text/html;charset=UTF-8"%>
+
+<!--web.xml-->
+<error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+</error-page>
+```
 
 
 
@@ -1047,4 +1303,316 @@ Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
 Cookie: Idea-e2a89403=9a09c65a-b1e9-46b0-8c9c-c35970848d9c
 **/
 ```
+
+
+
+##### 8、JSP的标签
+
+JSP组成：Java服务页面、HTML、Java
+
+
+
+（1）JSP指令标签（放在文件顶部）：
+
+```jsp
+<%@ xxx %>放在JSP头部，做说明性质的描述
+
+<%@ page%> 包含请求头信息等
+1、contentType 告知浏览器对字节流的解析规则(UTF-8)
+2、pageEncoding 告知JSPServlet遵循字符规则（Tomcat9默认以UTF-8解析）
+3、import 导包
+4、isErrorPage 设置当前jsp作为异常页（只有设置了才会创建Java时内置Exception对象）
+5、Tomcat先按照pageEncoding,没有设置找contentType，也没有，找Tomcat下的server.xml中设置的默认字符集解析，8，9，8是默认UTF-8，老版本是ISO-8859-1
+
+<%@ taglib%> JSTL(JSP standard tag library)
+uri="http://java.sun.com/jsp/jstl/core"	
+prefix="c"
+
+<%@ include file="demo.html"%> 在JSP引入已经写好的资源(资源类型：.jsp .html)
+引入一个jsp资源，没有任何问题
+引入html资源会出现中文乱码的问题
+原因：因为html是直接导入的，Tomcat不会编译，会按照英文的默认字符集编译
+解决：在web.xml中配置
+<jsp-config>
+	<jsp-property-group>
+        <description>HTMLConfig</description>
+        <display-name>HTMLConfig</display-name>
+        <url-pattern>*.html</url-pattern>
+        <el-ignored>false</el-ignored>
+        <page-encoding>UTF-8</page-encoding>
+        <!--使脚本无效，一般不会设置失效-->
+        <scripting-invalid>false</scripting-invalid>
+    </jsp-property-group>   
+</jsp-config>
+```
+
+
+
+（2）JSP代码标签：
+
+```jsp
+<%!		%> xxx_jsp.java的service方法外部
+<%		%> xxx_jsp.java的service方法内部
+<%=		%> 输出值
+```
+
+
+
+（3）JSP动作标签：
+
+用来替代JSP中Java创建对象和对象赋值、取值、转发
+
+技术发展：
+
+1、ModelOne：只有Servlet（拼接相应信息太麻烦）	VC+M
+
+2、技术革新ModelTwo模式：JSP+Servlet	V+C
+
+3、JSP2.0技术出现以后，替代对象的创建、赋值、请求转发（运行性能不好）
+
+4、新的模板语言诞生
+
+不常用的模板语言：
+
+```jsp
+<jsp:useBean id="atm" class="domain.Atm" scope="request"></jsp:useBean>
+<!--等价于-->
+<% 
+	Atm atm = (Atm)request.getAttribute("atm");
+	if(atm == null){
+		Class clazz = Class.forName("domain.Atm");
+        Atm atm = (Atm)clazz.newInstance();
+        request.setAttribute("atm",atm);
+	}
+%>
+
+<!--设置属性-->
+	<jsp:setProperty name="atm" property="username" param="username"></jsp:setProperty>
+	<jsp:setProperty name="password" property="password" param="password"></jsp:setProperty>
+	<jsp:setProperty name="balance" property="balance" param="balance"></jsp:setProperty>
+    <jsp:forward page="doRegister">
+    	<jsp:param name="fname" value="chen"></jsp:param>
+        <jsp:param name="lname" value="xiang"></jsp:param>
+    </jsp:forward>
+```
+
+
+
+总结：
+
+JSP三个指令标签：`<%@page%>`,`<%taglib>`,`<%@include%>`
+
+JSP六个动作标签：`<jsp:>`,`useBean,setProperty,getProperty,forward,param,include`
+
+JSP四个作用域：`pageContext,request,session,apllication`
+
+JSP九个内置对象：`request,response,session,application,out,page,pageContext,config,exception`
+
+
+
+购物小系统
+
+功能分析：
+
+> 1、需要用户登录、注册
+>
+> 2、欢迎页，欢迎用户登录购物系统
+>
+> 3、用户选择购买商品种类
+>
+> 4、继续购物-->再次看到商品种类的选择
+>
+> 5、结算（列出购买商品的清单，实现可以展示个数的功能，并列出商品的总价格）
+
+需求分析：
+
+> 1、用户表格：账号，密码，账户余额
+>
+> 2、商品种类：种类编号，种类名字
+>
+> 3、商品表格：商品编号，名字，价钱，种类编号（外键）
+
+
+
+1）创建数据库
+
+```mysq
+create database shopping_mall;
+user shopping_mall;
+#设置用户表格
+create table user (
+	username varchar(40),
+	password varchar(20),
+	balance double
+)character set utf8;
+alter table user add primary key(username);
+insert int user values("minmin","1994"),("chen","123");
+
+#设置商品种类表格
+create table category (
+	c_id int(4),
+	c_name varchar(80)
+)character set utf8;
+#设置主键约束
+alter table category primary key(c_id);
+insert into category values(1,"food"),(2,"book"),(3,"clothes");
+
+#创建商品表格
+create table good (
+	g_id int(4),
+	g_name varchar(20),
+	g_price double(10,2),
+	g_categoey int(4)
+)character set utf8;
+#添加主键约束
+alter table good add primary key(g_id);
+#添加外键约束
+alter table good add constraint fk_category_good foreign key(g_category) references category(c_id);
+#添加商品数据
+insert into good values(1,"热干面",4.00,1),(2,"豆皮",3.00,1),(3,"花甲粉",12.00,1),(4,"汤粉",3.00,1);
+insert into good values(5,"javaWeb",32.50,2),(6,"javascript",23,2),
+(7,"python",50.0,2),(8,"c",92.00,2);
+insert into good values(9,"T-shirt",45,3),(10,"coat",120,3),
+(11,"jackiet",2000,3),(12,"sockets",20,3);
+```
+
+
+
+2）创建web工程
+
+
+
+##### 9、EL表达式语言
+
+expression language：表达式语言EL
+
++ EL就是为了解决JSP的问题，两种语言风格不统一，颜色不一致
+
++ EL的功能，代替Java取值的过程
++ 能处理一些简单的计算（算数、逻辑、比较）
++ 调用方法（不长用）
+
+
+
+语法结构：
+
+```jsp
+${name}获取域对象的值,四个作用域挨个遍历性能不高
+${pageScope.name}
+${requestScope.name}
+${sessionScope.name}
+${applicationScope}
+
+${pageScope.user.getName()}
+${pageScope.user.name}注意属性必须有getter和setter
+```
+
+
+
+EL的作用域对象
+
+> 1、`${param.xxx}`获取请求键名的参数
+>
+> 2、`${paramValues.xxx}`获取请求的值的数组
+>
+> 3、`${requestScope.xxx}`获取request对象中存的值，使用的是getAttribute()方法
+>
+> 4、`${sessionScope.xxx}`获取session对象中存的值
+>
+> 5、`${applicationScope.xxx}`获取ServletContext中存的值
+>
+> 6、`${pageScope.xxx}`获取pageContext中存的值
+>
+> 7、获取初始化参数
+>
+> `${initParam}`获取初始化参数
+>
+> `${header[accept-language]}`获取协议头
+>
+> `${cookie}`获取cookie
+>
+> 8、简单运算
+>
+> `${requestScope.price + 100}`
+>
+> `${requestScope.price >= 100}`
+>
+> `>=ge >gt <lt <=le ==eq !=ne`  
+
+
+
+原理：
+
+底层通过反射技术，获取对应的getXXX方法执行，获得属性，所以没有get方法会报错
+
+
+
+
+
+JSTL功能（标准标签库）
+
++ 控制流程
+
++ 处理字符串
+
++ 格式化
+
+  JavaServerPage Standard Tag Library	JSP标准标签库
+
+  jstl1.2
+
+
+
+需要引入两个外部的jar包：jstl.jar	standard.jar
+
+大体上提供3个包：核心（流程控制）、函数（处理String）、SQL
+
+
+
+JSTL标签：
+
+```jsp
+<%page contentType="text/html;charset=UTF-8"%>
+<%taglib uri="http://java.sun..com/jsp/jstl/core" prefix="c">
+<!--导入JSTL包，告诉JSP标签可用-->
+<html>
+	<body>
+		<!--输出-->
+        <c:out value="hello world"></c:out>
+        
+        <!--满足条件就显示-->
+        <c:if test="${requestScope.value > 1}"></c:if>
+        
+        <!--分支语句-->
+        <c:choose>
+        	<c:when test="${requestScope.value < 4}">one</c:when>
+        	<c:when test="requestScope.value < 8">two</c:when>
+        	<c:when test="requestScope.value < 12">three</c:when>
+        	<c:otherwise>default</c:otherwise>
+        </c:choose>
+        
+        <!--循环语句，注意varStatus是个对象（方法内部类），end是可以取到的-->
+        <c:forEach begin="0" end="5" step="1" varStatus="i">${i.index}</c:forEach>
+        
+        <!--增强for循环-->
+        <c:forEach var="user" items="${requestScope.userList}">
+        	${user.username}:${user.password}
+        </c:forEach>
+        
+        <!--字符串拆分-->
+        <c:forTokens items="a-b-c" delims="-" var="value">${value}</c:forTokens>
+        
+        <!--函数和格式化标签：String类常用的方法-->
+        <@ taglib uri="http://java.sun..com/jsp/jstl/functions" prefix="fn" >
+        ${fn:字符串方法（字符串...）}
+		${fn:length(requestScope.strValue)}
+
+		<!--格式化标签-->
+        <%@ taglib uri="http://java.sun..com/jsp/jstl/fmt" prefix="fmt"%>
+		<fmt:formatDate value="${requestScope.date}" pattern="yy-MM-dd hh:mm:ss">
+    </body>
+</html>
+```
+
+
 

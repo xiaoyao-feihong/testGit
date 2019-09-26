@@ -274,5 +274,42 @@ psvm ---> public static void main (String[] args){}
 
 
 
-Debug调试模式的使用：
+IDEA使用中发现项目没有配置好，或配置出错，重新配置方式：
+
+> 1、`.InteliJIdea2019.1/`目录下，删除`config`和`system`文件夹，重启IDEA就可以重新配置，这两个目录的功能就是保存我们堆IDEA的配置信息
+>
+> 2、还原到最初设置状态，重启IDEA会重新生成这两个文件夹
+
+
+
+IDEA的快捷设置
+
+> 1、主题下载网址`www.riaway.com`
+>
+> 外观和性为（`appearance & behaviour`）
+>
+> 下载的是jar包，然后`import setting`后，重启就能改变主题
+>
+> 2、`Editor/Genneral`勾选`change font size`可以通过`Ctrl+滚轮`改变编辑区字体大小
+>
+> 3、自动导包
+>
+> `Settings/General/Auto Import`选all，都勾选上
+>
+> 4、添加头部信息
+>
+> `Code Style/File and Code Templates/includes/File header`
+>
+> 每个类前面添加作者信息和创建年月日的模板：
+>
+> ```java
+> /**
+>   @author chenxiang
+>   @date ${YEAR}-${MONTH}-${DAY} ${TIME}
+> */
+> ```
+>
+> 5、光标切换到下一行快捷键`Shift+Enter`
+
+
 

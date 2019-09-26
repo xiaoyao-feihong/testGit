@@ -850,7 +850,7 @@ public class Demo extends HttpServlet {
 
 ### 五、Request和Response
 
-##### 1、需求
+##### 1、文件下载
 
 ​	页面登录成功后，页面跳转到下载的列表页面，点击列表的某些链接，下载文件
 
@@ -889,6 +889,8 @@ public class Demo extends HttpServlet {
 > `ServletOutputStream getOutputStream();`获取输出流
 >
 > `PrintWriter getWriter();`返回一个读取流
+
+
 
 （2）文件下载的方式
 
@@ -1061,7 +1063,7 @@ public class Demo extends HttpServlet {
         response.getWriter().println("中文");
         
         //第二种:编码简化写法
-        resposne.setContentType("text/html;charset=utf-8");
+        response.setContentType("text/html;charset=utf-8");
         
         /***同理：
         *response.setStatus(302);
@@ -1075,3 +1077,367 @@ public class Demo extends HttpServlet {
 }
 ```
 
+
+
+### 六、MVC
+
+##### （一）技术发展：
+
+>1、Servlet（拼接麻烦）
+>
+>2、JSP（封装处理数据麻烦）
+>
+>3、JSP+JavaBean（维护麻烦）
+>
+>4、JSP+Servlet+JavaBean（JSP用于显示数据，Servlet处理业务逻辑，JavaBean用于封装处理数据），这就被称为MVC设计模式
+>
+>M：Model模型层（封装处理数据）
+>
+>V：View视图层（用于显示数据）
+>
+>C：Controller控制层（处理请求，任务分派等）
+
+
+
+##### （二）反射机制：
+
+> ​							编译											JVM（classLoader）
+>
+> demo.java ----------------> demo.class ------------------------------------> 内存中形成Classs对象 
+
+
+
+反射的目的是操作某个类的属性或方法
+
+
+
+使用内省实现BeanUtils工具类
+
+内省技术：主要用来获得JavaBean的属性和属性的get,set方法
+
+Javabean：满足特定格式的Java类（提供无参数构造方法，属性私有，对私有属性提供public的get/set方法）
+
+```java
+public class BeanUtils {
+    /*
+    *获得某个类的属性：
+    *	由一个JavaBean属性的get/set方法确定的
+    */
+    public void getBeanInfo () {
+        //获取bean信息
+        BeanInfo beanInfo = Introspector.getBeanInfo(User.class);
+        //获得bean的属性描述
+        PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
+        for(PropertyDescriptor p : pds){
+            //获得属性对应的名字
+            System,out.println(p.getName());
+            //获得属性的get方法
+            Method = p.getReadMethod();
+            //获得属性的set方法
+            p.getWriteMethod();
+        }
+    }
+    
+    public void getBeanInfo (Object obj, HashMap<String, String[]> map) throws  Exception {
+        //获取BeanInfo对象
+        BeanInfo beanInfo = Introspector.getBeanInfo(obj.class);
+        //获取所有属性描述符
+        PropertyDescriptor[] descs = beanInfo.getPropertyDescriptors();
+        for (PropertyDescriptor desc : descs) {
+            if(map.containsKey(desc.getName())){
+                Method m = desc.getWriteMethod();
+                m.invoke(obj,map.get(desc.getName())[0]);
+            }
+        }
+    }
+}
+
+class User {
+    private String name;
+    private Integer age;
+    public User (){}
+    public void setName (String name){
+        this.name = name;
+    }
+    public void setAge(Integer age){
+        this.age = age;
+    }
+    public String getName (){
+        return this.name;
+    }
+    public Integer getAge () {
+        return this.age;
+    }
+}
+```
+
+
+
+##### （三）事务管理
+
+事物：指的是逻辑上的一组操作，组成这个操作的各个逻辑单元要么一起成功，要么一起失败
+
+
+
+体会`rollback/commit;`因为mysql默认是自动提交，所以需要我们手动开启事物；
+
+```mysql
+#创建表
+create table account {
+	id int(4) primary key auto_increment,
+	name varchar(40),
+	balance double(10,2)
+}character set utf8;
+#插入数据
+insert into account values(1,'chenxiang',1000.00),(null,'libin',20000.00);
+#手动开启事物
+start transaction;
+
+#更改表
+update account set money = money - 100 where name='chenxiang';
+update account set money = money + 100 where name='libin';
+
+#查询表
+select * from account;
+
+#回滚，表回到没改变之前；如果提交，表将发生变化
+rollback;
+#commit;
+#如果访问数据库发生异常我们就回滚（注意手动将auto_commit关闭就需要自动提交了，就能回滚）
+
+```
+
+
+
+JDBC事务管理
+
+JDBC事务管理是由Connection管理的
+
+
+
+Connection的方法：
+
+> 1、将连接的自动提交模式设置为给定状态
+>
+> `void setAutoCommit(boolean autoCommit)`
+>
+> 2、使用所有上一次提交/回滚后进行的更改为持久更改，并释放对象当前持有的所有数据库锁
+>
+> `void commit()`
+>
+> 3、取消在当前事物中进行的所有更改，并释放connection对象持有的所有数据库锁
+>
+> `rollback()`
+>
+> 4、设置事务的隔离级别
+>
+> `void setTransactionIsolation(int level)`
+
+
+
+转账出现的问题：
+
+如果张三（转账人）的更新没有异常，李四（收款人）的有异常，会发现张三的钱少了，李四的钱多了，这很明显不能
+
+即使我们将这两个连接都设置为手动提交，两个人的操作数据库连接也并不是一个连接，这并不是好的解决办法，因为回滚也互相没有联系
+
+事物应该加在业务层，需要业务层获得Connection对象，将Connection给Dao才可以
+
+
+
+解决办法一（代码具有侵入性）：
+
+```java
+public class Service {
+    AccountDao dao = new AccountDao();
+    public void transfer (String from,String to,Double money){
+        Connection con = null;
+        try{
+            con = JDBCUtils.getConnection();
+            con.setAutoCommit(false);
+            dao.update(from,money,con);
+            dao.update(to,money,con);
+            con.commit();
+        }catch(Exception e){
+            con.rollback();//处理异常
+            e.printStackTrace();
+        }finally{
+            con.close();//处理异常
+        }
+    }
+}
+```
+
+
+
+解决办法二（Hibernate解决办法）：
+
+Hibernate：将连接绑定到当前线程中，Dao从当前线程中获得连接
+
+>1、创建一个线程本地变量
+>
+>`new ThreadLocal<>()`
+>
+>2、返回此线程局部变量的当前线程初始值
+>
+>`initialValue()`
+>
+>3、移除此线程局部变量当前线程的值
+>
+>`remove()`
+>
+>4、将此线程局部变量的当前线程副本中的值设置为指定值
+>
+>`set()`
+
+```java
+//目的，保证用的都是一个连接
+public class JDBCUtils {
+    private static final ComboPoolDataSource DATA_SOURCE = new ComboPoolDataSource();
+    private static ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
+    //获得连接的方法
+    public static Connection getConnection (){
+        Connection con = null;
+        try{
+            con = threadLocal.get();
+            if(con==null){
+                con = DATA_SOURCE.getConnection();
+                threadLocal.set(con);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    //开启事务的方法
+    public static void beginTransaction () throws SQLException  {
+        Connection con = threadLocal.get();
+        if(con == null){
+            con = DATA_SOURCE.getConnection();
+            threadLocal.set(con);
+        }
+        con.setAutoCommit(false);
+    }
+    //回滚事务的方法
+    public static void commitTransaction () throws SQLException {
+        Connection con = threadLocal.get();
+        con.commit();
+    }
+    //回滚事物的方法
+    public static void rollbackTransaction () throws SQLException {
+        Connection con = t.get();
+        con.rollback();
+    }
+}
+```
+
+
+
+面试经常问的问题：
+
+<font color="blue">事物的四大特性：</font>
+
++ 原子性：事物的不可分割
++ 一致性：强调事务执行的前后，数据的完整性保持一致
++ 隔离性：一个事务的执行不应该受到其它事务的干扰
++ 持久性：事务一旦结束（提交/回滚）数据就持久到了数据库
+
+
+
+如果不考虑事务的隔离性，会引发一些安全的问题：
+
+<font color="blue">1）读问题：</font>
+
++ 脏读：一个事务读到另一个事务还没有提交的数据
+
+  一个事务还没提交，
+
++ 不可重复读：一个事务读到了另一个事务已经提交的update数据，导致当前的事务中多次查询结果不一致
+
++ 虚读/幻读：一个事务读到另一个已经提交的insert数据，导致当前的事务多次查询结果不一致
+
+
+
+解决办法，设置事务的隔离级别：
+
++ `read uncommitted`：隔离级别最低，脏读，不可重复读，虚读都会发生
++ `read committed`：已提交读，避免脏读，不可重复读，虚读都会发生
++ `repeatable read`：可重复读，避免了脏读，不可重复读，但是虚读可能发生
++ `serializable`：串行化，避免了脏读，不可重复读，虚读（不存在事务并发，都是串行执行的，所以性能最差）
+
+Mysql默认的是`repeatable read`，Oracle默认的是`read committed`
+
+通常事务隔离级别是不会用`read uncommitted`和`serializable`的，一个性能高，但太不安全，一个太安全，性能太差
+
+
+
+Mysql指令：
+
+> 1、查看隔离级别
+>
+> `select @@tx_isolation`
+>
+> 2、设置事务隔离级别
+>
+> `set session transaction isolation level = "事务名称" `
+>
+> ```mysql
+> set  [glogal | session]  transaction isolation level '隔离级别名称';
+> #事务名称： uncommitted-read committed-read repeatable-read serializable
+> set tx_isolation='隔离级别名称';
+> ```
+> 避免虚读
+>
+> 设置隔离级别`serializable`，不允许并行操作
+
+不可重复读演示
+
+```mysql
+# 转账的demo，A，B窗口同时开启事务
+# 隔离级别均为repeatable-read
+start transaction;
+# A窗口执行更新语句
+update account set money = money - 1000 where name="zhangsan";
+# B窗口进行查询,发现数据并没有更新
+# 避免了脏读，对方没有提交的数据读不到
+select * from account;
+# A窗口执行提交操作
+commit;
+# B窗口执行查询
+# 发现数据并没有更新，避免了不可重复读
+select * from account;
+# B窗口执行提交
+# 发现数据更新
+commit;
+```
+
+
+
+> EE开发经典三层结构：
+>
+> 客户端层 ----> Java Applet(最早，需要下载插件支持这个脚本语言)，HTML，CSS，JS
+>
+> web层 ----> Servlet+JSP
+>
+> 业务层 ----> EJB（Enterprise Java Bean）
+>
+> 持久层
+>
+> 使用Servlet，JSP，JavaBean，JDBC开发目前市面的大部分项目
+>
+> 
+>
+> 当前开发结构
+>
+> Web：Struts2，SpringMVC，Struts1，Webwork
+>
+> 业务层：Javabean，Spring
+>
+> 持久层：Hiberbate,Mybatis,DBUtils,JDBCTemplate
+
+
+
+
+
+2）写问题：
+
++ 引发两类丢失更新

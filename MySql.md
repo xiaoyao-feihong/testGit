@@ -22,7 +22,7 @@ JavaEE（Web部分）：Tomcat，Servelet，JSP，EL+JSTL，Filter，Listener，
 + 1980年，SQL（structured query language）
 + 1989年，国际化标准化组织（ISO）颁布SQL正式国际标准，SQL89标准，现在很多数据库厂商还在遵循沿用这套规范
 + 微软公司：SQLServer数据库，Access数据库（Office办公软件）
-+ Oracle公司：Oracle数据库，MySQL数据库（最早是瑞典一家公司MySQL），SUN并购了MySQL，后SUN公司被Oracle数据库
++ Oracle公司：Oracle数据库，MySQL数据库（最早是瑞典一家公司MySQL），SUN并购了MySQL，后SUN公司被Oracle收购
 + 大型服务器系统是Linux，所以微软的数据库存在兼容性问题，一般使用MySQL和Oracle数据库
 
 ##### 4、操作数据库的语言规范
@@ -70,7 +70,7 @@ JavaEE（Web部分）：Tomcat，Servelet，JSP，EL+JSTL，Filter，Listener，
   - 数据库中数据类型，按存储数据的方式来分类
     - 数值型
       - 整数：tinyint(1byte) smallint(2byte) mediumint(3byte) *int(4byte)/integer bigint(8byte)
-      - 浮点：*float(4byte) *double(8byte) decimal(4byte) numeric(8byte);float和double更精确
+      - 浮点：*float(4byte) * double(8byte) decimal(4byte) numeric(8byte);float和double更精确
     - 字符串
       - 存储字符串
         - *varchar(4byte)可变长字符串，根据存入的字符个数可以变长，'a'1字节，'ab'2字节
@@ -88,7 +88,7 @@ JavaEE（Web部分）：Tomcat，Servelet，JSP，EL+JSTL，Filter，Listener，
 
 + 修改表格的结构
   - 表格名字修改：`alter table 原表名 rename to 新表名;`
-  - 修改原有的列名（列类型不对，列长度不够）：`alter table 表名 原列名 change  新列名 新类型 新长度; `
+  - 修改原有的列名（列类型不对，列长度不够）：`alter table 表名  change column 原列名 新列名 新类型 新长度; `
   - 新增一个列：`alter table 表名 add 新列名 新类型 新长度 `
   - 删除一个原有的列：`alter table 表名 drop 列名  ;`
   - 删除表格：`drop table 表格名字;`
@@ -103,7 +103,7 @@ create table student (
     sage int(4)
 );
 alter table student rename to stuinform;//表格重命名
-alter table stuinform change sid snum;//更改表格列名
+alter table stuinform change column sid snum;//更改表格列名
 alter table stuinform add sscore int(4);//表格添加一列
 alter table stuinform drop sscore;//删除一列
 drop stuinform;//删除一个表
@@ -119,7 +119,7 @@ drop database test;//删除数据库
   
 - 设置默认编码字符集：`create database test default character set = 'utf8';`
   
-- 创建表格的时候设置字符集：`create table tablename()character set utf8;`
+- 创建表格的时候设置字符集：`create table tablename(...) character set utf8;`
   
 + `delete`删除记录：`delete from tablename where 条件` 
 
@@ -169,9 +169,9 @@ drop database test;//删除数据库
 >
 > `in`运算符
 >
-> 如下的1条件满足一个即可
+> 如下的条件满足一个即可
 >
-> eg：select * from student where chinese in (92,97)只查找语文成绩为92或97的
+> eg：select * from student where chinese in (92,97)	查找语文成绩为92或97的
 >
 > `like`运算符
 >
@@ -270,7 +270,7 @@ drop database test;//删除数据库
 >
 > （5）查询所有工资为6000，7000，8000，或者姓张，并且不叫张三丰的所有人的信息
 >
-> `select * from person where salary in (6000,7000,8000) or username like '张%' and username!+"张三丰";`
+> `select * from person where salary in (6000,7000,8000) or username like '张%' and username!="张三丰";`
 
 
 
@@ -386,7 +386,7 @@ drop database test;//删除数据库
 >
 > 使用：可以将一个查询结果作为外层条件进行查询
 >
-> `select * from (select * from student where chinese > 80) newStudent;`
+> `select * from (select * from student where chinese > 80) as newStudent;`
 >
 > 注意：将结果当作表格的时候需要给新表指定名字
 >

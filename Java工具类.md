@@ -885,6 +885,7 @@ public class Person {
     }
     //重写equals方法，但是还是没有改变size，因为还得重写hashCode
     public boolean equals (Object o){
+        //如果地址xiang
         if(this==o){
             return true;
         }
@@ -1006,6 +1007,7 @@ while(it.hasNext()){
     String value = map.get(key);
     System.out.println("key:"+key+";value:"+value);
 }
+
 ```
 
 - TreeMap：以二叉树形式存储，自然有序，按照unicode编码排序
@@ -1016,8 +1018,6 @@ while(it.hasNext()){
 TreeMap<Integet,String> map = new TreeMap<Integer,String>();
 
 map.put(1,"a");
-
-
 ```
 
 考试系统：
