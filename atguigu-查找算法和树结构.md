@@ -436,7 +436,7 @@ class EmpLinkedList {
 
 
 
-###### 2、二叉树的概念
+##### 3、二叉树的概念
 
 （1）每个节点做多只能有两个子节点的一种形式的树
 
@@ -472,7 +472,7 @@ class EmpLinkedList {
 
 
 
-###### 3、前序遍历
+###### 1、前序遍历
 
 先输出父节点，在遍历左子树和右子树
 
@@ -574,19 +574,19 @@ class PersonNode {
 
 
 
-###### 4、中序遍历
+###### 2、中序遍历
 
 先遍历左子树，在输出父节点，在遍历右子树（代码上）
 
 
 
-###### 5、后序遍历
+###### 3、后序遍历
 
 先遍历左子树，在遍历右子树，最后输出父节点（代码上）
 
 
 
-###### 6、二叉树查找节点
+###### 4、二叉树查找节点
 
 （1）前序查找
 
@@ -706,5 +706,451 @@ public PersonNode postOrderSearch(int no){
 
 
 
-###### 7、三种遍历方式的比较
+###### 5、二叉树删除节点
+
+无规则二叉树删除节点
+
+规定：
+
+（1）如果删除的是叶子节点，则删除该节点
+
+（2）如果删除的节点是非叶子节点，则删除该子树
+
+思路：
+
+（1）因为二叉树是单向的，所以我们比较的当前的节点的左子节点或右子节点
+
+（2）如果root节点不为空，且值就和查找值相等，二叉树置空
+
+（3）否则root节点执行自身的删除方法
+
+（4）自身删除方法先找左子节点来与查找值判断，如果相等，终止方法
+
+（5）左边不等，找右子节点判断值，如果相等，终止方法
+
+（6）都不等，如果左子节点不为空，执行左子节点的删除方法
+
+（7）还是没找到，如果右子节点不为空，执行右子节点的删除方法
+
+（8）一直没找到，就输出
+
+
+
+递归删除节点
+
+```java
+//PersonNode删除方法
+public PersonNode delete (int num){
+        //注意当前节点的判断是通过父节点进行比较的，所以不用考虑
+        PersonNode result = null;
+
+        //判断左子节点值是否相等
+        if(this.left != null && this.left.getNum() == num){
+            result = this.left;
+            this.left = null;
+            return result;
+        }
+
+        //判断右子节点值是否相等
+        if(this.right != null && this.right.getNum() == num){
+            result = this.right;
+            this.right = null;
+            return result;
+        }
+
+        //递归左子节点删除操作
+        if(this.left != null){
+            result = this.left.delete(num);
+            if(result != null)return result;
+        }
+
+        //递归右子节点删除操作
+        if(this.right != null){
+            result = this.right.delete(num);
+            if(result != null)return result;
+        }
+        return result;
+}
+
+//BinaryTree删除方法
+public PersonNode delete (int num){
+        PersonNode res = null;
+        if(this.root != null){
+            if(this.root.getNum() == num){
+                res = this.root;
+                this.root = null;
+            }else{
+                res = this.root.delete(num);
+            }
+        }
+        if(res == null){
+            System.out.println("binary tree is empty.");
+        }else{
+            System.out.println("删除节点：" + res);
+        }
+        return res;
+}
+```
+
+
+
+思考：将代码改成，如果找到该节点，删除该节点，如果左子节点不为空，就将左子节点放过来，如果为空，就判断右子节点是否为空，不为空就放右子节点
+
+
+
+##### 4、顺序存储二叉树
+
+基本说明：从数据存储来看，数组存储方式和树的存储方式可以相互转换，也就是树可以转化为数组，数组可以转化为树。
+
+
+
+顺序存储二叉树的的特点：
+
+（1）顺序二叉树通常只考虑完全二叉树
+
+（2）第n个元素的左子节点放第2\*n + 1个元素，右子节点存放第2\*n + 2个元素
+
+（3）第n个元素的父节点为(n - 1) / 2
+
+（4）n表示二叉树的第n个元素
+
+（5）只是规定存放顺序，和节点或数组里存放的值没有关系
+
+
+
+顺序存储二叉树
+
+![](算法img/顺序存储二叉树.png)
+
+
+
+顺序存储二叉树代码实现
+
+```java
+public class ArrayBinaryTree {
+    public static void main (String[] args){
+        int[] arr = {1,2,3,4,5,6,7};
+    }
+    
+    private int[] arr;
+    public ArrayBinaryTree (int[] arr){
+        this.arr = arr;
+    }
+    
+    public void preOrder () {
+        this.preOrder(0);
+    }
+    
+    //前序遍历传index=0
+    public void preOrder (int index){
+        if(arr = null || arr.length = 0){
+            System.out.println("Array should not be null.");
+            return;
+        }
+        System.out.println(arr[index]);
+        if(index * 2 + 1 < arr.length){
+            preOrder(2 * index + 1);
+        }
+        if(index * 2 + 2 < arr.length){
+            preOrder(2*index + 2);
+        }
+    }
+    
+     //中序遍历
+    public void infixOrderList (int index){
+        //数组没有初始化，或传递空数组处理
+        if(arr == null || arr.length == 0){
+            System.out.println("Array should not be null.");
+            return;
+        }
+        if(index*2 + 1 < arr.length){
+            infixOrderList(index*2 + 1);
+        }
+        System.out.print(arr[index] + "\t");
+        if(index*2 + 2 < arr.length){
+            infixOrderList(index*2 + 2);
+        }
+    }
+
+    //后序遍历
+    public void postOrderList (int index){
+        //数组没有初始化，或传递空数组处理
+        if(arr == null || arr.length == 0){
+            System.out.println("Array should not be null.");
+            return;
+        }
+        if(index*2 + 1 < arr.length){
+            postOrderList(index*2 + 1);
+        }
+        if(index*2 + 2 < arr.length){
+            postOrderList(index*2 + 2);
+        }
+        System.out.print(arr[index] + "\t");
+    }
+}
+```
+
+
+
+使用场景：堆排序利用的数据结构就是顺序存储二叉树
+
+
+
+##### 5、线索化二叉树
+
+将数列{1，3，6，8，10，14}构建成一棵二叉树
+
+二叉树：
+
+```java
+		1
+ 	3		6
+  8	  10  14         
+```
+
+问题：对二叉树进行遍历时，6，8，10，14这几个节点的左右指针，并没有完全的利用上，如果我们想充分利用各个节点的左右指针，让各个节点指向自己的前后节点怎么办？
+
+
+
+解决方案：线索化二叉树
+
+
+
+线索化二叉树（Threaded Binary Tree）
+
+（1）n个节点的二叉链表中含有n+1个空指针域（2n-（n-1）= n+1）。
+
+***推导：***n个元素会产生2n个指针，两两相连产生的树需要n-1个指针连接，所以空指针数是`2n-(n-1)`个
+
+（2）利用二叉链表的空指针域，存放指向该节点在某种遍历次序下的前驱和后继节点的指针，这种附加的指针称为**线索**。
+
+不同的遍历方式空指针指向的节点不同
+
+（3）加上线索的二叉链表成为**线索链表**，相应的二叉树成为**线索二叉树**。
+
+（4）根据线索性质的不同，线索二叉树分为**前序线索二叉树**、**中序线索二叉树**、**后序线索二叉树**。
+
+（5）一个节点的前一个结点，称为**前驱节点**，一个节点的后一个节点称为**后继节点**
+
+
+
+应用案例：中序遍历结果--{8，3，10，1，14，6}
+
+```java
+	    1 
+   3          6 
+ 8  10      14
+//根据中序遍历结果来的
+//8的右指针指向3，10的左指针指向3，右指向1
+//14的左指针指向1，右指针指向6
+```
+
+说明：当线索化二叉树后，节点的属性left和right，有如下情况：
+
+（1）left的指向是左子树，也可能是指向前驱节点，比如1节点根据中序遍历结果做指针指向10，实际指向3，右指针指向14，实际指向6，10节点左指针指向了前驱节点；
+
+（2）right指向的是右子树，也可能是指向后继节点，比如1节点的right指向的是右子树，而10节点得到right指向的是后继节点。
+
+
+
+线索二叉树代码实现：
+
+<font color="red">注意最左的叶子节点左指针，和最右的叶子节点的右指针都是不会被设置上线索的</font>
+
+```java
+public class ThreadedBinaryTree {
+    private HeroNode root;
+    
+    //递归进行线索化的时候，总是保留前驱节点
+    private HeroNode prev = null;
+    
+    //二叉树添加中序线索化的方法
+    public void threadedNodes (PersonNode node) {
+        if(node == null){
+            return;
+        }
+        //1.先线索化左子树
+        threaded(node.getLeft());
+        
+        //2.线索化当前节点
+        //2.1先处理当前节点的前驱节点
+        if(node.getLeft() == null){
+            node.setLeft(prev);
+            node.setLeftType(false);
+        }
+        
+        //2.2处理后继节点
+        if(prev!= null && prev.getRight() == null){
+            //让前驱节点的右指针指向当前节点
+            prev.setRight(node);
+            prev.setRight(false);
+        }
+        //每处理一个节点，让当前节点是下一个节点的前驱节点
+        prev = node;
+        
+        //3.线索化右子树
+        threaded(node.getRight());
+    }
+}
+//在PersonNode中规定：
+//leftType:true左子树，false前驱节点
+//leftType:true右子树，false后继节点
+```
+
+
+
+遍历线索化二叉树
+
+各个节点可以通过线性方式遍历，因此无需递归，提高了遍历效率，遍历次序应当和中序遍历一致
+
+```java
+//中序遍历
+public void threadedList () {
+    PersonNode temp = root;
+    while(temp != null){
+        while(temp.getLeftType()){
+            temp = temp.getLeft();
+        }
+        //到最左节点并输出
+        System.out.println(temp);
+        //一直输出后继节点
+        while(!temp.getRightType()){
+            temp = temp.getRight();
+            System.out.println(temp);
+        }
+        node = node.getRight();
+    }
+}
+```
+
+
+
+#### 4、数据结构和算法的应用
+
+##### 1、堆排序介绍与实现
+
+（1）堆排序是利用堆这种数据结构，堆排序是一种选择排序，它的最坏、最好、平均时间复杂度都是O(nlog n)，是不稳定排序
+
+（2）堆是完全二叉树
+
++ 每个节点的值，都大于等于左右孩子节点的值，成为**大顶堆**
++ 没有要求左右孩子节点的值
++ 每个节点的值都小于或等于左右孩子节点的值，称为**小顶堆**
+
+（3）升序采用大顶堆，降序采用小顶堆
+
+
+
+堆排序思想
+
+（1）将待排序序列结构构成一个大顶堆（不需要构建二叉树）
+
+（2）此时整个序列的最大值就是堆顶的根节点
+
+（3）将其与末尾元素进行交换，此时末尾就是最大值
+
+（4）然后将剩余n-1个元素重新构成一个堆，这样会得到n个元素的次小值，如此反复执行，就能得到一个有序序列了。
+
+可以看到构建大顶堆的过程中，元素的个数逐渐减少，最后得到一个有序序列。
+
+
+
+堆排序基本思路
+
+（1）将无须序列构成为一个堆（大顶堆或小顶堆）
+
+（2）将堆顶元素和末尾元素交换，将大元素沉到数组末端
+
+（3）重新调整结构，使其满足定义，然后继续交换堆顶元素与当前末尾元素，反复执行调整，交换，知道整个序列有序
+
+
+
+堆排序代码实现
+
+```java
+public class HeapSort{
+    public void heapSort (int[] arr){
+       //根据非叶子节点自下而上完成最大值的上浮
+        for(int i = arr.length/2 - 1; i >= 0; i--){
+            adjustHeap(arr,i,arr.length);
+        }
+        //将上浮的值交换到数组后面
+        int temp = 0;
+        for(int j = arr.length-1;j>0;j--){
+            temp = arr[j];
+            arr[j] = arr[0];
+            arr[0] = temp;
+            adjustHeap(arr,0,j);
+        }
+    }
+    
+    //注意非叶子节点i是自下而上的
+    //数组为待调整数组，i表示非叶子节点数组中索引
+    //length堆多少个元素进行调整，length在逐渐减少
+    //功能：完成将非叶子节点的树调整成大顶堆
+    public void addjustHeap (int[] arr,int i,int length){
+        int temp = arr[i];
+        for(int k = i*2 + 1; k < length; k = k*2 +1){
+            //如果左子节点比右子节点小，切到右子节点
+            if(k + 1 < length && arr[k] < arr[k+1]){
+                k++;//指向右子节点
+            }
+            //找到子节点中比较大的与当前非叶子节点比较
+            if(arr[k] > temp){
+                //如果子节点大于父节点，把较大的值赋值给当前节点，让i指向k
+                arr[i] = arr[k];
+                //切换到当前节点的下一个节点继续循环比较
+                i = k;
+            }else{
+                break;//
+            }
+        }
+        //当循环结束后，已经将i为父节点的树的最大值，放在了最顶上
+        //将找到的非叶子节点值赋值过去，完成交换
+        arr[i] = temp;
+    }
+}
+```
+
+
+
+堆排序速度特别快，不是递归而是迭代，所以强
+
+
+
+##### 2、赫夫曼树
+
+基本介绍
+
+（1）给定n个权值作为n个叶子节点，构造一棵二叉树，如果该树的带权路径长度达到最小，称这样的树为最优二叉树
+
+（2）赫夫曼树是带权路径长度最短的树，权值较大的节点离根较近
+
+
+
+赫夫曼树重要概念
+
+（1）在一棵树，从一个节点往下达到孩子或孙子节点之间的通路，称为**路径**，通路中分支的数目称为**路径长度**。若规定层数为L，则到L层的路径长度为L-1.
+
+（2）若将树中节点赋给一个有着某种含义的数值，则这个数值称为该节点的**权**。
+
+（3）**节点的带权路径长度**：从根节点到该节点之间的路径长度与该节点的权的乘积（如路径长度是2，目标节点权值为5，带权路径长度为10）
+
+（4）**树的带权路径长度**：树的带权路径长度规定为所有叶子节点的带权路径之和，记为WPL（weighted path length）
+
+（5）WPL最小的就是**赫夫曼树**
+
+
+
+赫夫曼树创建思路：
+
+（1）先将数组从小到大进行排序，每一个数据都是一个节点，每个节点可以看成是一棵最简单的二叉树
+
+（2）取出节点权值最小的两棵二叉树
+
+（3）组成一棵新的二叉树，该新的二叉树的根节点的权值是前面两棵二叉树根节点权值的和
+
+（4）将这棵新的二叉树，以根节点的权值大小再次排序，不断重复，知道数列中，所有数据都被处理，就得到一棵赫夫曼树
+
+
 
