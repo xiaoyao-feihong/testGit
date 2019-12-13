@@ -522,7 +522,7 @@ servlet：servlet是运行在web服务器上的小型Java程序，就是SUN公�
 
 ```java
 package servletpackage;
-public class ServaaletDemo implements Servlet {
+public class ServletDemo implements Servlet {
     public void service (ServletRequest req,ServletResponse res) throws Exception {
         
     }
@@ -1402,6 +1402,7 @@ update account set money = money - 1000 where name="zhangsan";
 select * from account;
 # A窗口执行提交操作
 commit;
+
 # B窗口执行查询
 # 发现数据并没有更新，避免了不可重复读
 select * from account;

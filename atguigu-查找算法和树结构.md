@@ -48,7 +48,7 @@ public static seqSearch (int[] arr,int value){
 
 思路分析：
 
-（1）首先确定该数组的中间下表
+（1）首先确定该数组的中间下标
 
 （2）然后让需要查找的数据与中间值比较，然后根据比较进行递归，决定向哪边递归，如果相等就返回
 
@@ -76,6 +76,35 @@ public static int binarySearchOne (int[] arr,int left,int right,int value){
         }else{
             return mid;
         }
+    }
+}
+
+//不需要递归的二分查找
+public class BinarySearch {
+
+    public static int binarySearch (int[] arr,int value){
+        int mid = 0;
+        int left = 0;
+        int right = arr.length - 1;
+        //小于等于，只有一个数时需要判断
+        while(left <= right){
+            //直接left + right更容易越界
+            mid = left + (right - left) / 2;
+            if(arr[mid] > value){
+                right = mid - 1;
+            }else if(arr[mid] < value){
+                left = mid + 1;
+            }else if(arr[mid] == value){
+                return mid;
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        //测试代码
+        int[] arr = {1,3,5,12,15,19};
+        System.out.println(binarySearch(arr,1));
     }
 }
 ```
@@ -161,6 +190,7 @@ public static void insertSearch (int[] arr,left,right,value){
     if(left > right || value < arr[0] || value > arr[arr.length-1]){
         return -1;
     }
+    //预估索引
     int mid = (value - arr[left])/(arr[right]-arr[left])*(right-left);
     int midValue = arr[mid];
     if(value > midValue){
@@ -214,12 +244,12 @@ public static fibonacciSearch (int[] arr,int value){
     int[] fiboArr = getFibonacciArray(20);
     
     //获取分割数值下标
-    while(high > f[k] - 1){
+    while(high > fiboArr[k] - 1){
         k++;
     }
     
     //创建临时数组
-    int[] temp = Arrays.copyOf(arr,f[k]);
+    int[] temp = Arrays.copyOf(arr,fiboArr[k]);
     
     //f[k]的值最后会大于等于数组长度，多余的地方会补0
     //将多余部分进行处理，让数组始终保持有序
@@ -231,10 +261,10 @@ public static fibonacciSearch (int[] arr,int value){
     while(low <= high){
         mid = low + fiboArr[k-1] - 1;
         //向左查找
-        if(key < temp[mid]){
+        if(value < temp[mid]){
             high = mid - 1;
             k--;
-        }else if(key > temp[mid]){
+        }else if(value > temp[mid]){
             low = mid + 1;
             //因为后面的初始长度是f[k-2],从f[k-2]为分割点
             k -= 2;
@@ -242,8 +272,8 @@ public static fibonacciSearch (int[] arr,int value){
             //根据大小决定返回索引
             return mid <= high ? mid : high;
         }
-        return -1;
     }
+    return -1;
 }
 
 //创建一个斐波那契数列
@@ -326,7 +356,7 @@ public class HashTableDemo {
     }
     //添加雇员
     public void add (Emp emp) {
-        int hash = getHash(emp.getId);
+        int hash = getHash(emp.getId());
         empListArray[hash].add(emp);
     }
     
@@ -375,6 +405,7 @@ class EmpLinkedList {
         }
     }
 }
+class Emp {}//省略
 ```
 
 
@@ -1124,7 +1155,9 @@ public class HeapSort{
 
 （1）给定n个权值作为n个叶子节点，构造一棵二叉树，如果该树的带权路径长度达到最小，称这样的树为最优二叉树
 
-（2）赫夫曼树是带权路径长度最短的树，权值较大的节点离根较近
+（2）**赫夫曼树是带权路径长度最短的树**，权值较大的节点离根较近,
+
+?		WPL最小的数
 
 
 
@@ -1150,7 +1183,880 @@ public class HeapSort{
 
 （3）组成一棵新的二叉树，该新的二叉树的根节点的权值是前面两棵二叉树根节点权值的和
 
-（4）将这棵新的二叉树，以根节点的权值大小再次排序，不断重复，知道数列中，所有数据都被处理，就得到一棵赫夫曼树
+（4）将这棵新的二叉树，以根节点的权值大小再次排序，不断重复，直到数列中，所有数据都被处理，就得到一棵赫夫曼树
 
 
 
+java实现赫夫曼树
+
+```java
+public class HuffmanTree {
+    public static void main(String[] args){
+        int[] arr = {13,7,8,3,29,6,1};
+        createHuffmanTree(arr);
+    }
+    
+    //遍历数组，将数组的每一个元素构建成一个Node放入到ArrayList中
+    public static void createHuffmanTree (int[] arr){
+        List<Node> nodes = new ArrayList<>();
+        for(int value : arr){
+            nodes.add(new Node(value));
+        }
+        
+        while(nodes.size > 1){
+            //从小到大排序,java自带的排序法
+        	Collections.sort(nodes);
+        	Node leftNode = nodes.get(0);
+            Node rightNode = nodes.get(1);
+      Node parentNode = new Node(leftNode.value+rightNode.value);
+            parentNode.left = leftNode;
+            parentNode.right = rightNode;
+            nodes.remove(leftNode);
+            nodes.remove(rightNode);
+            nodes.add(parentNode);
+            Collections.sort(nodes);
+        }
+    }
+    
+    //前序遍历
+    public static void preOrder(Node root){
+        if(this.root != null){
+            this.root.preOrder();
+        }else{
+            System.out.println("root is null.");
+        }
+    }
+}
+//为了让Node能持续排序，实现Comparable接口
+class Node implements Comparable<Node> {
+    int value;
+    Node left;
+    Node right;
+    
+    public void preOrder () {
+        System.out.println(this);
+        if(this.left != null){
+            this.left.preOrder();
+        }
+        if(this.right != null){
+            this.right != null;
+        }
+    }
+    
+    public Node (int value){
+        this.value = value;
+    }
+    
+    public int compareTo (Node target){
+        //从小到大排序
+        return this.value - target.value;
+    }
+}
+```
+
+
+
+##### 3、赫夫曼编码
+
+基本介绍
+
+（1）赫夫曼编码是一种编码方式，属于一种程序算法
+
+（2）赫夫曼编码是赫夫曼树在通信当面的经典应用之一
+
+（3）赫夫曼编码广泛用于数据文件压缩，压缩率通常在20%-90%之间
+
+（4）赫夫曼编码是可变长编码，Huffman于1952年提出的编码方法，称之为最佳编码
+
+
+
+原理分析
+
+通信领域中的信息处理方式---定长编码
+
+> 字符串：`i like java i like java a`
+> ASCII码： `105(i),32(空格),108(l),105,107,101,32,106,97,118,97...`
+>
+> 1.定长编码就是将这些字符的二进制都保存，然后进行传输
+>
+> 二进制：`01101001(i),etc...`数据量比较大！
+>
+> 2.可变长编码
+> （1）统计次数
+> 	`i:4 l,k,e,v,j:2 a:5 空格:6`
+> 原则上，按照各个字符出现的次数进行编码，出现次数越多的，编码越小
+> （2）二进制表示字符
+>
+> `空格:0 a:1 i:10 e:11 j:100 k:101 l:110 v:111 `
+> （3）根据上面规则可变长编码为
+> `10(i) 0(空格) 110(l) 10(i) 101(k) 11(e) 0 100 1 111 1...`
+>
+> 前缀编码：字符的编码不能是其它字符编码的前缀，即不能匹配到重复的编码
+>
+> 存在问题：不是前缀编码，容易存在多义性，比如`i(10)`是`k(101)`的前缀
+
+
+
+赫夫曼编码
+
+通信领域的第三种编码方式
+
+> 1、字符串`i like java i like java a`
+>
+> 2、统计字符出现次数`i:4 l,k,e,v,j:2 a:5 空格:6`
+>
+> 3、按照上面字符出现的次数构建一棵赫夫曼树，出现次数作为权
+>
+> 4、将数据按照规则构建成一棵赫夫曼树
+>
+> 5、根据赫夫曼树，向左为0，向右为1，找到节点的路径就是该树的赫夫曼编码
+>
+> 构建的编码就是前缀编码，即每一个字符的编码都不会是另一个字符编码的前缀原因：因为都是叶子节点表示一个字符，二叉树中到叶子节点的路径是唯一的
+>
+> 6、最后得到的编码就是霍夫曼编码（无损压缩）
+>
+> 7、**注意：**赫夫曼树重复数据出现的时候，是有可能出现不同的赫夫曼树，所以编码也会出现不同的编码结果，但是压缩后的长度是一样的，都是无损压缩
+
+
+
+赫夫曼编码---数据压缩
+
+思路分析：
+
+（1）Node节点，保存数据、权重、左节点、右节点
+
+（2）将得到的字符串放到对应的byte[]数组，将准备构建赫夫曼树的Node节点放到List
+
+（3）通过List构建对应的赫夫曼树
+
+
+
+创建赫夫曼编码树
+
+```java
+public class HuffmanCode {
+    public static void main (String[] args){
+        String str = "I like java do you like java really";
+        byte[] bytes = str.getBytes();
+    }
+    
+    public static List<Node> getNodeList (byte[] bytes) {
+        //用一个List存放所有节点
+        ArrayList<Node> nodes = new ArrayList<>();
+        //用一个Map用来统计字节出现的次数
+        Map<Byte,Integer> counts = new HashMap<>();
+        for(byte b : bytes){
+            Integer count = counts.get(b);
+            if(count == null){
+                counts.put(b,1);
+            }else{
+                //覆盖
+                counts.put(b,count++);
+            }
+        }
+        //遍历Map将节点放到List集合中
+        for(Map.entry<Byte,Integer> entry : counts.entrySet()){
+            nodes.add(new Node(entry.getKey(),entry.getValue()));
+        }
+        return nodes;
+    }
+    
+    //创建赫夫曼树并返回根节点
+    public static Node createHuffmanTree (byte[] bytes) {
+        List<Node> nodes = getNodeList(bytes);
+        while(nodes.size() > 1){
+            Collections.sort(nodes);
+            Node leftNode = nodes.get(0);
+            Node rightNode = nodes.get(1);
+            Node parent = new Node(null,leftNode.getWeight()+rightNode.getWeight());
+            parent.setLeft(leftNode);
+            parent.setRight(rightNode);
+            nodes.remove(leftNode);
+            nodes.remove(rightNode);
+            nodes.add(parent);
+        }
+        return nodes.get(0);
+    }
+}
+
+class Node {
+    //存放数据
+    private Byte data;
+    //表示字符出现次数
+    private int weight;
+    private Node left;
+    private Node right;
+    
+    public Node (Byte data,int weight){
+        this.data = data;
+        this.weight = weight;
+    }
+    
+    public int compareTo (Node o){
+        return this.weight - o.weight;
+    }
+    
+    public void toString (){
+        return "Node[data=" + data + ",weight=" + weight + "]"; 
+    }
+    
+    public void preOrder () {
+        System.out.println(this);
+        if(this.getLeft() != null){
+            this.getLeft().preOrder();
+        }
+        if(this.getRight() != null){
+            this.getRight().preOrder();
+        }
+    }
+}
+```
+
+
+
+获得赫夫曼编码
+
+课程代码
+
+```java
+private static HashMap<Byte,String> byteToCodeMap = new HashMap<>();
+public static void getCodes (Node node,String code,StringBuilder sb) {
+    StringBuilder sb2 = new StringBuilder(sb);
+    sb2.append(code);
+    if(node != null){
+       if(node.getData() == null){
+           getCodes(node.getLeft(),"0",sb2);
+           getCodes(node.getRight(),"1",sb2);
+       }else{
+           byteToCodeMap.put(node.getData(),sb2.toString());
+       }
+    }
+}
+```
+
+自己代码：
+
+```java
+//规定向左的路径为0，向右的路径为1
+    public static void getHuffmanCode (Node node,Map<Byte,String> byteToCodeMap,StringBuilder str) {
+        if(node.getLeft() == null && node.getRight() == null){
+            byteToCodeMap.put(node.getData(),str.toString());
+            return;
+        }
+       if(node.getLeft() != null){
+           str.append("0");
+           getHuffmanCode(node.getLeft(),byteToCodeMap,str);
+           //递归回父级节点删除左支添加的字符
+           str = str.deleteCharAt(str.length()-1);
+       }
+       if(node.getRight() != null){
+           str.append("1");
+           getHuffmanCode(node.getRight(),byteToCodeMap,str);
+           //递归回父级节点删除又支添加的字符
+           str = str.deleteCharAt(str.length()-1);
+        }
+    }
+```
+
+
+
+获取赫夫曼编码后的字节数组
+
+```java
+//bytes 原始字符串对应的字节数组  
+//Map 赫夫曼编码Map
+//返回值，处理后赫夫曼字节数组
+//注意生成的赫夫曼编码是补码，-1获得反码，符号位不变，按位取反获得原码
+private static byte[] zip(byte[] bytes,Map<Byte,String huffmanCodeMap){
+    StringBuilder sb = new StringBuilder("");
+    for(byte b : bytes){
+        sb.append(huffmanCodeMap.get(b));
+    }
+    //将对应字符串转为byte数组
+    //统计返回赫夫曼编码长度
+    //因为每个字节都是8位，所以不足要补0
+    int len = (sb.length() + 7) / 8;
+    //等价于len = sb.length() % 8 == 0 ? sb.length % 8 : sb.length() % 8 + 1;
+    //创建存储压缩后的byte数组，大小为len
+    byte[] newByteArr = new byte[len];
+    int index = 0;
+    for(int i = 0; i < sb.length(); i+=8){
+        String temp = "";
+        //防止越界，最后一位会在强转的时候补0
+        if(i + 8 > sb.length()){
+            temp = sb.substring(i);
+        }else{
+            temp = sb.substring(i,i + 8);
+        }
+        newByteArr[index++] = (byte)Integer.parseInt(temp,2);
+    }
+    return newByteArr;
+}
+```
+
+
+
+赫夫曼字节数组解码
+
+```java
+//完成数据解压
+//1.将字节转化成二进制
+//2.将编码对应的二进制字符串对照赫夫曼Map转化为字符串
+//3.flag标识整数
+//4.返回值是字节对应的二进制字符串
+public static String byteToBitString (byte b,boolean flag) {
+     int temp = b;//将b转成int类型
+        
+     //如果是正数存在补高位
+     if(flag){
+        //比如1获取二进制字符串是1
+        // 256|1: 1 0000 0000 | 0000 0001 100000001
+        temp |= 256;
+     }
+        
+     //获取字节对应的补码但是整数是去了无用0的
+      //4: 100,所以需要上面的操作补0
+      String str = Integer.toBinaryString(temp);
+      if(flag){
+         //长度为9，需要把第一个干掉
+         return str.substring(str.length()-8);
+      }else{
+         //最后一个字节是不需要补高位的
+         //返回后可以通过Integer的方法转Int类型
+         return str;
+      }
+}
+    
+//完成对压缩数据的解码
+public static byte[] decode (Map<Byte,String> huffmanCodeMap,byte[] huffmanBytes){
+    StringBuilder sb = new StringBuilder("");
+    //将byte数组转成二进制字符串
+    for(int i = 0; i < huffmanBytes.length;i++){
+        boolean flag = (i!=huffmanBytes.length-1);
+        sb.append(byteToBitString(huffmanBytes[i],flag));
+    }
+    //将原来的Map反转，方便通过字符串获取字节
+    Map<String,Byte> reverseMap = new HashMap<String,byte>;
+    for(Map.Entry<Byte,String> entry : byteToCodeMap){
+        reverseMap.put(entry.getValue(),entry.getKey());
+    }
+    //将二进制字符串对应的字节取出放到集合里
+    List<Byte> list = new ArrayList<>();
+    for(int i = 0; i < sb.length();){
+        int count = 1;
+        boolean flag = true;
+        Byte b = null;
+        while(flag){
+            String key = sb.substring(i,i+count);
+            b = map.get(key);
+            if(b == null){
+                count++;
+            }else{
+                flag = false;
+            }
+        }
+        list.add(b);
+        i += count;
+    }
+}
+```
+
+
+
+通过哈夫曼编码方法对文件进行压缩
+
+```java
+//srcFile：源文件路径  outFile：输出文件路径
+public static void zipFile (String srcFile,String outFile){
+    FileInputStream fis = null;
+    FileOutputStream fos = null;
+    ObjectOutputStream oos = null;
+    try{
+        fis = new FileInputStream(srcFile);
+        byte[] b = new byte[fis.available];
+        fis.read(b);
+        //获取压缩后的数组
+        byte[] zipBytes = zip(b);
+        fos = new FileOutputStream(outFile);
+        //创建对象输出流，为了以后回复源文件使用
+        oos = new ObjectOutputStream(fos);
+        oos.writeObject(zipBytes);
+        //将byte和String的映射关系写进文件
+        oos.writeObject(byteToCodeMap);
+        oos.flush();
+    }catch(Exception e){
+        e.printStackTrace();
+    }finally{
+        try{
+            fis.close();
+            fos.close();
+            oos.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+
+赫夫曼压缩文件解压
+
+```java
+public static void unZipFile (String src,String out) {
+    //定义文件的输入流
+    FileInputStream fis = null;
+    ObjectInputStream ois = null;
+    FileOutputStream fos = null;
+    try{
+        fis = new FileInputStream(src);
+        ois = new ObjectInputStream(fis);
+        byte[] huffmanBytes = (byte[])ois.readObject();
+        Map<Byte,String> map = (Map<Byte,String>)ois.readObject();
+        decode();
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}
+```
+
+
+
+赫夫曼压缩文件注意事项
+
+（1）如果文件本身就是经过压缩处理的，再使用赫夫曼编码压缩压缩效率不会有明显变化，比如视频、ppt等文件，本身就是经过压缩的文件
+
+（2）赫夫曼编码是按照字节处理的，所以可以无损压缩所有的文件
+
+（3）如果一个文件中重复的数据不多，压缩效果也不明显
+
+
+
+#### 5、二叉排序树
+
+二叉排序树介绍：BST（Binary sort tree），对于二叉树的任何一个非叶子节点，要求左子节点的值比当前节点值小，右子节点的值比当前节点的值大
+
+
+
+二叉排序树添加和遍历方法代码
+
+```java
+public class BinarySortTree {
+    Node root;
+    
+    public BinarySortTree (){}
+    
+    public void add(Node node){
+        if(root == null){
+            root = node;
+        }else{
+            root.add(node);
+        }
+    }
+    
+    public void infixOrder () {
+        if(root != null){
+            root.infixOrder();
+        }else{
+            System.out.println("tree is null.");
+        }
+    }
+}
+
+class Node {
+    int value;
+    Node left;
+    Node right;
+    
+    public Node (int value){
+        this.value = value;
+    }
+    
+    //添加节点
+    public void add(Node node){
+        if(node == null){
+            return;
+        }
+        //添加节点值与当前节点值进行大小比较
+        if(node.value < this.value){
+            if(this.left == null){
+                this.left = node;
+            }else{
+                this.left.add(node);
+            }
+        }else{
+            if(this.right == null){
+                this.right = node;
+            }else{
+                this.right.add(node);
+            }
+        }
+    }
+    
+    //中序遍历，二叉排序树会正好升序排列
+    public void infixOrder () {
+        if(this.left != null){
+            this.left.infixOrder();
+        }
+        System.out.println(this);
+        if(this.right != null){
+            this.right.infixOrder();
+        }
+    }
+}
+```
+
+
+
+删除方法：
+
+（1）删除叶子节点
+
++ 没有父节点情况
+
++ 找到要删除的节点和父节点，根据是左是有，进行指针的置空
+
+（2）删除只有一棵子树的节点
+
++ 找到要删除的节点和父节点
++ 确定是左子节点还是右子节点
++ 如果删除的是父节点的左子节点
+
+（3）删除有两棵子树的节点
+
+找右子树的最左叶子节点，删除当前节点，然后连接
+
+
+
+二叉排序树删除节点方法
+
+```java
+class Node {
+    int value;
+    Node left;
+    Node right;
+    
+    //查找要删除节点的值
+    public Node search (int value){
+        if(value == this.value)return this;
+        if(value < this.value){
+            //从左边继续查找
+            if(this.left == null)return null;
+            return this.left.search(value);
+        }else{
+            //从右边继续查找
+            if(this.right == null)return null;
+            return this.right.search(value);
+        }
+    }
+    
+    //查找要删除节点的父节点的值
+    public Node searchParent (int value){
+        if((this.left != null && this.left.value == value) || (this.right != null && this.right.value == value)){
+            return this;
+        }else{
+            //如果查找的值小于当前节点的值，并且当前节点的左子节点不为空
+            if(value < this.left.value && this.left != null){
+                return this.left.searchParent(value);
+            }else if(this.right != null){
+                //注意实际情况中要避免相同值的情况
+                return this.right.searchParent(value);
+            }else{
+                //都不满足，数明就是根节点，根节点没有父节点
+                return null;
+            }
+        }
+    }
+}
+
+class BinarySortTree {
+    private Node root;
+    
+    //查找要删除节点
+    public Node search (int value){
+        if(root == null){
+            return null;
+        }else{
+            return root.search(value);
+        }
+    } 
+    
+    //查找父节点
+    public Node searchParent (int value){
+        if(root == null){
+            return null;
+        }else{
+            return root.searchParent(value);
+        }
+    }
+    
+    //找到节点的最左叶子节点并删除这个节点
+    public int deleteRightTreeMini (Node node){
+        Node target = node;
+        while(target.left != null){
+            target = target.left;
+        }
+        deleteNode(target.value);
+        return target.value;
+    }
+    
+    //删除节点
+    public void deleteNode (int value){
+        if(root == null){
+            return;
+        }else{
+            Node target = search(value);
+            //没找到要删除节点
+            if(target == null)return;
+            
+            //如果找到的是root节点，从右子树找最小节点删除
+            //根节点判断
+            if(target == root){
+                if(target.right != null){
+                    int val = deleteRightTreeMini(target.right);
+                    root.value = val;
+                    return;
+                }else if(target.left != null){
+                    root = target.left;
+                    return;
+                }else{
+                    root = null;
+                    return;
+                }
+            }
+            
+            //target找到，找父节点
+            Node parent = searchParent(value);
+            
+            //2、target是叶子节点
+            if(target.left == null && target.right == null){
+                //判断是左叶子节点还是右叶子节点
+                if(parent.left != null && target.left.value == value){
+                    parent.left = null;
+                }else if(parent.right != null && parent.right.value == value){
+                   parent.right = null; 
+                }
+            }else if(target.left != null && target.right != null){
+                //3、删除有两棵子树的节点，找到右子树最小节点，或左子树最大节点
+                int minVal = deleteRightTreeMini(target.right);
+                targetNode.value = minVal;
+            }else{
+                //4、target只有一棵子树情况
+                if(target.left != null){
+                    //4.1 target有左子树
+                    //判断target是parent的左子节点还是右子节点进行悬挂
+                    if(parent.left.value == value){
+                        parent.left = target.left;
+                    }else{
+                        parent.right = target.left;
+                    }
+                }else{
+                    //4.2 target有右子树
+                    //判断target是parent的左子节点还是右子节点进行悬挂
+                    if(parent.left.value == value){
+                        parent.left = target.right;
+                    }else{
+                        parent.right = target.right;
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+自己测试代码（修改课程中判断不严谨的地方）
+
+```java
+public class BinarySortTree {
+    private static Node root;
+
+    public static void add (Node node) {
+        if(root == null){
+            root = node;
+        }else{
+            root.add(node);
+        }
+    }
+
+    //寻找节点
+    public static Node findNode (int value){
+        if(root == null){
+            return null;
+        }else{
+            return root.findNode(value);
+        }
+    }
+
+    //寻找节点的父节点
+    public static Node findParent (int value) {
+        if(root == null)return null;
+        return root.findParent(value);
+    }
+
+    //中序遍历
+    public static void infixOrder (){
+        if(root == null){
+            System.out.println("tree is empty.");
+        }else{
+            root.infixOrder();
+        }
+    }
+
+    //删除右子树最左的节点
+    public static Node delRightTreeMin (Node node){
+        Node temp = node;
+        Node parent = node;
+        while(temp.getLeft() != null){
+            temp = temp.getLeft();
+        }
+        delete(temp.getValue());
+        return temp;
+    }
+
+    //删除节点
+    /*
+     * 1、删除叶子节点
+     * 2、删除节点只有一棵子树
+     * 3、删除节点有两棵子树
+     * 3.1、找左子树最右节点
+     * 3.2、找右子树最左节点顶替
+     * 4、删除节点是父亲节点
+     * */
+    public static void delete (int value){
+        if(root == null)return;
+        //找到要删除节点
+        Node target = findNode(value);
+        if(target == null)return;
+
+        //删除根节点处理
+        if(target == root){
+            //找右子树最小值替换
+            if(target.getRight() != null){
+                root.setValue(delRightTreeMin(target.getRight()).getValue());
+            }else if(target.getLeft() != null){
+                root = root.getLeft();
+            }else{
+                root = null;
+            }
+            return;
+        }
+
+        //删除根节点以外节点
+        Node parent = findParent(value);
+        //删除叶子节点
+        if(target.getLeft() == null && target.getRight() == null){
+            if(parent.getLeft() != null && parent.getLeft().getValue() == value){
+                parent.setLeft(null);
+            }else if(parent.getRight() != null && parent.getRight().getValue() == value){
+                parent.setRight(null);
+            }
+        }else if(target.getLeft() != null && target.getRight() != null){
+            //删除有两棵子树节点
+            int rightMiniVal =  delRightTreeMin(target.getRight()).getValue();
+            target.setValue(rightMiniVal);
+        }else{
+            //删除只有一棵子树的节点
+            if(target.getLeft() != null){
+                //将左子树挂到parent上
+                if(parent.getLeft() != null && parent.getLeft().getValue() == value){
+                    parent.setLeft(target.getLeft());
+                }else{
+                    parent.setRight(target.getLeft());
+                }
+            }else{
+                //将右子树挂到parent上
+                if(parent.getLeft().getValue() == value){
+                    parent.setLeft(target.getRight());
+                }else{
+                    parent.setRight(target.getRight());
+                }
+            }
+        }
+    }
+}
+
+class Node {
+    private int value;
+    private Node left;
+    private Node right;
+
+   //getter,setter...
+
+    public Node (int value){
+        this.value = value;
+    }
+
+    //增加节点的方法
+    public void add (Node node) {
+        if(node == null)return;
+        if(node.getValue() < this.getValue()){
+            if(this.getLeft() != null){
+                this.getLeft().add(node);
+            }else{
+                this.setLeft(node);
+            }
+        }else{
+            if(this.getRight() != null){
+                this.getRight().add(node);
+            }else{
+                this.setRight(node);
+            }
+        }
+    }
+
+    public Node findNode (int value) {
+        //如果当前节点值等于查找值，返回
+        if(value == this.getValue())return this;
+        //如果比当前节点值小，先从左边查找，如果左子节点为空
+        //如果比当前节点值大，从右边查找，如果右子节点为空
+        if(value < this.getValue()){
+            if(this.getLeft() == null)return null;
+            return this.getLeft().findNode(value);
+        }else{
+            if(this.getRight() == null)return null;
+            return this.getRight().findNode(value);
+        }
+    }
+
+    public Node findParent (int value){
+        //找到后终止递归条件，左子节点或右子节点值等于查找节点值
+        if(( this.getLeft() != null && this.getLeft().getValue() == value ) || (this.getRight() != null && this.getRight().getValue() == value)){
+            return this;
+        }else{
+            //value和当前节点值的比较进入下一个分支的比较
+            if(this.getLeft() != null && this.getValue() > value){
+               return this.getLeft().findParent(value);
+            }else if(this.getRight() != null && this.getValue() <= value){
+                return this.getRight().findParent(value);
+            }else{
+                return null;
+            }
+        }
+    }
+
+    //中序遍历
+    public void infixOrder (){
+        if(this.getLeft() != null){
+            this.getLeft().infixOrder();
+        }
+        System.out.println(this);
+        if(this.getRight() != null){
+            this.getRight().infixOrder();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "value=" + value +
+                '}';
+    }
+}
+```
+
+
+
+#### 6、二叉平衡树

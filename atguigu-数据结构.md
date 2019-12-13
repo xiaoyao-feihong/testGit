@@ -198,6 +198,7 @@ public class CircleQueue {
     public boolean isEmpty () {
         return rear == front;
     }
+    
     //因为rear和front一直是紧挨着的
     //所以只要rear+1就应该是front
     //所以算法是(rear+1)%maxSize==front
@@ -1518,13 +1519,6 @@ class Stack {
 中缀表达式`1+((20+3)*4)-5`转后缀表达式
 
  ```java
-package util;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Stack;
-
 public class PolandExpression {
 
     //计算方法

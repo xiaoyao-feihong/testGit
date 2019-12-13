@@ -56,7 +56,7 @@
 >            //1.加载驱动类
 >            Class.forName("com.mysql.cj.jdbc.Driver");
 >            //2.获取连接
->            // url写法："jdbd:"+数据库名+"//:ip:port/数据库名"
+>            // url写法："jdbc:"+数据库名+"//:ip:port/数据库名"
 >             String url = "jdbc:mysql://localhost:3306/mytest";
 >             String user = "root";
 >             String password = "root";
@@ -92,7 +92,7 @@
 >             //增加了time zone
 >            Class driver = Class.forName("com.mysql.cj.jdbc.Driver");
 >             //5.x版本 --> jdbc:mysql://localhost:3306/mytest
->             //8.x版本 --> jdbc:mysql://localhost:3306/mytest?serverTimezone=cst
+>             //8.x版本 --> jdbc:mysql://localhost:3306/mytest?serverTimezone=CST
 >             String url = "jdbc:mysql://localhost:3306/mytest";
 >             String user = "root";
 >             String password = "root";
@@ -258,7 +258,8 @@ public class Demo {
             ps.setString(1,"%"+letter+"%");
             ResultSet rs = ps.excuteQuery();
             //预处理的执行机制：
-            /**1.底层的状态参数
+            /**
+            1.底层的状态参数
             2.根据调用的setString方法判断问号类型
             3.如果是String，拼接一个''
             */
@@ -276,6 +277,7 @@ public class Demo {
 分页查询
 
 ```java
+//先按照薪资大小降序排列，然后从索引5（第六条数据）开始，展示5条数据
 select * from emp order by salary desc limit 5,5;//从索引从0开始，此处从索引5开始，每次展示5条数据
 
 public class Dao {
@@ -1104,6 +1106,9 @@ cpds.setDriverClass("com.mysql.cj.jdbc.Driver");
 cpds.setJdbcUrl(url);
 cpds.setUser(username);
 cpds.setPassword(password);
+
+//获取连接
+cpds.getConnection();
 ```
 
 配置文件设置参数：

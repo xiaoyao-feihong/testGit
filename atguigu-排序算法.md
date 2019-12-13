@@ -106,7 +106,9 @@ public void jiecheng (int n){
 | 计数  |     n + k      |     n + k      |     n + k      |   n + k    |   稳   |
 | 基数  |     n * k      |     n * k      |     n * k      |   n + k    |   稳   |
 
-稳定性：
+
+
+稳定性：某次排序后，相同的值的前后顺序没有改变
 
 
 
@@ -199,7 +201,7 @@ public void insertSort (int[] arr) {
         //定义获一个插入值，和插入值前面的索引
         int insertValue = arr[i];
         int insertIndex = i - 1;
-        //每一个与插入值进行比较，比插入值大，就后移
+        //每一个与插入值进行比较，比插入值大，就后移，每次插入的时候前面都是有序的
         while(insertIndex >= 0 && insertValue < arr[insertIndex]){
             arr[insertIndex+1] = arr[insertIndex];
             insertIndex--;
@@ -358,6 +360,7 @@ public void hillSort (int[] arr){
 空间换时间
 
 ```java
+// 5,4,3,2,1,8,7,6
 public void quickSort (int[] arr,int left,int right){
     //左下标
     int l = left;
@@ -408,6 +411,45 @@ public void quickSort (int[] arr,int left,int right){
     if(right > l){
         quickSort(arr,l,right);
     }
+}
+```
+
+
+
+快排JavaScript代码
+
+```js
+//快速排序
+function quickSort(arr, left, right) {
+    //终止递归
+    if (left > right) {
+        return;
+    }
+    var l = left;
+    var r = right;
+    var base = arr[left];
+    var temp = 0;
+    //完成值交换
+    while (l < r) {
+        //从右找比基准值大的
+        while (arr[r] >= base && l < r) {
+            r--;
+        }
+        //从左找比基准小的值
+        while (arr[l] <= base && l < r) {
+            l++;
+        }
+        temp = arr[l];
+        arr[l] = arr[r];
+        arr[r] = temp;
+    }
+    //讲基准值与终点值交换
+    arr[left] = arr[l];
+    arr[l] = base;
+    //向左递归
+    quickSort(arr, left, l - 1);
+    //向右递归
+    quickSort(arr, r + 1, right);
 }
 ```
 

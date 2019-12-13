@@ -391,7 +391,7 @@ JDK中动态代理：Proxy对象
 
 
 
-###### （2）动态代理使用：
+###### （2）动态代理使用
 
 ```java
 public interface Waiter {

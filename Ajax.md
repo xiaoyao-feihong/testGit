@@ -53,7 +53,8 @@ GET方式提交请求：
     var btn = document.getElementById("btn");
     btn.onclick = function () {
         var xhr = XMLHttpRequest();
-        xhr.open("GET","",true);
+        //布尔值表示是否异步发送
+        xhr.open("GET","/",true);
         xhr.send(null);
         xhr.onreadystatechange = function () {
             if(this.readyState == 4 && this.status == 200){

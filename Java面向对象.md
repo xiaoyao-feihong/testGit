@@ -342,7 +342,9 @@ public class Demo {
 > 类的使用：类描述好后，不能直接用来执行，需要通过new的方式创建一个实例，然后才能调用类的方法（执行一次特定行为）和属性（存值和取值）
 >
 
-4、**<font color="pink">命名规范：</font>**
+
+
+##### 4、**<font color="pink">命名规范</font>**
 
 > 方法、属性、变量：小驼峰式命名规则[^（changeName()）]
 >
@@ -355,6 +357,8 @@ public class Demo {
 > 包名：全部字母小写，Java关键字也是小写，注意不冲突
 >
 > **<font color="red">注意：方法设计很重要</font>**
+
+
 
 ##### 5、方法执行的内存变化
 
@@ -390,15 +394,17 @@ publc class Test {
 > 	x[0] = 10;
 > 	}
 > 	public static void main (String[] args) {
->   //加载Test的类模板
+> 	//加载Test的类模板
 > 	Test t = new Test();
->   //栈中开辟变量t，保存的是指向对象的地址
->   int[] arr = {1,2,3,4};
->   //方法放到栈中执行时，开辟临时内存空间
->   //将栈中的arr地址复制一份到x，指向同一个数组
->   //更改堆内存中第一个元素的值为10
->   t.changeArray(arr);
->   System.out.println("arr[0]:"+arr[0]);//arr[0]:10
+>         
+> 	//栈中开辟变量t，保存的是指向对象的地址
+> 	int[] arr = {1,2,3,4};
+>         
+> 	//方法放到栈中执行时，开辟临时内存空间
+> 	//将栈中的arr地址复制一份到x，指向同一个数组
+> 	//更改堆内存中第一个元素的值为10
+> 	t.changeArray(arr);
+> 	System.out.println("arr[0]:"+arr[0]);//arr[0]:10
 > 	}
 > }
 > ```
@@ -406,6 +412,8 @@ publc class Test {
 > 形参：方法执行时的临时变量空间
 >
 > 实参：方法调用时会将实参的内容传递给形参（<font color="red">常量传递的是值，引用数据类型传递的是值</font>）
+
+
 
 ##### 6、方法重载(overload)
 
@@ -427,7 +435,7 @@ publc class Test {
 
 ​		动态参数列表的方法是可以不传参的，相当于0个
 
-​		前面还可以规定必须传的类型`test(String a,int...x)`，但是后面时不能再继续传参的
+​		前面还可以规定必须传的类型`test(String a,int...x)`，但是后面时不能再继续传参
 
 ​		动态参数列表在方法的参数中只能存在一份，且必须放置在方法参数的末尾
 
@@ -489,7 +497,7 @@ public class Demo {
 >    Test t = new Test("Jackson",18,"male");
 >    System.out.println("my name is "+t.name+",I am "+t.age+" years old");
 > }
-> public String name = "goudai";
+> public String name = "minmin";
 > public int age = 20;
 > public String gender = "male";
 > //提供重载
@@ -521,6 +529,8 @@ public class Demo {
 > }
 > ```
 
+
+
 ##### 8、类的成员：程序块
 
 ​	作用：和普通方法一样，完成特定行为的
@@ -539,6 +549,8 @@ public class Demo {
     public Demo () {}
 }
 ```
+
+
 
 ##### 9、类的总结与设计
 
@@ -654,6 +666,7 @@ public class ArrayBox {
         this.initialSize = size;
         this.intArr = new int[size];
     }
+    
     //检查空间是否足够
     private boolean checkSpace (int[] arr) {
         boolean flag = false;
@@ -764,6 +777,8 @@ public class ArrayBox {
 ```
 
 ​	Exception异常（人为规定一种不正常现象,ArrayIndexOutOfBounds），Error（计算机根本处理不了，StackOverFlowError栈内存溢出，方法相互调用容易产生）
+
+
 
 ##### 10、类的关系
 
@@ -1154,6 +1169,8 @@ public class PoliceCar {
 }
 ```
 
+
+
 ##### 11、修饰符
 
 ​	*（1）权限修饰符*
@@ -1475,7 +1492,7 @@ public class Test {
 >
 >4、子类产生自己的静态空间
 >
->​	先加载属性，方法，块，执行静态块
+>​	先加载静态属性，静态方法，静态块，执行静态块
 >
 >5、开辟对象空间
 >

@@ -65,7 +65,7 @@ Spring的优点
 
 #### 2、Spring的使用
 
-##### （1）Spring的jar包下载
+##### 2.1 Spring的jar包下载
 
 在Spring3.0.2以后不在提供依赖的jar包，我们项目需要依赖的jar包需要自己下载
 
@@ -99,7 +99,7 @@ Spring的jar包下载
 
 
 
-##### （2）Spring开发环境搭建
+##### 2.2 Spring开发环境搭建
 
 Spring开发中，需要根据业务来导入不同的jar包
 
@@ -205,11 +205,11 @@ DI：在spring创建对象的过程中，对象所依赖的属性通过配置注
 
 
 
-##### （3）Bean的实例化
+##### 2.3 Bean的实例化
 
 
 
-###### 1）不同接口加载原理
+###### 2.3.1 不同接口加载原理
 
 ApplicationContext是接口，并实现了BeanFactory接口，下面有两个具体实现类，FileSystemXmlApplicationContext和ClassPathXmlApplicationContext两个具体实现类
 
@@ -219,7 +219,7 @@ ApplicationContext：扩展了BeanFactory接口，配置文件加载时就会初
 
 
 
-###### 2）id和name的区别
+###### 2.3.2 id和name的区别
 
 + id遵循XML规范，名称不能包含特殊符号
 + name为了更好的扩展，可以包含特殊符号，`-`等
@@ -267,7 +267,7 @@ xml文件：
 
 
 
-###### 4）Bean的实例化方式
+###### 2.3.3 Bean的实例化方式
 
 + 无参构造：注意Bean类必须提供无参构造
 + 静态工厂方法：需要创建一个工厂类
@@ -282,7 +282,6 @@ xml文件：
 XML配置：
 ```xml
 <!--设置工厂类和获取对象方法-->
-<bean name="bean2" class="Bean2Factory" factory-method="createBean2"></bean>
 ```
 
 Java实现工厂类和实例类：
@@ -330,7 +329,7 @@ class Bean3 {
 
 
 
-###### 5）Bean的作用域
+###### 2.3.4 Bean的作用域
 
 ```xml
 <!--scope取值：（常用标**）
@@ -350,7 +349,7 @@ class Bean3 {
 
 
 
-###### 6）Bean的生命周期
+###### 2.3.5 Bean的生命周期
 
 测试
 
@@ -447,7 +446,7 @@ Bean的生命周期方法作用解析
 
 
 
-###### 7）Bean的属性注入
+###### 2.3.6 Bean的属性注入
 
 Spring中bean的属性注入有两种：
 
@@ -673,7 +672,7 @@ Spring Expression Language	Spring表达式语言，类似于EL表达式语言
 
 
 
-##### （1）注解开发准备工作
+##### 3.1 注解开发准备工作
 
 > 1、找到约束
 >
@@ -701,7 +700,7 @@ Spring Expression Language	Spring表达式语言，类似于EL表达式语言
 > `<context:annotation-config />`允许使用注解注册Bean对象
 >
 > ```java
-> @Conponent("userService")
+> @Component("userService")
 > //相当于<bean id="userService" class="domain.UserService"></bean>
 > public class UserService {
 >     public void add () {
@@ -726,7 +725,7 @@ Spring Expression Language	Spring表达式语言，类似于EL表达式语言
 
 
 
-##### （2）属性依赖注入
+##### 3.2 属性依赖注入
 
 简单注入
 
@@ -833,7 +832,7 @@ public void myDestroy(){}
 
 
 
-（1）配置web.xml文件
+##### 4.1 配置web.xml文件
 
 ```xml
 <listener>
@@ -871,7 +870,7 @@ Tomcat默认会在WEB-INF下查找applicationContext.xml查找
 
 
 
-Spring整合JUNIT4
+##### 4.2 Spring整合JUNIT4
 
 导入`spring-test-xxx.jar`
 
@@ -913,13 +912,13 @@ AOP相关概念
 
 
 
-##### （1）AOP底层实现
+##### 5.1 AOP底层实现
 
 AOP分为静态AOP和动态AOP，静态AOP是指AspectJ实现的AOP，将切面代码直接编译到Java类文件中。动态AOP是指将切面代码进行动态织入实现的AOP。Spring的AOP为动态AOP，实现的技术是动态代理技术和CGLIB（动态字节码增强技术）
 
 
 
-###### 1）JDK动态代理
+##### 5.2 JDK动态代理
 
 运行时，在JVM内部动态生成class字节码对象（Class对象），JDK动态代理只针对于接口操作
 
@@ -1010,7 +1009,7 @@ class EnhanceUtil extends ProxyUtil {
 
 
 
-###### 2）CGLIB动态代理
+##### 5.3 CGLIB动态代理
 
 开源项目，强大的，高性能的，高质量的Code生成类库，它可以在运行期扩展Java类与实现Java接口。底层是通过使用字节码处理框架ASM，来转换字节码并生成新的类（可以为无接口的实现类做代理）
 
@@ -1049,7 +1048,7 @@ public class CglibProxy implements MethodInterceptor {
 
 
 
-###### 3）使用选择情况
+##### 5.4 使用选择情况
 
 目标对象实现了接口，优先使用JDK动态代理
 
@@ -1188,3 +1187,474 @@ spring配置文件是可以拆分的
 
 
 
+#### 6、Spring注解开发
+
+##### 6.1 容器注册组件方式
+
++ 包扫描 + 组件标记组件（@Controller @Service @Repository @Component），局限是只能给我们写的类进行注册，第三方依赖没法注册
+
++ @Bean（导入第三方包里的组件）
+
++ @Import（导入组件new的方式比较麻烦）
+
++ - 实现ImportSelector接口的类自定义注册规则（<font color="blue">SpringBoot使用最多</font>）
+
++ - 实现ImportBeanDefinitionRegistrar自定义注册信息和id
+
+
+
+##### 6.2 注解开发相关注解
+
+```java
+//告诉Spring这是一个配置类
+@Configuration
+
+//指定要扫描的包
+@ComponentScan(value = {},excludeFilters = {
+        //指定扫描包下的哪些类不扫描
+        /*
+         *ANNOTATION:按照class方式排除
+         * REGEX:正则
+         * ASPECTJ:按照aspectj表达式
+         * CUSTOM:自定义规则
+        */
+        @Filter(type = FilterType.ASSIGNABLE_TYPE,classes={})
+},includeFilters = {
+        //要包含的类
+        @Filter(type = FilterType.ASSIGNABLE_TYPE,classes = {})
+
+}, useDefaultFilters = false)//将Spring默认扫描所有包关掉
+
+//@Conditional放在配置类上表示只有满足条件这个配置类注册的bean才会生效
+//作用：类中组件统一设置
+@Conditional(WindowsCondition.class)
+
+//导入第三方组件，默认id是类全名,util.BeanUtil,util.ContextUtil
+//MyImportSelector是实现ImportSelector接口的类，里面也可以自定义规则导入第三方组件
+//MyImportBeanDefinitionRegister是实现ImportBeanDefinitionRegistrar接口的类，可以自定义注册和指定id名
+@Import({MyImportSelector.class,
+         MyImportBeanDefinitionRegister.class
+})
+
+
+public class SpringMainConfig {
+    //给容器注册一个Bean，id默认是方法名
+    //@Bean("deptService22")可以通过给bean传值，指定它的id
+    @Bean
+    //Scope调整作用域，prototype调用时才创建，singleton容器启动就会创建对象放进容器
+    //@Lazy懒加载，第一次使用的时候才创建
+    @Lazy
+    @Scope("prototype")
+    public DeptService deptService (){
+        return new DeptService();
+    }
+
+    @Bean
+    public TeacherService teacherService () {
+        return new TeacherService();
+    }
+
+    @Bean
+    @Lazy
+    public DeptController deptController () {
+        return new DeptController();
+    }
+
+    /*
+    * 条件：
+    * 如果操作系统式windows，打印Bill Gates
+    * 如果操作系统式Linux，打印Linus
+    * */
+    @Bean("person01")
+    //Spring4.0+提供的注解，SpringBoot大量使用这个注解
+    //按照一定条件进行判断是否给容器注册Bean
+    @Conditional(WindowsCondition.class)
+    public Person person01 () {
+        return new Person(1,"Bill Gates",null);
+    }
+
+    @Bean("person02")
+    @Conditional(LinuxCondition.class)
+    public Person person02 () {
+        return new Person(1,"Linus",null);
+    }
+    
+    @Bean
+    //注册工厂
+    public ColorFactoryBean colorFactoryBean () {
+        return new ColorFactoryBean();
+    }
+
+    public static void main(String[] args) {
+        //获取环境变量中的操作系统名称
+        ApplicationContext ctx = ContextUtil.getContext();
+        ConfigurableEnvironment env = (ConfigurableEnvironment) ctx.getEnvironment();
+        String osName = env.getProperty("os.name");
+        System.out.println("Current Operating System:" + osName);
+        //获取所有Bean定义的id名称
+        String[] names = ContextUtil.getContext().getBeanDefinitionNames();
+        for (String name : names) {
+            System.out.println("bean name:" + name);
+        }
+        //获取的是Color.class
+        System.out.println("获取工厂实例的class：" + ctx.getBean("colorFactoryBean").getClass());
+        //通过&也可以获取工厂,ColorFactoryBean.class
+        System.out.println("获取工厂的class：" + ctx.getBean("&colorFactoryBean").getClass());
+    }
+}
+
+//自定义注册实例
+public class MyImportBeanDefinitionRegister implements ImportBeanDefinitionRegistrar {
+    @Override
+    //通过BeanDefinitionRegistry注册我们需要的组件
+    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
+        boolean flag1 = registry.containsBeanDefinition("condition.springAnnoConfig.Blue");
+        boolean flag2 = registry.containsBeanDefinition("condition.springAnnoConfig.Red");
+        if(flag1 && flag2){
+            //指定bean的定义信息
+            RootBeanDefinition rainbowDef = new RootBeanDefinition(Rainbow.class);
+            //指定bean的id
+            registry.registerBeanDefinition("rainbow",rainbowDef);
+        }
+    }
+}
+
+//根据数组类全名创建实例
+public class MyImportSelector implements ImportSelector {
+    @Override
+    //AnnotationMetadata：可以获取配置类注解（SpringMainConfig）的所有注解信息
+    public String[] selectImports(AnnotationMetadata annotationMetadata) {
+        //写我们需要导入组件符合的规则
+        Set<String> clazzSet = annotationMetadata.getAnnotationTypes();
+        for (String s : clazzSet) {
+            System.out.println("class of annotations:" + s);
+        }
+        //不能返回null
+        return new String[]{
+                "condition.springAnnoConfig.Blue",
+                "condition.springAnnoConfig.Red"
+        };
+    }
+}
+
+//根据工厂来创建实例
+public class ColorFactoryBean implements FactoryBean<Color> {
+    //是否单例，true：单例，false：每次使用重新创建
+    @Override
+    public boolean isSingleton() {
+        return false;
+    }
+
+    @Override
+    public Color getObject() throws Exception {
+        System.out.println("color is created.");
+        return new Color();
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        return Color.class;
+    }
+}
+```
+
+
+
+##### 6.3 Bean的生命周期
+
+###### 6.3.1 @Bean注解初始化，销毁
+
+以前方法：在spring-config.xml中给bean指定`init-method`和 `destroy-method`方法
+
+
+
++ 注解方式定义初始化和销毁方法：
+
+```java
+@NoArgsConstructor
+@Getter
+@Setter
+//在SpringMainConfig里配置bean
+public class Car {
+    public void init () {
+        System.out.println("car is created.");
+    }
+    
+    public void destroy () {
+        System.out.println("color is destroyed.");
+    }
+}
+
+@Configuration
+class SpringMainConfig {
+    @Bean(initMethod = "init",destryMethod="destroy")
+    public Car car () {
+        return new Car();
+    }
+}
+```
+
+
+
+单实例：在每次容器启动的时候创建对象
+
+多实例：每次获取的时候创建对象
+
+
+
+初始化和销毁方法调用时机：
+
+单例情况下，Spring通过无参构造创建实例，创建好后执行指定的init方法，容器关闭的时候执行销毁方法。
+
+多实例情况下，获取bean的时候会执行初始化方法，不执行销毁方法，容器不管理多实例bean，我们手动销毁
+
+
+
+###### 6.3.2 实现接口方式实现初始化和销毁
+
+```java
+@Getter
+@Setter
+@AllArgsConstructor
+public class Car  implements InitializingBean, DisposableBean {
+    private float price;
+
+    public Car () {
+        System.out.println("Car is creating...");
+    }
+
+    //销毁方法
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("Car instance is destroyed.");
+    }
+
+    //初始化方法
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("Car instance is created, excute the init method.");
+    }
+    
+    public static void main (String[] args) {
+        AnnotationConfigApplicationContext ctx = ContextUtil.getContext();
+        Car car = (Car)ctx.getBean("car");
+        ctx.close();
+        /*
+        * Car is creating...
+        * Car instance is created, excute the init method.
+        * Car instance is destroyed.
+        */
+    }
+}
+```
+
+
+
+###### 6.3.3 JSR250
+
+使用Java规范的注解进行初始化、销毁操作
+
+```java
+@Getter
+@Setter
+@Component("dog")
+public class Dog {
+    public Dog () {
+        System.out.println("dog constructor.");
+    }
+
+    @PostConstruct
+    //构造方法执行后执行
+    public void init () {
+        System.out.println("dog postConstruct");
+    }
+
+    @PreDestroy
+    //对象销毁前执行
+    public void destroy () {
+        System.out.println("dog preDestroy");
+    }
+}
+```
+
+
+
+###### 6.3.4 BeanPostProcessor接口
+
+所有Spring管理的实例初始化方法执行之前、之后执行接口方法
+
+```java
+public class MyPostProcessor implements BeanPostProcessor {
+    @Override
+    //Bean初始化之前执行
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        return null;
+    }
+
+    @Override
+    //Bean初始化后执行
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        return null;
+    }
+}
+```
+
+
+
+###### 6.3.5 生命周期测试
+
+```java
+@Getter
+@Setter
+@AllArgsConstructor
+public class Car  implements InitializingBean, DisposableBean {
+    private float price;
+
+    public Car () {
+        System.out.println("Car的构造方法执行");
+    }
+
+    //销毁方法
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("实现DisposableBean接口的destroy方法执行。");
+    }
+
+    //初始化方法
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("实现InitializingBean接口的afterPropertiesSet方法执行。");
+    }
+
+    public void init () {
+        System.out.println("Car配置类@Bean中注册的init方法执行");
+    }
+
+    public void destroy2 () {
+        System.out.println("Car中注册的destroy方法执行");
+    }
+
+    @PostConstruct
+    public void init2 () {
+        System.out.println("Car中JSR250中@PostConstruct注解标记的init方法");
+    }
+
+    @PreDestroy
+    public void destroy3 () {
+        System.out.println("Car中JSR250中@PostConstruct注解标记的destroy方法");
+    }
+}
+
+//注册car省略
+//实现BeanPostProcessor接口
+@Component
+public class MyPostProcessor implements BeanPostProcessor {
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        System.out.println(beanName + "---postProcessBeforeInitialization.");
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        System.out.println(beanName + "---postProcessAfterInitialization.");
+        return null;
+    }
+}
+```
+
+生命周期测试结果
+
+> （1）Car的构造方法执行
+> （2）实现BeanPostProcessor接口postProcessBeforeInitialization方法执行
+> （3）Car中JSR250定义的@PostConstruct注解标记的init方法执行
+> （4）实现InitializingBean接口的afterPropertiesSet方法执行
+> （5）@Bean注解中注册的init方法执行
+> （6）Car---postProcessAfterInitialization.
+> （7）Car中JSR250定义的@PreDestroy注解标记的destroy方法
+> （8）实现DisposableBean接口的destroy方法执行。
+> （9）@Bean注解中注册的destroy方法执行
+>
+> <font color="red">JSR250 > Spring接口方法 > @Bean中注册的初始化和销毁方法</font>
+
+
+
+##### 6.4 属性赋值
+
+```java
+public class Person {
+    @Value("Bill")
+    private String name;
+    
+    //支持SPEL表达式
+    @Value("#{20 - 2}")
+    private int age;
+    
+    //获取配置文件中的值,配置文件中的值都可以通过ConfigurableEnvironment获取到
+    @Value("${person.nickName}")
+    private String sex;
+}
+
+//指定使用类路径下的配置文件，并且使用UTF-8编码
+//可重复使用的注解，也可以使用PropertySources配置多个PropertySource
+@PropertySource(value={"classpath:/person.properties"},encoding="UTF-8")
+@Configuration
+public class SpringMainConfig {
+    @Bean
+    public Person person () {
+        return new Person();
+    }
+    
+    public static void main (String[] args){
+        //获取注解的上下文变量
+        //注意不能用ApplicationContext接口接收(没有这些方法)
+        AnnotationConfigApplicationContext ctx = ContextUtil.getContext();
+        ConfigurableEnvironment env = (ConfigurableEnvironment) ctx.getEnvironment();
+
+        //获取配置文件中所有变量信息
+        Map<String,Object> systemVariable = env.getSystemProperties();
+        for(Map.Entry<String,Object> item : systemVariable.entrySet()){
+            System.out.println("item key:" + item.getKey() + "----item value:" + item.getValue());
+        }
+
+        //获取配置文件中键值
+        System.out.println("nickName----" + env.getProperty("nickName"));
+        //获取文件的编码格式，注意读取流的格式Spring默认不是UTF-8
+        System.out.println("file encoding----" + env.getProperty("file.encoding"));
+    }
+}
+```
+
+person.properties
+
+```mysql
+person.nickName=Bull
+person.chineseName=逍遥
+```
+
+
+
+##### 6.6 自动装配
+
+
+
+###### 6.6.1 Spring自动装配注解
+
+> @Autowired
+> *	（1）默认优先根据类型寻找对应的组件
+> *	（2）如果找到多个相同类型的组件，根据属性名称作为id查找
+> *	（3）@Qualifier("id")，指定需要装配的组件id
+> *	（4）自动装配的注解一旦使用，就一定要找到，否则报错
+> *	（5）@Autowired(required = false)可以找到就装配，找不到就不装配（不报错）
+> *	（6）@Primary 让注册的实例变为首选装配的，如果有Qualifier则根据Qualifier中id寻找
+>
+
+
+
+###### 6.6.2 支持使用JSR250和JSR330的注解
+
+> （1）@Resource可以和@Autowired一样自动装配，默认是按照组件名称进行装配的（JSR250规范的注解）
+>
+> @Resource(name = "id")，缺点是不支持设置required属性和@Primary注解
+>
+> （2）@Inject需要导入javax.inject包（JSR330规范的注解）

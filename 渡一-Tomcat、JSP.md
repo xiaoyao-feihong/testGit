@@ -62,7 +62,7 @@ public class Browser {
     private void receive () {
         try{
             InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-           BufferedReader br = new BufferedReader(isr); 
+            BufferedReader br = new BufferedReader(isr); 
             String responseMsg = br.readLine();
             while(responseMsg!=null){
                 System.out.println(responseMsg);
@@ -781,7 +781,7 @@ JSP使用
 
 1）浏览器只能识别HTML代码，虚拟机只能识别Java代码，JSP让Tomcat编译，最后还是浏览器展示
 
-2）如何创建使用JSP文件
+2）如何创建使用JSP文件	
 
 ```jsp
 <!--头标签，通常包含Content-Type和language-->

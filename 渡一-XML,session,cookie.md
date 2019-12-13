@@ -418,7 +418,7 @@ application	全局上下文，Java中的单例管理方式或者类中的static�
 
 （1）Cookie在浏览器端存储，在浏览器关闭的时候会永久存储到本地
 
-本地位置：`C:\Users\86180\AppData\Local\Google\Chrome\User Data\Default\Cookies文件`
+本地位置：`C:\Users\86180\AppData\Local\Google\Chrome\User Data\Default\Cookies`文件
 
 （2）Cookies文件进行了加密，防止黑客获取电脑的Cookies文件，获取用户的信息
 
@@ -427,7 +427,7 @@ application	全局上下文，Java中的单例管理方式或者类中的static�
 （4）可以通过控制台查看Cookie，可以设置Cookie是否永久保存到文件中
 
 ```java
-JSESSIONID通过UUID.randomUUID()获取，并去掉了-的32位随机字符串
+JSESSIONID通过UUID.randomUUID()获取，并去掉了"-"的32位随机字符串
 ```
 
 
@@ -445,6 +445,9 @@ public TestCookie extends HttpServlet {
         
         //获取cookie的域名
         cookie.getDomain();
+        
+        //种cookie
+        cookie.setDomain("/");
         
         res.addCookie(cookie);
         

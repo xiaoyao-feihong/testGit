@@ -1,3 +1,5 @@
+
+
 ### Java
 
 ------
@@ -67,7 +69,7 @@
 
 + Java源文件格式.java（用文本编辑器可以打开），通过虚拟机编译后为.class的字节码文件
 + JRE（Java Runtime Environment，Java运行环境）包含JVM，JVM将.java文件编译成.class文件，JRE提供可以打开.class格式文件的环境
-+ JDK：Java Developement Kit Java开发工具包，JDK包含JRE，JDK（JRE（JVM））
++ JDK：Java Development Kit Java开发工具包，JDK包含JRE，JDK（JRE（JVM））
 
 ##### 5、搭建环境
 
@@ -117,7 +119,7 @@ class Demo {
  ```
 
 + 代码的编译执行
-  - 编译工具在doc命令窗口：win + R输入cmd打开doc窗口
+  - 编译工具在doc命令窗口：win + R输入cmd打开dos窗口
   - 切换盘符：`d:`盘符名不区分大小写，`cd`切换盘符，切换文件夹`cd ..`退出一层；路径c://Program Files/Java/JDK1.8.0_211/bin/javac
   - 文件和编译工具不在一起：将工具箱放在一个公共位置共同使用，先在当前环境寻找编译工具，然后去共有位置查找工具
   - 配置环境变量：让所有专门后缀的文件都可以使用
@@ -394,7 +396,7 @@ x = x + 2;//报错
     - |：逻辑或
     - ^：异或，前后结果不一致为true，[^(3>1)^(3>5)  //true]
     - !：将结果取反
-    - &&：短路与，当前面结果为false时，性能比一般逻辑&好
+    - &&：短路与，当前面结果为false时，后面不再比较，性能比一般逻辑&好
     - ||：短路或，当前面结果为true时，后面不在计算（底层实现是短路），性能比逻辑或|好
 
   - 位运算（bit）
@@ -411,7 +413,7 @@ x = x + 2;//报错
 
     - ">>"：按位右位移
 
-    - ">>>"：按位右位移
+    - ">>>"：无符号按位右位移
 
       进制转化问题：
 
@@ -444,10 +446,12 @@ x = x + 2;//报错
     6 >> 1;//右位移，/2位移次幂
     
     -6 >> 1;//保留符号位置，填1
+    //10000110 -- 11111001 -- 11111010 -- 11111101
     //...111 11111010-->...111 11111101
     -6 >>> 1;//不保留符号位置，都填0
+//10... 0000110 --11.. 11111001 --11... 11111010 -- 01..1 11111101 
     ```
-
+    
       
 
 ##### 10、Java语法结构
@@ -887,7 +891,7 @@ public class ArrayDemo {
         for(int i = 1; i < arr.length; i++) {
             if(max < arr[i]){
                 max = arr[i];
-			   index = i;
+			    index = i;
             }
         }
         int[] arr1 = new int[index + 1];
@@ -910,13 +914,13 @@ public class ArrayDemo {
 }
 ```
 
-```
+
 
 
 
 ​	*5.寻找数组中最大值和最小值{1,2,4,9,3,5,8,7}*
 
-​```java
+```java
 public class ArrayDemo {
     public static void main (String[] args){
         int[] arr = {1,2,3,9,11,4,5,7,8};
@@ -936,7 +940,7 @@ public class ArrayDemo {
 
 
 
-​	*6.去掉数组中的0元素：a{1,2,3,0,0,4,5,0,6,0,7}*
+*6.去掉数组中的0元素：a{1,2,3,0,0,4,5,0,6,0,7}*
 
 ```java
 public class ArrayDemo {
@@ -965,6 +969,7 @@ public class ArrayDemo {
     }
 }
 ```
+
 
 
 
@@ -1003,9 +1008,11 @@ public class Demo {
 
 
 
+```
+
 ​	*8.数组元素的排序（冒泡、快速、选择、希尔...）*
 
-```java
+​```java
 public class Demo {
     public static void main (String[] args) {
         //冒泡排序1
@@ -1196,7 +1203,9 @@ public class ArrayDemo {
 
 ​	4）main：方法名字，主要的，主方法不是我们调用的，是JVM虚拟机启动的时候，虚拟机调用的
 
-​	5）args：可以传参
+​	5）args：主要是命令行调用Java的时候，可以传参
+
+举例：`java Test chenxiang zhumin`这时args就是一个数组`{"chenxiang","zhumin"}`
 
 ```java
 public class Demo {
@@ -1271,7 +1280,7 @@ public class Demo {
 
 ​		*5）*计算机中利用面向对象思想来做事
 
-​			先定义一个类（有属性），在描述的类中擦黄建一个具体的个体出来，个体来做事（方法/属性）。
+​			先定义一个类（有属性），在描述的类中创建一个具体的个体出来，个体来做事（方法/属性）。
 
 ```java
 public class Demo {
