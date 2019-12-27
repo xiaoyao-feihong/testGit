@@ -8,7 +8,7 @@
 
 V：view视图层（HTML、JSP、JSON、JS）
 
-C：controller控制层（Servlet）
+C：controller控制层（Controller、Servlet）
 
 M：Model模型层（Service、Dao）
 
@@ -1226,11 +1226,60 @@ public class ProxyUtil {
 
 
 
+Mybatis动态代理原理：
+
+```java
+public class ProxyUtil {
+
+    private final static SqlSession session = SqlSessionUtil.getSqlSession(true);
+
+    //传进来一个接口类，实现接口里的方法
+    public static <T>T getMapper (Class<T> type) throws IllegalAccessException, InstantiationException {
+        //创建代理对象
+        T proxyInstance = (T) Proxy.newProxyInstance(type.getClassLoader(), new Class[]{type}, new MyHandler());
+
+        return proxyInstance;
+    }
+
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+        //getMapper返回一个代理了接口方法的代理对象
+        DeptDao dao = getMapper(DeptDao.class);
+        //执行的是代理对象实现的方法
+        Dept dept = dao.selectOneDept(10);
+        //输出dept为10的对象
+        System.out.println(dept);
+    }
+
+}
+
+class MyHandler implements InvocationHandler {
+
+    private final static SqlSession session = SqlSessionUtil.getSqlSession(true);
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("代理方法执行");
+        //代理对象实际上通过sqlSession对象干活
+        //sqlSession对象先根据方法名作为id找mapper文件对应的sql语句
+        //执行完sql语句后，根据配置生成resultType设置的类型生成对象
+        return session.selectOne(method.getName(),args[0]);
+    }
+}
+
+interface DeptDao {
+    Dept selectOneDept (int deptno);
+}
+```
+
+
+
+
+
 大厂为什么总喜欢考算法？
 
 （1）通用问题的思考能力
 
-（2）转业能力
+（2）专业能力
 
 （3）人品和三观
 
@@ -1255,22 +1304,6 @@ public class ProxyUtil {
 
 答：数据结构上有不同，内存空间占用上也有不同，ArrayList有一定预留空间的浪费，LinkedList有指针空间的浪费。
 
-（2）LinkedList的新增元素如何操作的？
-
-
-
-（3）当通过下标获取Node时，是如何查询的？
-
-
-
-（4）LinkedList的删除操作是如何进行的？
-
-
-
-（5）支持批量add吗？如果支持，试怎么实现的？
-
-
-
 
 
 LinkedList：jdk1.6以前是环形链表，1.6以后是双向链表
@@ -1285,4 +1318,242 @@ public class LinkedList implements Serializable,Deque,Clonable,List,AbstractSequ
     
 }
 ```
+
+
+
+#### 6、Mybatis基于注解开发
+
+xml文件：写完程序后可以更改，灵活便于管理，缺点是mapper文件本身结构比较复杂，文件中sql语句与dao不在一起，实际开发中使用配置较少
+
+
+
+注解的方式：弥补xml文件的缺点
+
++ 写在方法上面，将sql与dao在一起（一对一，多对多关系也不是很简单）
++ 注解方式执行操作，必须依托于mapper管理
+
+
+
+Mybatis框架使用的3中形式：
+
++ Dao类是普通的，使用SqlSession对象属性，mapper.xml
++ Dao类是接口，不需要对象属性，mapper.xml
++ Dao类是接口，注解
+
+
+
+##### （1）Mybatis增删改的注解方式
+
+```java
+public interface StudentDao {
+    //方法底层有一个代理，帮我们执行方法
+    @Delete("delete from student where sid = #{sid}")
+    void deleteById(Integer sid);
+    
+    @Delete("delete from student where sid = #{sid} and ssex = #{ssex}")
+    //注解@Param中传递参数名，然后就能对映上sql中的参数
+    void deleteByIdAndSex(@Param("sid") Integer sid,@Param("ssex") String sex); 
+    
+    @Insert("insert into student values (#{sid},#{sname},#{ssex},#{sage})")
+    //属性名和参数要对映上
+    void insert(Student student);
+    
+    @Insert("insert into student values (#{sid},#{sname},#{ssex},#{sage})")
+    //map中键名和参数名对应上即可
+    void insert(Map map);
+    
+    @Insert("insert into student values (#{param1},#{param2},#{param3},#{param4})")
+    //因为java无法获取参数名，通过param来对应参数
+    void insert(Integer sid,String sname,String ssex,Integer sage);
+    
+    @Insert("insert into student values (#{sid},#{sname},#{ssex},#{sage})")
+    //通过注解对应上
+    void insert(@Param("sid") Integer sid,@Param("sname") String sname,@Param("ssex") String ssex,@Param("sage")  Integer sage);
+}
+
+@Getter
+@Setter
+@AllArgsConstructor
+public class Student {
+    private Integer id;
+    private String sex;
+    private Integer age;
+}
+```
+
+mybatis-config.xml
+
+```xml
+<!--将resource修改为class-->
+<mapper class="dao.StudentDao">
+```
+
+
+
+<font color="blue">尽量使用Map和对象的形式进行接口定义方法的传参，比较统一，凌乱的传值它不麻烦吗？</font>
+
+
+
+##### （2）Mybatis查询的注解方式
+
+
+
+```java
+public class StudentDao {
+    //查询单条
+    @Select("select * from student where id = #{id}")
+    Student selectOneStudentById(int sid);
+    
+    //查询多条
+    //Mybatis会根据返回值类型和集合中类型自动装配
+    @Select("select * from student")
+    List<Student> selectAllStudent();
+}
+```
+
+
+
+xml文件对应注解的
+
+| xml形式           | 注解形式               |
+| ----------------- | ---------------------- |
+| namespace         | 类名                   |
+| select等标签      | @Select等注解          |
+| 标签属性id        | 方法名                 |
+| 标签中有SQL       | 注解中携带SQL          |
+| 标签属性resultMap | @Results（自定义规则） |
+| 内联对象延迟机制  | 注解里设置             |
+
+
+
+##### （3）注解：一对一
+
+java代码
+
+
+```java
+public interface PersonDao { 
+    @Select("select * from person where pid = #{pid}")
+    @Results(
+        //设置id
+    	id="selectOnePersonById",
+        value={
+            //主键
+            @Result(property="pid",column="pid",id=true),
+            //一般属性
+            @Result(property="pname",column="pname"),
+            //关联对象属性
+            @Result(
+                property="idCard",
+                column="cardid",
+                javaType=IDCard.class,
+                one=@One(
+                    select="selectOneIDCard",
+                    //设置懒加载
+                    fetchType=FetchType.LAZY
+                ))
+        }
+    )
+    Person selectOnePersonById (Integer pid);
+    
+    @Select("select * from idcard where cardid = #{cardid}")
+    IDCard selectOneIDCard (String cardid);
+    
+    @Select("select * from person")
+    @ResultMap("selectOnePersonById")
+    List<Person> selectAllPerson ();
+}
+```
+
+
+
+##### （4）注解：一对多
+
+java代码
+
+```java
+public interface DeptDao {
+public interface TeacherDao {
+
+    @Results(
+            id = "teacherMap",
+            value = {
+                    @Result(property = "tid",column = "tid",id = true),
+                    @Result(property = "tname",column = "tname"),
+                    @Result(property = "tsex",column = "tsex"),
+                    @Result(property = "tage",column = "tage"),
+                    @Result(
+                            property = "studentList",column = "tid",javaType = List.class,
+                            one = @One(select = "selectStudentByTid",fetchType = FetchType.LAZY)
+                    )
+            }
+    )
+    @Select("select * from teacher where tid = #{tid}")
+    Teacher selectOneTeacher (int tid);
+
+    @Select("select s.* from student s inner join teacher_student ts on ts.sid = s.sid where ts.tid = #{tid}")
+    Student selectStudentByTid(Integer tid);
+
+    @Select("select * from teacher")
+    @ResultMap("teacherMap")
+    List<Teacher> selectAllTeacher ();
+
+    @Select("select * from teacher where tname = #{tname}")
+    @ResultMap("teacherMap")
+    Teacher selectTeacherByName (String name);
+
+}
+```
+
+
+
+##### （5）注解：多对多
+
+
+
+#### 7、Mybatis基于注解的动态sql
+
+根据条件动态拼接sql
+
+```java
+public interface EmpDao {
+    //value找类，type找方法
+    //如果方法名为provideSql，type就可以省略
+    @SelectProvider(value = EmpDynamic.class)
+    List<Emp> selectEmpByDeptnoAndJob(@Param("job") String job,@Param("deptno") Integer deptno);
+    
+    @SelectProvider(value = EmpDynamic.class,method = "empDynamicSql")
+    List<Emp> selectEmpInEmpnos (Integer... empnos);
+    
+}
+
+class EmpDynamic {
+    //使用默认方法名动态拼接
+    public String provideSql (@Param("job") String job,@Param("deptno") Integer deptno){
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from emp where 1=1 ");
+        if(job != null && !"".equals(job)){
+            sb.append("and job = #{job} ");
+        }
+        if(deptno != null){
+            sb.append("and deptno = #{deptno} ");
+        }
+        return sb.toString();
+    }
+    
+    //自定义方法名动态拼接
+    public String empDynamicSql (@Param("empnos") Integer... empnos){
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from emp where empno in (");
+        for(Integer empno : empnos){
+            sb.append(empno + ",");
+        }
+        sb.delete(sb.length()-1);
+        sb.append(")");
+        return sb.toString();
+    }
+}
+```
+
+
 

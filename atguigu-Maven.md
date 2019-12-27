@@ -1,8 +1,8 @@
-### Maven
+### Maven与Git
 
 <hr>
 
-##### 1、为什么我们需要学习maven
+#### 1、为什么我们需要学习maven
 
 （1）我们已经掌握的技术图：
 
@@ -23,7 +23,7 @@
 
 
 
-##### 2、Maven介绍
+#### 2、Maven介绍
 
 Maven是一款服务于Java平台的自动化构建工具（自动化构建工具发展：Make-> Ant -> Maven -> Gradle）
 
@@ -67,7 +67,7 @@ pom.xml用于配置项目依赖（通过坐标找到唯一jar包）
 
 
 
-###### （1）maven核心概念
+##### （1）maven核心概念
 
 > 1、约定的目录结构
 >
@@ -141,10 +141,6 @@ Maven工程的坐标与仓库路径的对应关系：
 
 
 
-
-
-
-
 maven使用流程
 
 > 1、下载maven压缩包
@@ -179,4 +175,197 @@ maven使用流程
 > 	</mirror>
 > </mirrors>
 > ```
+
+
+
+Dubbo（分布式）、Log4j（日志）、Maven（仓库）、rocketMq（阿里）、Tomcat（服务器）
+
+
+
+#### 3、Maven工程搭建
+
+阿里员工：如何成为顶级的程序员？
+
+Justin在阿里演讲中的回答：
+
+（1）勇于出错
+
+（2）积极参与开源
+
+（3）发量不重要
+
+
+
+##### （1）基础
+
+构建：是将工程编译得到的结果部署到服务器上的过程
+
+编译：.java文件编译为.class文件
+
+坐标：包名（公司）+ 名称 + 版本号
+
+SNAPSHOT：快照版本，不稳定的，随时可能更新的
+
+RELEASE：稳定版本，发布版本
+
+
+
+##### （2）约定
+
+maven有一个约定好的目录结构：设计思想，**<font color="blue">“约定优于配置”</font>**
+
+通过统一规范
+
+Enable Auto-Import允许自动引包，自动生成Maven项目的包结构
+
+
+
+##### （3）目录结构
+
+Maven自动导入web的目录结构：
+
+> ***src***
+>
+> ------**main**
+>
+> -------------java
+>
+> -------------resources
+>
+> ------**webapp**
+>
+> --------------WEB_INF
+>
+> -------------------------web.xml
+>
+> ------**test**
+>
+> ---------------java
+>
+> ---------------resources
+>
+> ------**pom.xml**
+
+
+
+##### （4）常见功能
+
++ mvn -v 查看版本号
+
++ 出现报错，找到Help --> show log in explorer查看报错日志
+
+  **<font color="red">Unable to import Maven project：</font>**
+
+  **IDEA版本与高版本Maven不兼容，一般降低Maven版本**
+
++ Google：guava，提供很多Java的工具包
+
+  我们发现Guava下又有很多jar包，这就是**依赖的递进关系**
+
++ external libraries就是我们引入的jar包，可以查看jar包的递进关系
+
++ exclusion标签，排除递进关系中不需要的jar
+
+```xml
+<dependency>
+	<groupid>com.google.guava</groupid>
+    <artifact>guava</artifact>
+    <version>28.1-jre</version>
+    <exclusions>
+    	<exclusion>
+        	<groupid>com.google.code.finbugs</groupid>
+    		<artifact>jsr305</artifact>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
++ scope标签，定义作用的时机
+
+```xml
+<exclusion>
+     <groupid>com.google.code.finbugs</groupid>
+     <artifact>jsr305</artifact>
+     <!--compile编译阶段使用，test测试阶段使用，package打包时使用
+			verify校验阶段使用，install安装使用，clean项目清理
+			validate校验项目可用性，site网站站点创建
+			deploy部署阶段使用，
+		-->
+     <scope>runtime</scope>
+</exclusion>
+```
+
+
+
+##### （5）maven指令与功能
+
+`mvn clean -compile`项目路径下执行命令就会将项目打包生成target文件夹
+
+`mvn clean package`项目的target文件夹中生成项目的jar包
+
+`mvn clean install`打包文件并存储到本地仓库中
+
+`mvn clean deploy`首先配置远程仓库地址，然后打包上传到远程仓库中，这样别人就能使用这个jar包
+
+
+
+跳过测试阶段：
+
+方式一：`mvn package -DskipTests`跳过单元测试的执行，单仍然会编译代码，如果测试代码有bug，还是没法通过，**不推荐使用**
+
+方式二：`mvn package -Dmaven.test.skip=true`常用命令，既不会执行也不会编译
+
+
+
+查看依赖树：pom.xml文件中右键选择Diagrams，就可以查看jar包之间的依赖关系
+
+![1577437736558](../../AppData/Roaming/Typora/typora-user-images/1577437736558.png)
+
+
+
+`mvn dependency:tree`也可以查看依赖树，作用是解决jar包冲突
+
+
+
+#### 4、Git
+
+背景：最早由linus手动合并代码，SVN需要收费，Linus使用一个BitKeeper来进行代码管理，最早BitKeeper给了Linux免费的使用权，但是一位Linux大牛尝试破解BitKeeper并被BitKeeper公司发现，于是收回了使用权，于是Linus花了两周时间写出了Git来进行版本管理。
+
+
+
+Git & Github
+
+Github：基于Git工具的代码托管平台
+
+Git：管理团队的代码
+
+
+
+将远程代码克隆到本地
+
+`git clone https://github.com/example`找到要存代码的位置，然后执行命令，就会将项目下载到当前文件夹中，打开项目，在pom.xml文件上，右键add as maven project
+
+
+
+配置git，获取更改权限
+
+`git config --list`显示配置列表，用户名和邮箱
+
+`git config --global user.name "username"`配置用户名
+
+`git config --global user.email "address"`配置邮箱
+
+
+
+想使用git的地址下载，必须配置ssh密钥
+
++ 本地生成密钥，命令：`ssh-keygen -t -rsa -C "邮箱"`
+
+  执行命令后，设置文件夹保存key，然后我们的key在生成的.pub文件中，复制粘贴到Github
+
++ github上配置密钥，settings/ SSH and  GPG keys/ new ssh key添加即可
+
++ 验证添加成功：`ssh -T git@github.com`
+
++ 我们尝试下载.git链接的文件，证明关联成功
 

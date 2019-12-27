@@ -1006,7 +1006,7 @@ public class Download extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
-    public voud doPost () {}
+    public void doPost () {}
 }
 ```
 
@@ -1307,6 +1307,7 @@ public class JDBCUtils {
         }catch(Exception e){
             e.printStackTrace();
         }
+        return con;
     }
     //开启事务的方法
     public static void beginTransaction () throws SQLException  {
