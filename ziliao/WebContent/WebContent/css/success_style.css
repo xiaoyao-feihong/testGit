@@ -1,0 +1,51 @@
+/* CSS Document */
+@charset "gb2312";
+body,div,span,h1,h2,h3,h4,h5,h6,p,input,ul,li,img{margin:0;padding:0}
+*{ margin:0;padding:0;border:0px;}
+h2{font-size:14px;}
+ul{list-style:none;}
+body{font-size:12px;color:#333;background:#fff;}
+a{ text-decoration:none;color:#000000;}
+a:hover{text-decoration:underline;color:#FF0000;}
+#bodyPart{width:930px;height:970px;margin:auto;border:0px solid #ff0000;}
+#top{ margin-top:30px; height:52px;}
+#logo{ background:url(../img/logo_small.gif); width:167px;height:46px; float:left}
+#Cart{ background:url(../img/warebuy3.jpg); width:438px;height:52px; float:left; margin-left:20px; overflow:hidden;}
+#Cart ul li{ font-weight:bold; float:left; text-align:center;margin-top:30px;}
+.white{ color:#FFFFFF;}
+#myCart{width:123px;}
+#writeInfo{ width:155px;}
+#successSub{ width:153px;}
+.List_cart{ width:930px; clear:both; margin-top:20px;}
+.List_cart h2{ background:url(../img/cart_bg_05.gif) no-repeat right top #AACDED; height:28px; line-height:28px}
+.List_cart h2 strong{background:url(../img/cart_bg_03.gif) no-repeat left top;height:28px; padding:0 20px; display:block;}
+
+.cart_table{width:890px;border:solid #AACDED;border-width:0 3px;padding:20px 17px 0;overflow:hidden;}
+
+.tip_1{padding:10px 10px 10px 50px;background:url(../img/wcdd.gif) no-repeat left 10px;font-size:16px;font-weight:bold;line-height:2em;}
+.tip_1 strong{color:#FE7E00;}
+.tip_5{margin-bottom:3px;}
+.tip_5 strong{color:red;font-size:16px;}
+.tip_6{font-size:16px;font-weight:bold;margin:20px 0 10px 0;}
+.tip_6 a{ color:#005EA7}
+
+.tip_3{background:#EBF4FB;border:solid #AACDED;border-width:2px 1px 1px;padding:15px; margin:auto; height:500px; clear:both;}
+.tip_3 ul li{ float:left; width:142px; height:43px; margin:28px 25px 0px 40px;}
+
+h4{ font-weight:normal; clear:both; font-size:12px;}
+.t{ padding-top:20px; clear:both;}
+
+#divContent{border: 1px solid rgb(255, 102, 0); background: none repeat scroll 0% 0% rgb(255, 252, 170); padding: 6px 0pt 6px 5px; clear:both;}
+
+.tip_4{padding:20px 10px;font-size:14px;line-height:2em;}
+.tip_4 strong{color:#FE7E00;}
+.tip_4 a{ color:#005EA7}
+.round{height:10px;background:url(../img/cart_bg_11.gif) repeat-x 0 top;}
+.lround{width:10px;height:10px;background:url(../img/cart_bg_09.gif) no-repeat left top;float:left;}
+.rround{width:10px;height:10px;background:url(../img/cart_bg_10.gif) no-repeat right top;float:right;}
+
+#footer{padding-bottom:30px;text-align:center; padding-top:20px;}
+#footer .flinks a,#footer .flinks span{margin:0 10px;}
+#footer .flinks span a{margin:0;}
+#footer .copyright{margin:10px 0;font-family:arial;}
+#footer .ilinks a{margin:0 5px;}

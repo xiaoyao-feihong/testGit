@@ -1,0 +1,23 @@
+/* CSS Document */
+*{margin:0;padding:0;}
+html{border:0;width:100%;}
+body{font-size:12px;line-height:1.5em;color:#444;margin:0 auto;}
+body{background: url("../img/logoutbg.gif") repeat-x scroll 0 -719px #FFFFFF;}
+img{border:none;}
+input,img,select{vertical-align:middle;}
+ul,ol{list-style:none;}
+em{font-style:normal;}
+a{text-decoration:none;}
+a:link,a:visited{color:#3366cc;}
+a:hover,a:active{text-decoration:underline;color:#FF7403;}
+h1{font-size:30px;font-family:ºÚÌå;}
+.succeed{width:600px;margin:0 auto;background:url(../img/suc_12.jpg) repeat-y left top;}
+.s_cornor_t{height:12px;background:url(../img/suc_bg.jpg) repeat-x left -25px;}
+.s_cornor_tl{width:12px;height:12px;float:left;background:url(../img/suc_bg.jpg) no-repeat left top;}
+.s_cornor_tr{width:12px;height:12px;float:right;background:url(../img/suc_bg.jpg) no-repeat right top;}
+.s_cornor_b{height:12px;background:url(../img/suc_bg.jpg) repeat-x left -38px;}
+.s_cornor_bl{width:12px;height:12px;float:left;background:url(../img/suc_bg.jpg) no-repeat left -12px;}
+.s_cornor_br{width:12px;height:12px;float:right;background:url(../img/suc_bg.jpg) no-repeat right -12px;}
+.s_cornor_c{background:url(../img/suc_14.jpg) repeat-y right top;padding:20px 40px;}
+.s_cornor_c td{padding:15px 10px;}
+

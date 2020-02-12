@@ -1,0 +1,324 @@
+/* CSS Document */
+@charset "gb2312";
+body,div,span,h1,h2,h3,h4,h5,h6,p,input,ul,li,img{margin:0;padding:0}
+*{ margin:0;padding:0;border:0px;}
+h2{font-size:14px;}
+ul{list-style:none;}
+body{font-size:12px;color:#333;background:#fff;}
+a{ text-decoration:none;color:#000000;}
+a:hover{text-decoration:underline;color:#FF0000;}
+img{vertical-align:middle;}
+#bodyPart{width:980px;height:3400px;margin:auto; }
+
+<!-----Ö÷Ìå----->
+
+
+.main{width:980px; margin:auto;}
+.right-extra{float:right;width:758px;border:0px solid #ff0000;padding-left:5px; margin-bottom:20px;}
+.right-extra .extra{border-top: 1px solid #F3E6C6; padding: 5px 10px;}
+.left{ float:left;width:211px;}
+.m{margin-bottom:10px;}
+#sortlist .mt{height:24px;padding:3px 8px;background:url(../img/bg_tit_home.gif) #E6E6E6 no-repeat 0 -520px;line-height:24px;}
+#sortlist h2{color:#fff;}
+#sortlist .mc{border:solid #E6E6E6;border-width:0 1px 1px; height:90px;}
+#sortlist ul{padding:6px 0 6px 6px;overflow:hidden;}
+#sortlist li{float:left;width:95px;height:18px;padding:3px 6px 3px 0;overflow:hidden;}
+
+#samekind .mt{height:24px;padding:3px 8px;background:url(../img/bg_tit_home.gif) #E6E6E6 repeat-x 0 -30px;line-height:24px;}
+#samekind .mc{border:solid #E6E6E6;border-width:0 1px 1px;}
+#samekind ul{padding:6px 0 6px 6px;overflow:hidden;zoom:1;}
+#samekind li{float:left;width:61px;height:18px;padding:3px 6px 3px 0;overflow:hidden;}
+
+.rank .mt{height:24px;padding:3px 8px;background:url(../img/bg_tit_home.gif) #E6E6E6 repeat-x 0 -30px;line-height:24px;}
+.rank .mc{padding:0 1px;border:solid #E6E6E6;border-width:0 1px 1px; height:168px;}
+.rank .tab{padding:6px 2px 0;height:19px;border-bottom:1px solid #c00;overflow:hidden;zoom:1;}
+.rank .tab li{width:62px;height:17px;padding-top:2px;margin:0 2px;background:url(../img/bg_tit_home.gif) no-repeat 0 -274px;text-align:center;line-height:17px;color:#999; float:left;}
+.rank .tab .curr{background:url(../img/bg_tit_home.gif) no-repeat -62px -274px;color:#c00;}
+.rank .tab .curr a:link,.rank .tab .curr a:visited{color:#c00;}
+.rank .tabcon li{float:left;width:197px;padding:6px 5px;border-top:1px solid #efefef;overflow:hidden;height:22px;line-height:22px;}
+.rank .tabcon span{float:left;padding:0 8px 0 4px;font-size:14px;font-weight:bold;color:#C00;font-family:arial;}
+.rank .tabcon .p-img{float:left;margin-right:5px;display:none;}
+.rank .tabcon .p-name{float:left;width:176px;height:22px;overflow:hidden;}
+.rank .tabcon .p-price{float:left;height:18px;margin-top:2px;line-height:18px;display:none;}
+.rank .tabcon .fore{padding:10px 5px 10px;height:56px;}
+.rank .tabcon .fore .p-img{display:block;}
+.rank .tabcon .fore .p-name{width:120px;height:3em;line-height:1.5em;}
+.rank .tabcon .fore .p-price{display:block;}
+
+#recent .mt{height:24px;padding:3px 8px;background:url(../img/bg_tit_home.gif) #E6E6E6 repeat-x 0 -60px;line-height:24px;}
+#recent h2{float:left;}
+#recent .mc{padding:0 1px;border:solid #E6E6E6;border-width:0 1px 1px;}
+#recent li{padding:5px 0;overflow:hidden;background:url(../img/bg_tit_home.gif) repeat-x 0 -597px;zoom:1;}
+#recent .p-img{float:left;padding-left:8px;margin-right:5px;}
+#recent .p-name{float:left;width:140px;margin-top:10px;}
+#recent .norecode{padding:5px 7px;}
+#recent .iloading{margin-top:5px;margin-bottom:5px;}
+#clearRec{ float:right;}
+#adv{ margin-top:10px;}
+
+#name{padding:10px;text-align:center;}
+#name h1{display:inline;font-size:16px;font-family:arial;}
+
+#spec-n1 img{width:350px;height:350px; border:1px  solid #E6E6E6}
+#preview{float:left;width:352px;}
+#spec-n5{padding-top:10px;}
+#spec-n5 .control{top:10px;width:10px;height:45px;background-image:url(../img/icon_clubs.gif);background-repeat:no-repeat;cursor:pointer;}
+#spec-left{background-position:-68px -380px; float:left;margin-top:5px}
+#spec-right{background-position:-79px -380px; float:right;margin-top:5px}
+#spec-list{ overflow:hidden; height:50px;}
+#spec-list .list-h li{ float:left; border:1px solid #E6E6E6; margin-left:10px;}
+#preview .links li{float:left;} 
+#preview .links{margin-top:20px; padding-left:5px;}
+#preview .enlarge{position:relative;float:left;height:25px;padding:0 20px;}
+#preview .enlarge a{color:#005aa0;}
+#preview .enlarge b {position:absolute;left:0;top:0;width:18px;height:18px;background:url(../img/icon_clubs.gif) no-repeat 0 -15px;}
+#preview .partake{position:relative;float:left;height:25px;padding:0 10px;}
+#preview .partake b {position:absolute;left:5;top:0;width:190px;height:25px;background:url(../img/icon_site.gif) no-repeat 0 -27px;}
+
+#summary{float:left; width:370px; padding:0 15px;}
+#summary .clearfix{position:relative;}
+#summary a{color:#005AA0;}
+#summary li{margin:20px 10px;}
+#market-price .pid{ margin-left:30px;}
+#star{position:absolute;background:url(../img/icon_clubs.gif) no-repeat 0 0; width:64px;height:12px;}
+#assess{position:absolute;padding-left:70px;}
+#storeinfocontainer img{vertical-align:middle;}
+
+#choose{float:right;width:398px;border:1px solid #EED97C;background:#FFFCEB;color:#B94708; margin-top:20px;}
+#choose .size ul li{ float:left; margin-left:5px;}
+#choose .size{ padding:10px; overflow:hidden; border-bottom:1px solid #EED97C; height:23px;}
+.selectver{ padding-top:3px; width:60px; text-align:right;}
+.size .selectver{ padding-top:6px;}
+.size .selected{ border:2px solid #FF8500;padding:4px 4px;}
+.size .noSelect{border:2px solid #CCCCCC;padding:4px 4px;}
+#choose .amount{ padding:10px; overflow:hidden; border-bottom:1px solid #EED97C; height:23px;}
+#choose .amount ul li{ float:left; margin-left:5px;}
+.amount .reduce{border:1px solid #DBDBDB; padding:1px 4px; margin-top:1px;}
+.amount #pamount{border:1px solid #989898; padding:2px 10px;}
+.amount .add{border:1px solid #DBDBDB; padding:1px 4px; margin-top:1px;}
+#choose .result{padding:10px 10px 0;}
+#choose .btns{padding:10px;overflow:hidden;zoom:1; margin-top:20px;}
+#choose .btns a{color:#005aa0;}
+#choose .btn-append,#choose .btn-divide,#choose .btn-coll,#choose .btn-notice{float:left;margin-right:6px;background-image:url(../img/icon_clubs.gif);background-repeat:no-repeat;overflow:hidden;cursor:pointer;font-size:12px;}
+#choose .btn-append{display:block;width:139px;height:38px;background-position:0 -265px;line-height:100px;}
+#choose .btn-divide{width:120px;height:28px;padding:4px 0 4px 22px;margin-top:7px;background-position:0 -426px;border:0;*padding-bottom:0px;color:#f60;}
+#choose .btns .btn-notice{width:78px;height:20px;padding:4px 0;margin-top:7px;background:url(../img/btn_notice.jpg) no-repeat 0 0;line-height:22px;color:#fff;text-align:center;}
+#choose .btn-coll{width:78px;height:28px;padding:4px 0;margin-top:7px;background-position:0 -455px;border:0;*padding-bottom:0px;}
+#choose .btn-0yuan{float:left;margin-right:6px;width:99px;height:38px;background:url(../img/btn_0yuan.gif) no-repeat 0 0;line-height:100px;overflow:hidden;}
+#choose .btn-enternet{float:left;margin-right:6px;width:158px;height:38px;background:url(../img/btn_enternet.jpg) no-repeat 0 0;line-height:100px;overflow:hidden;}
+
+
+#carriage{float:right;width:400px;margin-bottom:30px; margin-top:10px;}
+#carriage .item{width:378px;padding:0 11px;margin-bottom:5px;}
+#carriage .item li{float:left;margin-right:15px;}
+#carriage .item a{float:left;color:#005aa0;}
+#carriage .item .fore-1{margin-right:0;}
+#carriage .fore-2 a{position:relative;padding-right:8px;}
+#carriage .fore-2 a b{position:absolute;top:7px;right:0;width:5px;height:3px;background:url(../img/bg_shortcut.gif) no-repeat scroll -210px -25px;}
+#carriage .content{width:398px;border:1px solid #DDE5EF;background:#F8F9FA;position:relative;}
+
+.right-extra .mt{height:28px;line-height:28px;padding:0 10px 8px;border-top:1px solid #EED97C;background:url(../img/bg_hotsale.gif) repeat-x 0 -552px;color:#c00;}
+.right-extra .tab{border-bottom:2px solid #BE0000;margin-bottom:10px;height:27px;}
+.right-extra .tab li{position:relative;height:24px;padding:3px 12px 0;background:url(../img/icon_clubs.gif) #ccc no-repeat right -150px;overflow:hidden;margin-right:3px;line-height:24px;font-size:14px;font-weight:bold;color:#c30 ;}
+.right-extra .tab span{position:absolute;left:0;top:0;z-index:1;width:10px;height:27px;background:url(../img/icon_clubs.gif) no-repeat 0 -150px;}
+.right-extra .tab a{float:none;color:#c30;}
+.right-extra .tab .curr{background-position:right -178px;color:#fff; }
+.right-extra .tab .curr span{background-position:0 -178px;}
+.right-extra .tab .curr a{color:#fff;}
+.right-extra .mc .extra{padding:5px 10px;border-top:1px solid #F3E6C6;}
+.right-extra .total{float:right;}
+.right-extra .total strong{color:#FF7403;}
+.right-extra .total a:link,.right-extra .total a:visited{color:#005aa0;}
+.right-extra .join a:link,.right-extra .join a:visited{color:#FF7604;}
+.right-extra .norecode{padding:0 10px 10px;}
+.right-extra .iloading{margin-bottom:10px;}
+
+#co-service{ clear:both; padding-top:10px;}
+#co-service .mc{padding:0 10px;}
+#co-service ul{padding:5px 0 10px 20px;}
+#co-service li{padding:4px 0;overflow:hidden;zoom:1;}
+#co-service a{color:#005aa0;}
+#co-service .content{float:left;margin-right:15px;}
+#co-service .btn-buy{float:left;display:block;width:51px;height:21px;line-height:21px;background:url(../img/icon_clubs.gif) no-repeat -92px -303px;text-align:center;color:#fff;text-decoration:none;overflow:hidden;}
+
+#recommend .tab{margin-bottom:0; overflow:hidden;}
+#recommend .tab .curr{ width:60px; float:left;}
+#tab-suit{ width:60px; float:left;}
+#recommend .master{float:left;position:relative;width:125px;height:166px;background:#fff;border:solid #D8D7D3;border-width:1px 0 1px 1px;padding:0 35px 0 5px;text-align:center;}
+#recommend .master .icon-add{position:absolute;top:45px;right:0;width:30px;height:30px;background:url(../img/icon_clubs.gif) no-repeat -112px -380px;}
+#recommend .suits{float:left;position:relative;width:420px;height:166px;background:#fff;border:solid #D8D7D3;border-width:1px 0;overflow-y:hidden;overflow-x:hidden;}
+#recommend .suits ul{float:left;height:166px;}
+#recommend .suits li{float:left;width:126px;padding:0 7px;text-align:center;}
+#recommend .i-suit{float:left;width:17px;height:168px;border-left:1px solid #D8D7D3;}
+#recommend .i-suit b{float:left;width:17px;height:34px;background:url(../img/icon_clubs.gif) no-repeat 0 -354px;margin:6px 0 0 -1px;}
+#recommend .infos{float:right;width:140px;padding:0 5px 8px 0;}
+#recommend .infos div{margin-bottom:5px;}
+#recommend .infos .p-name a{color:#005aa0;font-weight:bold;}
+#recommend .infos .p-saving{color:#008000;}
+#recommend .btn-buy{float:left;width:67px;height:23px;text-align:center;line-height:23px;color:#fff;background:url(../img/icon_clubs.gif) no-repeat 0 -400px;}
+
+#fitting{position:relative;width:711px;height:180px;padding:5px 26px;margin-top:10px;}
+#fitting .p-name{height:1.5em;}
+#fitting .p-price{margin:5px 0;}
+#fitting .p-img img{width:100px;height:100px;}
+#fitting .btn-append{display:block;width:91px;height:21px;margin:0 auto;line-height:21px;background:url(../img/icon_clubs.gif) no-repeat 0 -303px;color:#fff;text-decoration:none;}
+#fitting-list{width:711px;height:180px;overflow:hidden;}
+#fitting-list ul{width:711px;height:180px;overflow:hidden;}
+#fitting-list li{width:122px;height:180px;padding:0 10px;text-align:center; float:left;}
+#fitting .control{position:absolute;top:50px;width:10px;height:45px;background-image:url(../img/icon_clubs.gif);background-repeat:no-repeat;cursor:pointer;}
+#fitting-left{left:8px;background-position:-68px -380px;}
+#fitting-right{right:8px;background-position:-79px -380px;}
+#fitting-left.disabled{background-position:-90px -380px;}
+#fitting-right.disabled{background-position:-101px -380px;}
+#detail .tab  li{ width:60px; float:left;}
+
+
+#i-detail{padding:0 10px 10px;overflow:hidden;zoom:1;}
+#i-detail li{float:left;width:450px;}
+
+#content{ margin-top:30px;height:440px;}
+#content div{float:left;}
+#content span{font-size:16px; font-weight:bold;}
+#ipadInfo{width:455px;margin-top:190px;}
+
+#promises{padding:10px;overflow:hidden;zoom:1;background:url(../img/bg_tit_home.gif) repeat-x 0 -597px; clear:both;}
+#state{padding:10px;overflow:hidden;zoom:1;background:url(../img/bg_tit_home.gif) repeat-x 0 -597px;}
+#state strong{ color:#FF0000;}
+
+#comment{ margin-top:10px;}
+#comment .tab  li{ float:left; overflow:hidden;}
+
+
+#i-comment{padding:10px 0;margin-bottom:10px;border:1px solid #E4E4E4;overflow:hidden;zoom:1;}
+#i-comment .rate{float:left;width:90px;height:65px;padding:15px 0 0;border-right:1px solid #E4E4E4;text-align:center;color:#E26500;}
+#i-comment .rate strong{line-height:36px;font-size:30px;font-family:arial;}
+.percent{float:left;width:220px;height:70px;padding:5px 3px 5px 15px;border-right:1px solid #E4E4E4;}
+.percent dl{padding:2px 0;overflow:hidden;zoom:1;}
+.percent dt,.percent dd{float:left;margin-right:5px;}
+.percent .d1{width:150px;border:1px solid #ccc;height:9px;margin-top:4px;overflow:hidden;background:url(../img/icon_clubs.gif) #efefef repeat-x 0 -129px;}
+.percent .d1 div{height:9px;background:url(../img/icon_clubs.gif) #FF701B repeat-x 0 -119px;overflow:hidden;}
+#i-comment .actor{float:left;position:relative;width:226px;height:70px;padding:5px 15px 5px 36px;border-right:1px solid #E4E4E4;overflow:hidden;zoom:1;}
+#i-comment .actor b{position:absolute;left:15px;top:5px;width:18px;height:18px;background:url(../img/icon_clubs.gif) #000 no-repeat -21px -49px;}
+#i-comment .actor span{float:left;}
+#i-comment .actor a{color:#005aa0;}
+#i-comment .actor .u-name{float:left;margin-right:16px;white-space:nowrap;color:#005aa0;}
+#i-comment .btns{float:right;width:145px;height:75px;padding:0 0 5px;text-align:center;}
+#i-comment .btn-comment{display:block;width:106px;height:35px;background:url(../img/icon_clubs.gif) no-repeat -30px -230px;line-height:100px;overflow:hidden;margin:5px auto;}
+#i-comment .btns a{color:#005aa0;}
+#comment .item{position:relative;padding:0 0 2px 130px;margin-bottom:10px;background:#fff;zoom:1;}
+#comment .user{position:absolute;top:10px;left:0;width:130px;text-align:center;color:#999;}
+#comment .user a{color:#005aa0;}
+#comment .u-icon img{border:2px solid #EAEAEA;}
+#comment .i-item{padding:10px 15px 5px;border:1px solid #F3E6C6;background:#FFFCF5;}
+#comment .o-topic{padding:0 0 2px;margin-bottom:10px;border-bottom:1px solid #F9F0DB;overflow:hidden;zoom:1;}
+#comment .topic{float:left;}
+#comment .star{float:left;margin:2px 0 0 5px;}
+.date-comment{float:right;color:#999;}
+.comment-content dl{padding:2px 0;overflow:hidden;zoom:1;}
+.comment-content dt{float:left;width:62px;text-align:right;color:#FE8F02;}
+.comment-content dd{float:left;width:530px;}
+#comment .item .btns{height:25px;padding:10px 0 5px 2px;line-height:25px;overflow:hidden;zoom:1;}
+#comment .btn-reply,#comment .btn-agree,#comment .btn-oppose{width:62px;height:25px;background:url(../img/icon_clubs.gif) no-repeat 0 -328px;border:0;text-align:center;margin-right:5px;}
+#comment .btn-agree,#comment .btn-oppose{float:left;color:#005aa0;text-decoration:none;}
+#comment .btn-reply{float:right;}
+#comment .useful{float:left;}
+#comment .useful span{float:left;margin-right:5px;color:#999;}
+.item-reply{position:relative;padding-left:50px;zoom:1;}
+.item-reply strong{display:block;position:absolute;top:6px;left:0;width:45px;color:#BEBEBE;font-size:20px;font-family:arial;text-align:right;}
+.item-reply dl{border-top:1px solid #F4F4F4;padding:5px;}
+.item-reply dt{margin-bottom:4px;color:#999;overflow:hidden;zoom:1;}
+.item-reply dt .u-name{float:left;}
+.item-reply dt a{float:left;color:#005aa0;margin-right:8px;}
+.item-reply dt .date-comment{float:right;}
+#comment .corner{position:absolute;background-image:url(../img/icon_clubs.gif);background-repeat:no-repeat;overflow:hidden;}
+#comment .tl{top:0;left:115px;width:20px;height:40px;background-position:0 -206px;}
+#comment .tr{top:0;right:0;width:10px;height:40px;background-position:-20px -206px;}
+#comment .b{bottom:0;width:633px;height:10px;background-position:0 -139px;background-repeat:repeat-x;}
+#comment .bl{bottom:0;left:130px;width:10px;height:10px;background-position:-14px -246px;}
+#comment .br{bottom:0;right:0;width:10px;height:10px;background-position:-20px -246px;}
+*html #comment .tr{right:-1px;}
+*html #comment .br{right:-1px;}
+
+.sa5{width:64px;height:12px;background-image:url(../img/icon_clubs.gif);background-repeat:no-repeat;overflow:hidden;}
+.sa5{background-position:0 0;}
+.item{ overflow:hidden;}
+
+.numBgMiddle{ background:url(../img/ln_num_middle.jpg); height:21px; width:21px; text-align:center; padding-top:7px;}
+.numPageNo ul li{ float:right;}
+.nextPage{ width:50px; height:30px; overflow:hidden;}
+.cur{ display:none;}
+.curM{ background:none;}
+
+#consult{ clear:both;}
+#consult .tab li{ float:left;}
+
+#consult .tab{margin-bottom:0;}
+#consult .search{position:relative;border-bottom:1px solid #F3E6C6;background:#FFFBE8;padding:10px 20px 10px 300px;zoom:1;}
+#consult .i-search1{position:absolute;top:10px;left:20px;}
+#consult .i-search1 strong{display:block;margin:5px 0 3px;}
+#consult .i-search1 .text{width:160px;border:1px solid #EAD045;padding:2px;}
+#consult .i-search2{border:1px dotted #EED2A9;padding:8px 12px;background:#fff;-moz-border-radius:10px;-webkit-border-radius:10px;}
+#consult .result{padding:5px 20px;background:#F4F9FF;}
+#consult .result strong{color:#f30;}
+#consult .result em{color:#d75509;}
+#consult .result a{color:#005aa0;}
+#consult .item{padding:8px 15px;border:1px solid #fff;}
+#consult .odd{background:#F4F9FF;border:1px solid #EDF0F1;-moz-border-radius:10px;-webkit-border-radius:10px;}
+#consult .user{text-align:right;color:#999;}
+#consult .user span{margin-left:20px;}
+#consult .user .u-level{color:#088100;}
+#consult dl{overflow:hidden;margin-bottom:5px;zoom:1;}
+#consult dt{float:left;width:80px;text-align:right;zoom:1;}
+#consult dd{float:right;width:645px;overflow:hidden;}
+#consult .content{float:left;width:510px;}
+#consult .date-answer{float:right;width:130px;text-align:right;color:#999;}
+#consult .useful{text-align:right;color:#999;}
+#consult .useful a{color:#005aa0;}
+#consult dt b{float:left;width:14px;height:13px;margin:2px 3px 0 0;background-image:url(../img/icon_clubs.gif);background-repeat:no-repeat;}
+#consult .ask b{background-position:-72px -14px;}
+#consult .answer{color:#D75509;}
+#consult .answer b{background-position:-57px -14px;}
+#consult .norecode,#consult .iloading{margin-top:10px;}
+.topBorder{padding:5px 10px;border-top:1px solid #F3E6C6;}
+
+
+#discuss .tab{margin-bottom:0; margin-top:10px;}
+#discuss .tab li{ float:left;}
+#discuss td{background:url(../img/bg_tit_home.gif) repeat-x 0 -597px;text-align:center;}
+#discuss td a{color:#005aa0;}
+#discuss .tw1{width:423px;padding:7px 0 3px 10px;text-align:left;}
+#discuss .tw2,#discuss .tw3,#discuss .tw4{width:150px;padding:7px 0 3px;}
+#discuss .topic{position:relative;width:400px;height:18px;padding-left:20px;line-height:18px;overflow:hidden;}
+#discuss .topic a{float:left;padding:0 2px;}
+#discuss b{float:left;margin-top:1px;background-image:url(../img/icon_clubs.gif);background-repeat:no-repeat;}
+#discuss .shai,#discuss .tao,#discuss .wen,#discuss .quan{position:absolute;top:1px;left:0;}
+.shai{width:19px;height:15px;background-position:-20px -33px;}
+.tao{width:19px;height:15px;background-position:-60px -33px;}
+.wen{width:19px;height:15px;background-position:-40px -33px;}
+.quan{width:19px;height:15px;background-position:0 -33px;}
+.tu{width:14px;height:14px;background-position:-111px -33px;}
+.fen{width:16px;height:16px;background-position:-126px -33px;}
+#discuss b.yigou{float:none;display:inline-block;width:29px;height:15px;margin-left:2px;background-position:-80px -33px;vertical-align:middle;}
+#discuss .norecode,#discuss .iloading{margin-top:10px;}
+
+#similar ul{padding:0;}
+#similar li{width:105px;padding:0 10px;text-align:center;}
+#similar .list-h li{ float:left;}
+
+
+#tail{clear:both; height:260px; border:1px solid #CCCCCC;}
+.info{ width:150px; float:left; margin:10px 0px 0px 38px;}
+.info .tt{ margin:auto; height:40px; width:130px;}
+.info .tt ul li{float:left;}
+.cutline{ width:100px; height:1px; background:url(../img/ln_dian.jpg); overflow:hidden;}
+.info .tt .buyInfo{ margin:3px 0px 0px 5px;}
+.info .tc{clear:both; padding-top:10px; width:70px; margin:auto;}
+.info .tc ul li{ padding-top:5px;}
+.buyInfo{padding-top:-13px; height:30px; line-height:30px;}
+#foot-img{ width:950px; height:57px; clear:both; margin:auto; padding-top:10px;}
+#foot-img ul li{ float:left;}
+#footer{padding-bottom:30px;text-align:center; margin-top:20px;}
+#footer .flinks a,#footer .flinks span{margin:0 10px;}
+#footer .flinks span a{margin:0;}
+#footer .copyright{margin:10px 0;font-family:arial;}
+#footer .ilinks a{margin:0 5px;}

@@ -561,7 +561,84 @@ public class TestController {
 public class TestService {
     
 }
-
 ```
 
 Spring中@Service、@Controller、@Component注解的作用是一样的，主要是给程序员分清层次的
+
+
+
+list引入关联bean
+
+```xml
+<bean id="manger" class="domain.Manager">
+	<property name="userList">
+		<list>
+			<ref bean="user1"/>
+			<ref bean="user2"/>
+		</list>
+	</property>
+    
+    <map>
+    	<entry>
+            <!--可以通过key-ref可以让键名为对象-->
+        	<entry key="xixi" value-ref="domain.User"></entry>
+            <entry key="nangua" value-ref="domain.User"></entry>
+        </entry>
+    </map>
+</bean>
+```
+
+
+
+parent可以用来继承父类属性
+
+```xml
+<bean id="haha"  abstract="true" class="domain.Animal">
+	<property name="name" value="animal"></property>
+</bean>
+<bean id="xixi"  parent="haha" class="domain.Animal"></bean>
+```
+
+
+
+依赖
+
+emp要想被创建，必须依赖dept对象，dept的bean必须存在
+
+多个依赖用`,`分割
+
+```xml
+<bean id="emp" class="domain.Emp" depends-on="dept,dept2">
+	<property name="ename" value="jackson"></property
+</bean>
+```
+
+
+
+bean的作用域
+
+scope：singleton单例，prototype使用时创建新对象，request一次请求对应一个bean对象，session同一个http session共享一个bean
+
+
+
+bean的生命周期
+
+（1）通过构造器或工厂方法创建bean实例
+
+（2）属性赋值，引用其它bean对象
+
+（3）调用bean的初始化方法
+
+（4）bean的初始化方法`init-method`
+
+（5）bean可以使用
+
+（6）容器关闭时，调用bean的销毁方法`destroy-method`
+
+
+
+bean的后置处理器
+
+可以在bean的初始化前后进行一些操作，对所有的bean都会起作用
+
+可以根据bean的名字对指定的bean对象进行初始化之前的一些操作

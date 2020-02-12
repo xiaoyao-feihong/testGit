@@ -1,0 +1,8 @@
+@charset "utf-8";
+/* CSS Document */
+/*messages*/
+.announce_mes{color:#FF6600;}
+.content_mes{margin:24px 0 32px 18px;line-height:18px;}
+
+/*favorite*/
+#fav_product tr td{border-bottom:1px solid #edeef0;border-right:1px solid #edeef0;}

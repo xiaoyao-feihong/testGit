@@ -26,8 +26,8 @@ Spring体系结构
 
 （2）Data access/Integration：数据访问/集成
 
-+ JDBC
-+ ORM
++ JDBC：java database connection
++ ORM：object relation mapping
 + OXM
 + JMS
 + Transactions
@@ -105,12 +105,12 @@ Spring开发中，需要根据业务来导入不同的jar包
 
 当前关于IOC和DI进行讲解，只需要Spring的核心功能
 
-+ Spring-beans-XXX.RELEASE.jar
-+ Spring-context-XXX.RELEASE.jar
-+ Spring-core-XXX.RELEASE.jar
-+ Spring-expression-XXX.RELEASE.jar
++ Spring-beans-XXX.RELEASE.jar：提供注册java bean的功能（配置和注解）
++ Spring-context-XXX.RELEASE.jar：提供spring上下文对象
++ Spring-core-XXX.RELEASE.jar：spring核心功能
++ Spring-expression-XXX.RELEASE.jar：提供spel表达式的支持（`${}`）
 
-<font color="blue">注意：commons-logging-1.2.jar也需要先加载</font>
+<font color="blue">注意：commons-logging-1.2.jar也需要先加载（spring日志功能依赖的jar包）</font>
 
 
 
@@ -2302,6 +2302,60 @@ public class UserService {
 >             - 调用实现XXXAware接口的方法
 >         - Bean的初始化：initializeBean(beanName,mbd,bw,pvs);
 >           - 执行Aware接口的方法：invokeAwareMethods(beanName,bean);
-> + 
->
 > 
+
+
+
+#### 10、Atguigu Spring
+
+DI的property是通过set方法进行的注入，每一个bean对象默认通过无参构造生成
+
+
+
+如果不指定index，构造器参数必须构造方法参数一一对应，不能
+
+```xml
+<bean id="car">
+    <!--通过index指定构造方法的装配位置，从0开始-->
+	<constructor-arg value="" index='1'></constructor-arg>
+    <constructor-arg value="" index='0'></constructor-arg>
+    <constructor-arg value="" index='2'></constructor-arg>
+</bean>
+```
+
+最后写的构造方法，最先执行；如果没有getter和setter，是顺序寻找构造方法，与C编写的JVM的native方法有关
+
+指定参数类型用type，消除歧义
+
+
+
+p命名空间（version：2.5+）
+
+依旧使用的是getter和setter来进行的赋值，属性必须有getter和setter方法
+
+
+
+使用特殊字符
+
+```xml
+<property name="bookName">
+	<value><![CDATA['"$^%^&*%&<>]]></value>
+</property>
+```
+
+
+
+map
+
+```xml
+<map>
+	<entry key="A1" value-ref="car1"></entry>
+    <entry key="B1" value-ref="car1"></entry>
+    <entry key="C1" value-ref="car1"></entry>
+</map>
+```
+
+
+
+
+

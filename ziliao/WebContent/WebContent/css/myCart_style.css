@@ -1,0 +1,125 @@
+/* CSS Document */
+@charset "gb2312";
+body,div,span,h1,h2,h3,h4,h5,h6,p,input,ul,li,img{margin:0;padding:0}
+*{ margin:0;padding:0;border:0px;}
+h2{font-size:14px;}
+ul{list-style:none;}
+body{font-size:12px;color:#333;background:#fff;}
+a{ text-decoration:none;color:#000000;}
+a:hover{text-decoration:underline;color:#FF0000;}
+#shortcut{width:100%;height:30px;background:url(../img/bg_shortcut.gif) #efefef repeat-x 0 -134px; overflow:hidden; margin:auto;}
+.w{width:100%;}
+#shortcut ul{float:right;background:url(../img/bg_shortcut.gif) repeat-x 0 -134px;height:30px;}
+#shortcut li{float:left;height:26px;padding:2px 10px;background:url(../img/bg_shortcut.gif) no-repeat -260px -100px;line-height:26px;color:#ACACAC;}
+.link-regist{color:#f60;}
+#shortcut li b{float:right;width:5px;height:3px;margin:12px 20px 10px 2px;background:url(../img/bg_shortcut.gif) no-repeat -210px -25px;}
+#shortcut .fore2{padding-left:50px;background:url(../img/bg_shortcut.gif) no-repeat -130px -165px;}
+#shortcut .sub{width:80px;padding:2px 0px 0px px;}
+
+#bodyPart{width:930px;margin:auto;border:0px solid #ff0000;}
+#top{ margin-top:30px;}
+#logo{ background:url(../img/logo_small.gif); width:167px;height:46px; float:left}
+#Cart{ background:url(../img/warebuy1.jpg); width:438px;height:52px; float:left; margin-left:20px; overflow:hidden;}
+#Cart ul li{ font-weight:bold; float:left; text-align:center;margin-top:30px;}
+.white{ color:#FFFFFF;}
+#myCart{width:123px;}
+#writeInfo{ width:155px;}
+#successSub{ width:153px;}
+#top_myCart{ background:url(../img/cart_001.gif); width:190px;height:50px; clear:both; margin-top:100px;}
+
+.List_cart{ width:930px;}
+.List_cart h2{ background:url(../img/cart_bg_05.gif) no-repeat right top #AACDED; height:28px; line-height:28px}
+.List_cart h2 strong{background:url(../img/cart_bg_03.gif) no-repeat left top;height:28px; padding:0 20px; display:block;}
+.cart_table{ border:solid #AACDED;border-width:0 3px 3px 3px; padding-top:20px;}
+#CartTb{ border:1px solid #AACDED; border-collapse:collapse; width:890px; margin:auto;}
+#CartTb td{ border:1px solid #AACDED;}
+#CartTb tr{ height:30px; text-align:center;}
+.price{ color:#FF0000; font-weight:bold; font-family:verdana;}
+#align_Left{ text-align:left;}
+#c_img{ float:left; border:1px solid #CCCCCC; margin:2px 0;}
+#c_info{ float:left; margin: 3px 0 0 10px;}
+.redColor{ color:#FF0000;}
+#c_info span a{ color:#AACDED;}
+#num{ border:1px solid #AACDED;width:30px; margin:0 2px; text-align:center;}
+#eqNum ul li{ float:left;}
+#eqNum{ width:55px; margin:auto;}
+.Img{ padding-top:2px;}
+.align_Right{ text-align:right; background:#EBF4FB;}
+
+#cart_op{  height:38px; padding: 25px 20px;}
+#cart_op ul li{color:#005EA7}
+#li1{ background:url(../img/gwc_05.jpg) no-repeat; padding:4px 0px 0px 20px; margin-right:4px;float:left; }
+#li2{ background:url(../img/gwc_07.jpg) no-repeat; padding:4px 0px 0px 20px; margin-right:30px;float:left; }
+#li3{ background:url(../img/cd.gif) no-repeat; padding:4px 0px 0px 20px; float:left; }
+#li4{width:209px; height:38px;float:right}
+
+#DeledSkuInfo{ width:890px; margin:auto;}
+#divDeledSku{border:#CCCCCC 1px solid;padding:2px;margin-bottom:16px; margin-top:2px;}
+#divDeledSku table{width:98%}
+#divDeledSku td{color:#666666;text-align:center;height:23px;}
+#divDeledSku a,#divDeledSku .price{color:#666666}
+#divDeledSku .delSplit{border-bottom:#CCCCCC 1px ;border-bottom-style:dashed}
+
+
+.yb{padding-top:5px;margin-bottom:15px;overflow:hidden; width:890px; margin:auto;}
+.yb img{display:inline; vertical-align:middle;}
+.yb_c{border:1px solid #EED6A2;overflow:hidden;padding:8px;background:#FFFDED; margin-bottom:10px;}
+.yb_c div{overflow:hidden;padding:2px 0;}
+.yb_c .font1{color:#F60204;}
+
+.stocklist span{margin-right:3px;}
+.stocklist b{font-weight:normal;}
+.stocklist .fs4{color:red;}
+
+
+.suitPromTitle{background:#fffddd;}
+.suitPromTitle td{border-top:none;}
+.suitPromItem{background:#fffddd;}
+.suitPromItem td{border-bottom:none;border-top:none;}
+.cartSpliter td{height:0px;border-top:none;line-height:0px;padding:0px;}
+
+
+.giftselect{border:#AACDED solid 2px;padding:5px 3px 5px 5px;background:#fff}
+.giftselect img{width:60px;height:45px;}
+
+#smallSize{ font-size:12px;}
+.t{ margin-top:10px;}
+#extra{font-weight:normal; margin-left:570px;}
+#notFav{ border:solid #AACDED; overflow:hidden; height:30px;border-width:0 3px 3px 3px; overflow:hidden; padding-top:30px; padding-left:20px;}
+
+#help{ text-align:right;position:relative;}
+
+.Product_List_S3 li dt img{height:100px;width:100px;}
+#sbox_3{margin-top:10px;overflow:hidden;}
+#sbox_3 .c-top{ background:url(../img/br0603.gif);height:7px;overflow:hidden}
+#sbox_3 .c-bot{background:url(../img/br0603.gif) 0 -7px;height:7px;overflow:hidden}
+#sbox_3 .content_right{border:solid #ffc26c;border-width:0 3px;padding:0 10px 0;}
+#sbox_3  h3{background:url(../img/arrow_2.gif) no-repeat 0 center;padding-left:20px;height:30px;line-height:30px}
+#sbox_3 .Product_List_S3{height:150px;}
+#sbox_3 .Product_List_S3 li{background:none}
+#sbox_3 .Product_List_S3  dl{background:none; overflow:hidden;zoom:1}
+#sbox_3 .Product_List_S3 li dt{float:left}
+#sbox_3 .Product_List_S3  dd{text-align:left;margin-left:105px;}
+#sbox_3 .Product_List_S3  dd .p_Name{height:55px}
+#sbox_3 .Product_List_S3  dd .p_Price{color:#f00}
+#sbox_3 #Tab h3 ul{float:right;padding:0}
+.num li{float:left;background:url(../img/bg0603.gif) no-repeat;height:15px;line-height:15px;width:15px;text-align:center;font-size:10px;margin-right:5px; cursor:pointer;color:#ccc;font-weight:normal}
+.Product_List_S3 li{width:33.3%;float:left}
+.num li.on{color:#333}
+.content_right{position:relative;}
+.content_right .ad {width:100%;height:130px;overflow:hidden;position:relative;}
+.content_right .slider,.content_right .num{position:absolute;}
+.content_right .slider{width:100%}
+.content_right .num{ right:5px;top:5px;}
+*html .content_right .num{ right:50px;}
+.slider li {list-style:none;display:inline;}
+#sbox_3 .Product_List_S3 li{height:130px;overflow:hidden;border:none}
+.Product_List_S3 li .p_Price{height:18px;overflow:hidden;}
+.Product_List_S3 li .p_Price img{display:inline;vertical-align:text-top;}
+
+
+#footer{padding-bottom:30px;text-align:center; padding-top:20px; clear:both; overflow:hidden;}
+#footer .flinks a,#footer .flinks span{margin:0 10px;}
+#footer .flinks span a{margin:0;}
+#footer .copyright{margin:10px 0;font-family:arial;}
+#footer .ilinks a{margin:0 5px;}

@@ -1,0 +1,45 @@
+@charset "utf-8";
+/* CSS Document */
+/*交易记录*/
+table{border-spacing:0;}
+#right_order tr{line-height:200%;}
+#right_order a{color:#005AA0;}
+#trade_record{margin-bottom:10px;border-left:1px solid #E7CA96;border-top:1px solid #E7CA96;}
+#trade th,td{border-right:1px solid #E7CA96;border-bottom:1px solid #E7CA96;}
+#trade_record #subTotal{margin-right:5px;}
+#trade_record b{color:#ff0000;line-height:300%;}
+#trade_record #page{color:#ffffff;line-height:18px;background:#4398CE;width:20px;height:18px;text-align:center;margin:10px 5px 4px;}
+#trade_m{margin-bottom:10px;border-left:1px solid #E7CA96;border-top:1px solid #E7CA96;}
+#trade_p{border-left:1px solid #E7CA96;border-top:1px solid #E7CA96;}
+
+/*地址管理*/
+.addr_m{margin-bottom:10px;overflow:hidden;}
+.addr_m input,select{border:1px solid #005AA0;}
+.addr_info td{border:none;line-height:16px;}
+.addr_list{border:1px solid #ececec;width:370px;margin:0px 0 0 15px;padding-bottom:45px;float:left;}
+.addr_list .addr_num{border-bottom:1px solid #ececec;}
+.addr_list h3{line-height:24px;background:#ededed;height:24px;width:24px;text-align:center;}
+#addr_new{margin:32px 0 8px 5px;}
+#addr_add{padding:18px 0px 32px 24px;}
+.addr_m .addr_tit{border:1px solid #e5ddcf;line-height:24px;padding-left:4px;background:#fbf7ee;}
+.addr_c{border:1px solid #e5ddcf;border-top:none;padding-top:14px;overflow:hidden;margin-bottom:10px;}
+#addr_add td{line-height:24px;border:none;}
+
+/*user_home*/
+#home_mid{float:left;border:1px solid #e7e7e7;width:580px;}
+#home_mid a{color:#005AA0;}
+#home_mid h2{line-height:32px;padding-left:10px;float:left;}
+#back_time{float:right;line-height:32px;padding-right:10px;color:#999999;}
+#home_table{border-left:1px solid #AACCEE;border-top:1px solid #AACCEE;width:555px;margin:auto;}
+#home_table th{border-right:1px solid #AACCEE;border-bottom:1px solid #AACCEE;line-height:200%;}
+#home_table td{border-right:1px solid #AACCEE;border-bottom:1px solid #AACCEE;line-height:200%;}
+#home_mid ul li{width:170px;text-align:center;margin-left:10px;float:left;}
+#home_mid ul .interest_name{line-height:20px;}
+#home_mid ul b{line-height:32px;color:#ff0000;}
+#home_right{float:right;width:209px;overflow:hidden;}
+#home_rt{background:url(../images/right_t.jpg) no-repeat 0 0;line-height:30px;color:#ffffff;width:209px;font-weight:bold;padding-left:8px;}
+#home_rc{border:1px solid #be0000;border-top:none;padding:5px 0 12px 8px;width:199px;overflow:hidden;}
+#home_right a{color:#005AA0;}
+#home_right #home_head{float:left;border:1px solid #999999;}
+#home_right .home_uInfo{line-height:24px;padding-left:12px;float:left;}
+#home_right .rank_up{border:1px solid #edd28b;background:#fffdee;color:#ff6600;width:190px;margin:auto;text-align:center;line-height:20px;margin-right:8px;}

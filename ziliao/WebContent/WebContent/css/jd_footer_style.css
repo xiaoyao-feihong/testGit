@@ -1,0 +1,27 @@
+/* CSS Document */
+@charset "gb2312";
+body,div,span,h1,h2,h3,h4,h5,h6,p,ul,li,img{margin:0;padding:0}
+img{ margin:0;padding:0;border:0px;}
+h2{font-size:14px;}
+ul{list-style:none;}
+body{font-size:12px;color:#333;background:#fff;}
+a{ text-decoration:none;color:#000000;}
+a:hover{text-decoration:underline;color:#FF0000;}
+
+#footerAll{width:985px;margin:auto; }
+#tail{clear:both; height:260px; border:1px solid #CCCCCC; margin-bottom:20px;}
+.info{ width:150px; float:left; margin:10px 0px 0px 38px;}
+.info .tt{ margin:auto; height:40px; width:130px;}
+.info .tt ul li{float:left;}
+.cutline{ width:100px; height:1px; background:url(../img/ln_dian.jpg); overflow:hidden;}
+.info .tt .buyInfo{ margin:3px 0px 0px 5px;}
+.info .tc{clear:both; padding-top:10px; width:80px; margin:auto;}
+.info .tc ul li{ padding-top:5px;}
+.buyInfo{padding-top:-13px; height:30px; line-height:30px;}
+#foot-img{ width:950px; height:57px; clear:both; margin:auto; padding-top:10px;}
+#foot-img ul li{ float:left;}
+#footer{padding-bottom:30px;text-align:center;}
+#footer .flinks a,#footer .flinks span{margin:0 10px;}
+#footer .flinks span a{margin:0;}
+#footer .copyright{margin:10px 0;font-family:arial;}
+#footer .ilinks a{margin:0 5px;}

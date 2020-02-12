@@ -49,7 +49,7 @@ JavaEE（Web部分）：Tomcat，Servelet，JSP，EL+JSTL，Filter，Listener，
 + 网址：https://www.mysql.com，下载社区版（MySQL Community Downloads）
 + MySql8.0版本还不太稳定，所以下载5.7版本
 
-+  安装完成以后，在我的电脑M里找到MySQL（MySQL5.7 command line client）
++  安装完成以后，在我的电脑里找到MySQL（MySQL5.7 command line client）
 + 输入密码后显示welcome表示连接数据库成功，一个服务中可以有多个小工程
 + 一些操作小指令：`show databeses;`显示root账户下所有的数据库，注意数据库语句必须以`;`表示语句结束；`use 数据库名字;`表示使用某一个数据库；`show tables;`指令显示当前的database种所有的表格；`exit;`退出窗口
 + 使用数据库时需注意的小问题
