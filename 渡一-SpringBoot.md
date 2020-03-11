@@ -733,3 +733,246 @@ thymeleaf语法
 
 
 
+
+
+##### 3.5 Restful风格API
+
+传统API与Restful风格API
+
+> 1、传统API
+>
+> 请求资源：/guest/list 获取集合
+>
+> 跳转：/guest/toAddPage
+>
+> 添加：/guest/add?guest={param}
+>
+> 编辑：/guest/update?guest={param}
+>
+> 删除：/guest/delete?name={param}
+>
+> 2、Restful API
+>
+> 举例：
+>
+> GET /zoos：列出所有动物园
+>
+> POST /zoos：新建一个动物园
+>
+> GET /zoos/{ID}：获取某个指定动物园的信息
+>
+> PUT /zoos/{ID}：更新某个指定动物园的信息（提供该动物园的全部信息）
+>
+> PATCH /zoos/{ID}：更新某个指定动物园的信息（提供该动物园的部分信息）
+>
+> DELETE /zoos/{ID}：删除某个动物园
+>
+> GET /zoos/{ID}/animals：列出某个指定动物园的所有动物
+>
+> DELETE /zoos/ID/animals/{ID}：删除某个指定动物园的指定动物
+
+对比
+
+|        | 传统API   | RESTful API  |
+| :----: | :-----: | :--: |
+|跳转   |/guest/toAdd| /guest/toAdd   `GET` |
+| 增     | /guest/add?guest={guest} | /guest                  `POST` |
+| 删     | /guest/delete?name={name} | /guest/{name}   `DELETE` |
+| 改     | /guest/update?guest={guest}   | /guest         `PUT` |
+| 查     | /guest/list    | /guest                  `GET` |
+
+GET：查	POST：增    PUT：改   DELETE：删
+
+
+
+注意改和删除的操作（form表单没有put和delete请求）：
+
+```html
+<!--改，覆盖form的method方法-->
+<input type="hidden" name="_method" value="put"/>
+```
+
+
+
+ 删除操作
+
+引入webjars：https://www.webjars.org/   下载maven形式的包含js的jar包，可以定制
+
+使用：
+
+```html
+<script th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    
+
+<button th:attr="del_url=${/guest/}+${guest.name}" name="del_button">删除</button>
+
+<form method="post" id='del_form'>
+	<input type="hidden" name="_method" value="delete"/>
+</form>
+
+<script>
+	$(function(){
+        $("button[name='del_button']").click(function(){
+         //点击按钮获取按钮中的url设置到form的action中，然后发送
+            $("#del_form").prop("action",$(this).attr("del_url")).submit();
+        })
+    });
+</script>
+```
+
+
+
+##### 3.6 ORM框架
+
+传统企业：主要是to B业务，用户量不大，使用不用写sql的Hibernate，发展到顶端就是Spring Data Jpa，根据方法名生成对应的sql
+
+互联网企业：用户量较大，使用可以灵活调试sql的mybatis，发展到目前最先进的模式就是mybatis-springboot-starter
+
+
+
+###### 3.6.1 Jpa整合
+
+初始化引入Spring Data Jpa，单表查询省去了sql操作，提供方法进行CURD操作
+
+
+
+pom.xml
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+<dependency>
+	<groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+```
+
+
+
+
+
+yml配置：
+
+```yml
+server:
+ port:8080
+ 
+spring:
+ datasource:
+  url: jdbc:mysql:///test
+  username: root
+  password: root
+  # 可以不配置，springboot会自动添加
+  driver-class-name: com.mysql.jdbc.Driver
+  
+  jpa:
+   hibernate:
+    # 自动创建|更新|验证数据库表结构
+    ddl-auto: update
+   
+   # 设置数据库引擎为InnoDB
+   database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+   # 开启sql日志
+   show-sql: true 
+```
+
+
+
+仓库与实体
+
+```java
+//仓库泛型：需要映射的实体，主键类型
+public class GuestRepository extends JpaRepository<Guest,Long> {
+    
+}
+
+@Entity
+@Data @AllArgsConstructor
+class Guest implements Serializable {
+    
+    @Id
+    private Long id;
+    @Column
+    private String name;
+    @Column
+    private String role;
+}
+
+@Service
+class GuestServiceImpl implements GuestService {
+    @Autowired
+    private GuestRepositoty repository;
+    
+    @Override
+    public List<Guest> getGuest () {
+        return repository.findAll();
+    }
+}
+
+```
+
+
+
+###### 3.6.2 MyBatis整合
+
+Mybatis对复杂查询比较好，有运行速度又是，但是数据库移植性不好。
+
+（1）依赖
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>2.1.0</version>
+</dependency>
+
+<dependency>
+	<groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+
+
+（2）配置文件yml
+
+```yaml
+# 设置xml文件位置
+mybatis:
+ config-location: classpath: mybatis-config.xml
+```
+
+
+
+（3）配置mybatis-config.xml和mapper.xml
+
+（4）dao
+
+```java
+@Repository
+public class GuestDao {
+    private List<Guest> list(){
+        return null;
+    }
+}
+```
+
+
+
+去xml配置操作的yaml配置
+
+```yaml
+# 设置xml文件位置
+mybatis:
+ mapper-locations: classpath*:/mybatis/mapper/*.xml
+ type-aliases-package: com.feihong.domain
+```
+
+
+
+
+

@@ -2,7 +2,7 @@
 
 <hr>
 
-##### 1、认识JVM
+#### 1、认识JVM
 
 （1）JVM语言规范：定义什么是Java虚拟机
 
@@ -18,7 +18,7 @@ Java语言和Java虚拟机相对独立的，很多其他语言也是支持Java�
 
 整数的表示：
 
-> -6												-1
+> -6								 -1
 >
 > 原码：10000110					10000001
 >
@@ -34,7 +34,7 @@ Java语言和Java虚拟机相对独立的，很多其他语言也是支持Java�
 >
 > 2）补码让计算更方便
 >
-> -6 + 5															-3 + 5
+> -6 + 5												-3 + 5
 >
 > 11111010		-6									11111101
 >
@@ -56,7 +56,7 @@ Java语言和Java虚拟机相对独立的，很多其他语言也是支持Java�
 >
 > -1\* 2^(129-127)*(2^0+2^-2)   完整表达式：-1 \* 2^(2^7+1)
 >
-> 值的计算：s\*m\*2 ^ (e-127)  \* (隐藏位 + m \* 2^-1 + m*2^-2 + m \* 2^-3 + ... + m \* 2^-23)；127是固定位移数
+> 值的计算：s\*m\*2 ^ (e-127)  \* (隐藏位 + m \* 2^-1 + m * 2·^-2 + m \* 2^-3 + ... + m \* 2^-23)；127是固定位移数
 
 
 
@@ -84,7 +84,7 @@ Java语言和Java虚拟机相对独立的，很多其他语言也是支持Java�
 
 
 
-##### 2、Java虚拟机的运行机制
+#### 2、Java虚拟机的运行机制
 
 （1）JVM启动流程
 
@@ -93,8 +93,6 @@ java xxx.java --->  装载配置（jvm.cfg）--->   根据配置找到JVM.dll --
 
 
 （2）JVM基本结构
-
-![](testGit/typoraImg/JVM.png)
 
 PC寄存器
 
@@ -664,4 +662,805 @@ public class ConditionDemo {
     }
 }
 ```
+
+
+
+##### 1.7 锁的介绍
+
+###### 1.7.1 synchronized锁的用法
+
+synchronized：对象锁，同一个对象的同步方法必须等第一个抢到对象资源的线程执行完才能继续执行
+
+static synchronized：类锁，所有使用类的方法必须等第一个抢到类资源的线程执行完才能继续执行
+
+无锁的普通方法，不受锁的影响
+
+对象锁和类锁也是没有竞争条件的
+
+
+
+
+
+虚假唤醒：
+
+多个线程操作一个资源类，使用`if`判断，会导致虚假唤醒，等待线程可能有两个功能相同的线程，此时会出现同时操作资源的问题，所以java官方文档要求使用`while`每次进入方法都要不断进行判断后再操作资源
+
+
+
+###### 1.7.2 ReentrantLock使用
+
+优势：精确唤醒
+
+操作资源类：
+
+```java
+class Product {
+    private int number = 0;
+    //可重入锁
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
+
+    public void increment() {
+        lock.lock();
+        try {
+            while (num != 0) {
+                try {
+                    //通知其它等待
+                    condition.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            num++;
+            count++;
+            System.out.println("thread " + Thread.currentThread().getName() + ": " + num + ";count: " + count);
+            //唤醒所有
+            condition.signalAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void decrement() {
+        lock.lock();
+        try {
+            while (num != 0) {
+                try {
+                    condition.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            num--;
+            count++;
+            System.out.println("thread " + Thread.currentThread().getName() + ": " + num + ";count: " + count);
+            condition.signalAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+```
+
+精确操作资源类：
+
+number=1，执行print5方法，打印五次number；
+
+number=2，执行print10方法，打印十次number；
+
+number=3，执行print15方法，打印十五次number；
+
+```java
+class ShareData {
+    //标志位
+    private int number = 1;
+    private Lock lock = new ReentrantLock();
+    //三个锁
+    private Condition condition1 = lock.new Condition();
+    private Condition condition2 = lock.new Condition();
+    private Condition condition3 = lock.new Condition();
+    
+    public void print5 () {
+        lock.lock();
+        try{
+            //1.判断
+            while(number != 1){
+                condition1.await();
+            }
+            //2.干活
+            for(int i = 0; i < 5; i++){
+                System.out.println(i);
+            }
+            //3.通知
+            number = 2;
+            condition2.signal();
+        }catch(Exception e){
+            
+        }finally{
+            lock.unlock();
+        }
+    }
+    
+    public void print10 () {
+        lock.lock();
+        try{
+             //1.判断
+            while(number != 2){
+                condition2.await();
+            }
+            //2.干活
+            for(int i = 0; i < 10; i++){
+                System.out.println(i);
+            }
+            //3.通知
+            number = 3;
+            condition3.signal();
+        }catch(Exception e){
+            
+        }finally{
+            lock.unlock();
+        }
+    }
+    
+     public void print15 () {
+        lock.lock();
+        try{
+             //1.判断
+            while(number != 3){
+                condition3.await();
+            }
+            //2.干活
+            for(int i = 0; i < 15; i++){
+                System.out.println(i);
+            }
+            //3.通知
+            number = 1;
+            condition1.signal();
+        }catch(Exception e){
+            
+        }finally{
+            lock.unlock();
+        }
+    }
+}
+
+public class TestMain {
+    public static void main (String[] args){
+        //1.创建资源类
+        ShareData data = new ShareData();
+        //2.线程操作资源类
+        new Thread(() -> {
+            data.print5();
+        },"A").start();
+        new Thread(() -> {
+            data.print10();
+        },"B").start();
+        new Thread(() -> {
+            data.print15();
+        },"C").start();
+    }
+}
+```
+
+
+
+###### 1.7.3 Callable接口
+
+获取线程返回值的接口
+
+ 函数式接口
+
+```java
+public class CallableTest implements Callable<String> {
+    public String call () throws Exception {
+        return "test callable...";
+    }
+    
+    public static void main (String[] args){
+        //FutureTask实现了Runnable和RunnableFuture接口
+        FutureTask ft = new FutureTask(new CallableTest());
+        new Thread(ft,"A").start();
+        String resultStr = ft.get();
+    }
+}
+```
+
+
+
+#### 2、JVM
+
+##### 2.1 JVM面试题
+
+（1）请谈谈你对JVM的理解？java8的虚拟机有什么更新？
+
+
+
+（2）什么OOM？什么是StackOverFlowError？有哪些方法分析？
+
+
+
+（3）JVM的常用参数调优有哪些？
+
+
+
+（4）谈谈JVM中，对类加载器你的认识？
+
+
+
+##### 2.2 JVM体系结构
+
+Java Virtual Machine运行在操作系统上（Windows、Linux等）
+
+硬件体系：如Intel体系、SPAC等
+
+JVM运行在操作系统之上，它与硬件没有直接的交互
+
+
+
+![1581937544661](typoraImg/JVM体系结构.png)
+
+###### 2.2.1 类加载器
+
+类加载器ClassLoader，将本地class文件加载到内存，创建类的模板存储在方法区
+
+- 启动类加载器Bootstrap ClassLoader（C++编写）
+- 扩展类加载器Extension ClassLoader（Java编写）
+- 应用程序类加载器AppClassLoader：加载当前应用classpath下的所有类
+
+class文件都有特定标识，让JVM识别并能进行加载（`cafe babe...`）
+
+
+
+查看类加载器
+
+```java
+public class ClassLoaderTest {
+        public static void main(String[] args) {
+               //因为Bootstrap Class Loader是C++编写的，无法打印，结果为null
+               System.out.println(Object.class.getClassLoader());
+            
+               //null
+               System.out.println(ClassLoader.class.getClassLoader());
+
+               ClassLoaderTest loader = new ClassLoaderTest();
+            
+               //AppClassLoader
+               System.out.println(loader.getClass().getClassLoader());
+        }
+}
+```
+
+操作系统上有了JRE，首先会加载rt.jar（Java的语言包）
+
+双亲委派模型：不重，不漏，更安全
+
+沙箱安全机制：防止人为的恶意代码污染源代码
+
+
+
+###### 2.2.2 本地方法栈和java栈
+
++ 本地方法栈：作用是融合不同编程语言为java所用，在内存中专门开辟空间保存native的方法，在执行引擎执行时加载native libraries。
+
++ 流行程度：现在使用越来越少，除非与硬件有关，企业级应用中已经比较少见，因为现在Socket通信已经很流行（Web Service），我们只需要调用合作企业提供的微服务接口。
+
+所有由C++编写的方法，存放在本地方法栈（`native`），到这个地步都是java语言无法解决的，需要调用底层操作系统或者是第三方C语言函数库方法来支持
+
++ Java语言的方法放在java栈中，native等第三方支持的方法放在本地方法栈
+
+
+
+**方法区**，**堆**所有线程共享，存在垃圾回收
+
+
+
+大数据工程师：用restful风格获取对方服务器的数据，处理各种第三方的数据源并分析
+
+
+
+###### 2.2.3 程序计数器
+
+Program Counter Register：程序计数寄存器，register在计算机中表示寄存器的意思
+
+作用：每个线程都有一个程序计数器，是线程私有的，本质是一个指针，指向下一个要执行的指令代码的地址
+
+
+
+**java栈**，**本地方法栈**，**程序计数器**都是线程私有的占用空间较小，不存在垃圾回收机制
+
+**方法区**，**堆**所有线程共享，存在垃圾回收
+
+
+
+##### 2.3 方法区
+
+**规范**：各线程共享的运行时区域，**储存每一个类的结构信息**，运行时常量池，字段和方法数据，构造函数和普通方法的**字节码**内容。（不同JVM实现不同）
+
+**注意**：不同虚拟机的实现不同，最典型的就是永久代（PermGen）和元空间（MetaSpace）
+
+
+
+方法区：
+
++ java7叫做**永久代**，分为**静态常量池**（存放类的信息等）和**运行时常量池**（字符串常量池等），默认是虚拟分配好的空间大小
++ java8叫做**元空间**，从JVM中剥离出来，直接使用系统的内存，作用是如同静态常量池存放类的元数据信息等，只是字符串常量池转移到堆空间中
+
+
+
+元空间详解：https://www.cnblogs.com/duanxz/p/3520829.html
+
+
+
+
+
+> **java7规范**：
+> 方法区 space = new PermGen();//永久代
+> **java8规范**：
+> 方法区 space = new MetaSpace();//元空间
+
+
+
+##### 2.4 java栈
+
+**栈负责运行，堆负责存储**
+
+计算机：程序 = 算法 + 数据结构
+
+企业：程序 = 框架 + 业务逻辑
+
+
+
+栈的概念：
+
+栈也叫栈内存，主管Java程序的运行，是在线程创建时创建，它的生命周期是跟随线程的生命周期，线程结束内存也就释放，对于栈来说，不存在垃圾回收机制，线程结束，栈就结束了，生命周期和线程一致，是线程私有的。8中基本类型的变量，对象的引用变量，实例方法都是在函数的栈内存中分配。
+
+
+
+栈保存的东西：方法，引用类型，8种基本类型
+
+将方法放入栈中，我们称之为栈帧。
+
+
+
+**栈帧**中包含本地变量，输入、输出参数，栈操作（记录出栈，入栈操作），栈帧数据（包含类文件、方法等等）
+
+
+
+StackOverFlowError：错误
+
+
+
+堆、栈、方法区的交互关系
+
+HotSpot是使用指针的方式来访问对象：
+
++ java堆中会存放访问**类元数据**的地址
++ reference存储的是对象的地址
+
+
+
+类元数据：描述数据的数据
+
+
+
+##### 2.5 堆
+
+堆：新生代，老年代，元空间
+
+新生代
+
++ 伊甸园区
++ 幸存者0区
++ 幸存者1区
+
+java8将永久存储区变为了元空间
+
+
+
+Eden满了：触发Young GC
+
+Old区满了：Full GC多次，OutOfMemoryError
+
+
+
+<font color="blue">堆异常原因：</font>
+
++ java虚拟机的堆内存设置不够，可以通过-Xms，-Xmx来调整
++ 代码创建了大量对象，并且长时间不能被垃圾收集器收集（存在被引用）
+
+
+
+基本类型传值，引用类型传引用
+
+
+
+###### 2.5.1 对象生命周期和GC
+
+物理上堆只有新生区和老年区，逻辑上包含永久区（java7叫法，java8为元空间）
+
+堆：新生区（1/3），养老区（2/3）
+
+新生区：Eden（8/10），from（1/10），to（1/10）
+
+每复制一次数据，都将数据的标识+1，记录回收次数
+
+第一次Young GC：Eden基本清空，存活的数据复制到from区
+
+第二次Young GC：Eden和from区清空，存活数据复制到to区
+
+第三次Young GC：Eden和to区清空，存活数据复制到from区
+
+第三次Young GC：Eden和from区清空，存活数据复制到to区
+
+............
+
+15次Young GC没有回收的数据进入老年区
+
+
+
+元空间在方法区，没有垃圾回收，用于存放类似rt.jar（java语言包）自身所携带的Class，Interface的元数据，关闭JVM才会释放所占用内存
+
+
+
+###### 2.5.2 堆参数调优
+
+-Xms 初始化大小，-Xmx 最大化大小
+
+-Xmn new区大小，设置new区大小，通常不调
+
+**永久代**使用JVM的堆内存，可以使用MaxPermSize控制
+
+java8以后**元空间**并不在虚拟机中，而是使用本机物理内存，可以加载多少元数据由系统实际可用空间来控制
+
+
+
+-Xms设置初始分配大小，默认物理内存的1/64
+
+8\*1024/64 = 128M
+
+-Xmx设置最大大小，默认物理内存的1/4
+
+2048M
+
+
+
+电脑爱好者：
+
+我的电脑右键管理，查看设备管理器/处理器，查看信息
+
+
+
+java程序员查看方式：
+
+Runtime可以获取运行时数据区信息
+
+```java
+public class CheckOSArgs {
+    public static void main (String[] args){
+       Runtime run = Runtime.getRuntime();
+       System.out.println("操作系统CPU核数：" + run.availableProcessors());
+       //JVM堆最大内存
+       long maxMemory = run.maxMemory();
+       //JVM实际开辟的堆最大内存
+       long totalMemoty = run.totalMemory();
+       //默认系统内存1/4左右
+       System.out.println("JVM试图开辟的内存大小：" + maxMemory/(double)1024/(double)1024 + "MB");
+       //默认系统内存1/64左右
+       System.out.println("JVM实际开辟的内存大小：" + totalMemoty/(double)1024/(double)1024 + "MB");
+    }
+}
+```
+
+
+
+注意：-Xmx和-Xms默认设置一样，避免内存忽高忽低，产生停顿（避免GC和应用程序争抢内存）
+
+停顿原因：主程序运行，JVM产生很多垃圾，理论值和真实值忽高忽低，GC垃圾回收也要使用JVM的内存来进行回收，就会停顿进行内存的分配
+
+
+
+IDEA配置JVM参数
+
+Run/Edit Configurations中VM Options中配置
+
+`-Xmx1024m -Xms1024m -XX:+PrintGCDetails`
+
+`-XX:+PrintGCDetails`打印GC的信息
+
+
+
+OOM错误测试：
+
+设置为10M的heap内存大小
+
+```java
+byte[] bytes = new byte[40*1024*1024];
+```
+
+
+
+
+
+##### 2.6 常量池
+
+常量池分为静态常量池和运行时常量池
+
+静态常量池：用来存储.class文件的元数据信息
+
+java7中方法区由常量池组成，静态常量池中存放字节码信息，运行时常量池存放String对象
+
+java8中将方法区命名为元空间，并从JVM中分离出去，占用系统本地内存（rt.jar，class元数据等），字符串常量池存放在堆内存
+
+
+
+###### **<font color="blue">永久代为什么被替换了</font>**
+
+思考一下，为什么使用元空间替换永久代？
+
+表面上看是为了避免OOM异常。因为通常使用PermSize和MaxPermSize设置永久代的大小就决定了永久代的上限，但是不是总能知道应该设置为多大合适, 如果使用默认值很容易遇到OOM错误。
+
+当使用元空间时，可以加载多少类的元数据就不再由MaxPermSize控制, 而由系统的实际可用空间来控制。
+
+更深层的原因还是要合并HotSpot和JRockit的代码，**JRockit从来没有所谓的永久代**，也不需要开发运维人员设置永久代的大小，但是运行良好。同时也不用担心运行性能问题了,在覆盖到的测试中, 程序启动和运行速度降低不超过1%，但是这点性能损失换来了更大的安全保障。
+
+
+
+##### 2.7 GC相关
+
+（1）GC是什么？
+
+分代搜集算法
+
+次数频繁上搜集Young区，少搜集Old区，基本不动MetaSpace
+
+**GC不是Young、Old、MetaSpace一起回收的**
+
+
+
+（2）为什么Full GC比Young GC慢？
+
+因为Full GC的扫描的空间比Young大
+
+
+
+###### 2.7.1 日志搜集
+
++ `-XX:+PrintGCDetails`：打印GC详细搜集日志信息
+
+
+
+###### 2.7.2 垃圾回收算法
+
+（1）引用计数法
+
+JVM一般不使用这种垃圾回收算法
+
+每次对象赋值时均要维护引用计数器，计数器本身有消耗，如果存在5个引用，就记录5，每减少一次引用，自减1，当为0时，进行回收
+
+缺点：
+
++ 计数器本身有消耗（很多对象，消耗太大）
++ 较难处理循环引用（实例相互引用对方，容易出现无法回收的问题）
+
+循环引用:
+
+```java
+public class Test {
+    private byte[] bytes = new byte[2*1024*1024];
+    Object instance = null;
+    
+    public static void main (String[] args){
+        Test test1 = new Test();
+        Test test2 = new Test();
+        test1.instance = test2;
+        test2.instance = test1;
+        test1 = null;
+        test2 = null;
+        System.gc();
+    }
+}
+```
+
+甲骨文问题：
+
++ 以下代码谈谈你的看法？
+
+两个线程，程序入口main的线程，和GC线程
+
+```java
+public class Test {
+    public static void main (String[] args){
+        //不是立刻执行，和开启线程一样不是立即执行
+        System.gc();
+        Thread.sleep(10);
+        ...
+    }
+}
+```
+
+IDEA有多个线程：语法检测线程，语法提示线程
+
+
+
++ 为什么一般不允许使用`System.gc()`
+
+默认会同时对老年代和新生代进行垃圾回收，过于频繁的手动触发GC对于程序性能没有好处，因为GC线程消耗内存资源
+
+如果JVM设置了DisableExplicGC，调用后相当于执行了一个空的函数执行
+
+
+
+（2）复制算法（Copying）
+
+<font color="blue">Young GC年轻代采用的算法</font>
+
+优点：不会产生**空间碎片**
+
+缺点：需要**额外空间**（Eden From区和To区）
+
+原理：
+
+将伊甸园区和from区不回收数据复制到to区，每次回收没有回收的对象年龄+1，当这个对象15（默认15岁）次回收仍然引用存在，就会进入老年代
+
+`-XX:MaxTenuringThreshold`可以设置对象最大年龄（只能 < 15）
+
+手动调节让回收年龄减小，当老年代空间较大，可以降低Young区的压力
+
+Eden: From: To = 8 : 1 : 1
+
+
+
+（3）标记清除（Mark-Sweep）
+
+<font color="blue">FUll GC老年代采用的算法</font>
+
+优点：不浪费空间
+
+缺点：产生空间碎片，两次扫描，耗时严重，需要停止应用程序
+
+原理：
+
+算法分成标记和清除两个阶段，先标记要回收的对象，然后统一回收对象
+
+程序运行期间，若可以使用的内存耗尽，GC线程就会被触发并将程序暂停，随后将要回收的对象标记一遍，最后统一回收这些对象，然后让应用程序恢复运行。
+
+
+
+（4）标记压缩（Mark-Compact）
+
+<font color="blue">标记清除压缩算法</font>
+
+优点：不浪费空间，减少了空间碎片
+
+缺点：多了压缩操作，比较耗时
+
+原理：在标记清除的基础上，增加了对象空间压缩的功能，Full GC的过程中会花更过的时间
+
+
+
+**哪一种算法比较好？**
+
+垃圾回收没有最好的算法，根据不同代的特性，对应最适合的算法
+
+年轻代特点对象存活率低，空间较老年代小，用**复制算法**最好
+
+老年代特点对象存活率高，空间相较年轻代大，用**标记清除**和**标记清除压缩算法**更好
+
+
+
+#### 3、JMM
+
+JMM，Java的并发采用的共享内存模型，描述了一组规范，通过这组规范定义了程序中各个变量的访问方式
+
+
+
+<font color="red">**原理**</font>：JVM运行程序的实体是线程，每个线程创建时，JVM都会为其创建一个工作内存（Java栈），Java内存模型中规定所有变量都成存储在主内存中，主内存是共享内存区域，所有线程都可以访问，<font color="blue">但是线程对变量的操作必须在工作内存中进行，首先要将变量从主内存拷贝到线程自己的工作内存空间中，然后变量进行操作，操作完成后将变量写回主内存</font>，不能直接操作主内存中变量，各个线程的工作内存中存储着内存中的变量拷贝副本，因此**不同线程间无法访问对方的工作内存**，线程间通信必须通过主内存来完成。
+
+
+
+JMM保证以下特性：
+
++ 可见性：线程操作主内存的值，其它线程也要更改这个值
++ 原子性：不可分割，更改数据都成功或者都失败
++ 有序性
+
+
+
+CPU　> 内存 > 硬盘
+
+为何买电脑看三级缓存：CPU算的比较快，运算完存储在缓存，内存从缓存读取数据，缓存越大，电脑CPU利用效率越高
+
+
+
+volatile：保证可见性，不保证原子性，禁止指令重排
+
+原理：通知机制，线程之间的变量是互相不可访问的，volatile修饰的变量，在被线程修改后，会通知其它线程将自己的工作内存中的变量值也进行修改
+
+
+
+代码演示：
+
+```java
+public class TestVolatile {
+    volatile int num = 10;
+    public void changeNum (int val) {
+        this.num = val;
+    }
+    
+    public static void main (String[] args) {
+        TestVolatile tv = new TestValotile();
+        new Thread(() -> {
+            System.out.prinln("****come in thread AAA****");
+            try{
+                Thread.sleep(3000);
+            }catch(Exception e){
+                
+            }
+            tv.changeNum();
+        },"AAA");
+        while(num == 10){
+            
+        }
+        System.out.println("Main thread num:" + num);
+    }
+}
+```
+
+
+
+### atguigu-JUC、JVM最新
+
+JUC：并发工具类
+
+java.util.concurrent
+
+java.util.locks
+
+java.util.atomic
+
+
+
+（1）进程与线程
+
+进程与操作系统有关系
+
+线程：轻量级的线程，共享这个进程内存中开辟中的资源
+
+
+
+word.exe就是一个进程，电脑突然关机，提醒你是否恢复到上级编辑位置，这个就是一个容灾线程，我们拼写单词错误报红线，就是一个语法检测线程
+
+
+
+（2）并发和并行
+
+什么是并发？
+
+多个线程同时间抢一个资源
+
+什么是并行？
+
+线程之间同一时间，各自运行
+
+
+
+（3）售票demo
+
+```java
+class Ticket implements Runnable {
+    @Override
+    public void run () {
+        
+    }
+}
+public class SaleTicket {
+    
+}
+```
+
+
 

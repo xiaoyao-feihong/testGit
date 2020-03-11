@@ -348,7 +348,7 @@ public class StreamAPI {
         Stream<String> stream1 = list.stream();
         
         //2.通过Arrays中的静态方法stream()方法获取数组流
-        Stream<String> stream2 = Arrays.stream(r);
+        Stream<String> stream2 = Arrays.stream();
         
         //3.通过Stream的静态方法of
         Stream<String> stream3 = Stream.of("aa","bb","cc");
