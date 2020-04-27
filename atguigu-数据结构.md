@@ -265,7 +265,7 @@ public class CircleQueue {
 
 （5）有效数据个数`(rear + maxSize - front) % maxSize`
 
-（6）**遍历的判断**：`i < front + (rear + maxSize - front) % maxSize`较难理解，记下来
+（6）**遍历的判断**：`i < front + (rear + maxSize - front) % maxSize`较难理解
 
 <font color="blue">注意：要空一个空间。</font>
 

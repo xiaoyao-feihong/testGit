@@ -366,3 +366,34 @@ public class StreamAPI {
 }
 ```
 
+
+
+lambda表达式也是对象，对象类型就是函数式接口（functional interface）
+
+```java
+public interface TestFnInterface {
+    public static void main (String[] args){
+        MyInterface i = message -> System.out.println(message);
+    	//MyInterface i = System.out::println;
+    	i.print();
+        
+        //使用函数式接口
+        String result = subStr("i love java",str -> str.toUpperCase());
+    }
+    
+    public String upper (String str,Function<String,String> f){
+        return f.apply(str);
+    }
+}
+
+//定义函数式接口，进行编译级别的错误检查
+@FunctionalInterface
+interface MyInterface {
+    void print(String message);
+}
+```
+
+
+
+
+

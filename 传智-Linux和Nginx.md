@@ -1,4 +1,4 @@
-### Linux和Nginx
+### Linux
 
 <hr>
 

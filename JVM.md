@@ -322,12 +322,12 @@ public boolean add(E e) {
 
 
 
-HashSet底层就是HashMap，value时常量preset，一个对象
+HashSet底层就是HashMap，value是常量preset，一个对象
 
 解决并发读写异常：
 
 + `ArrayList` -> `CopyOnWriteArrayList`
-+ `HashSe` -> `CopyOnWriteHArraySet`
++ `HashSet` -> `CopyOnWriteHArraySet`
 + `HashMap` -> `ConcurrentHashMap`
 
 
@@ -676,8 +676,6 @@ static synchronized：类锁，所有使用类的方法必须等第一个抢到�
 无锁的普通方法，不受锁的影响
 
 对象锁和类锁也是没有竞争条件的
-
-
 
 
 
@@ -1448,19 +1446,60 @@ word.exe就是一个进程，电脑突然关机，提醒你是否恢复到上级
 
 
 
-（3）售票demo
+### 详解synchronized
+
+synchronized实现原理
+
+
 
 ```java
-class Ticket implements Runnable {
-    @Override
+public class Demo implements Runnable {
+    int count = 0;
+    MyLock lock = new MyLock();
+    
+    public static void main(String[] args){
+        System.out.println(ClassLayout.parseInstance(lock));
+    }
+    
     public void run () {
-        
+        synchronized (lock) {
+            TimeUnit.SECONDS.sleep(3);
+            count++;
+        }
     }
 }
-public class SaleTicket {
-    
+
+class MyLock {
+    int state;
 }
 ```
 
 
 
+对象的布局：
+
+对象的组成部分
+
++ 对象头
+  + markword：前8byte描述
+  + klass pointer
++ 实例数据
++ 对齐填充（将多余的空间处理为计算机好处理的8的整数倍）
+
+
+
+markword(8byte)
+
+unused：25bit hash:31bit unused：1bit age: 4bit(每回收一次年龄加1)
+
+biased_lock：1bit  lock：2bit
+
+
+
+对象的状态有几种？普通，偏向锁，轻量级锁，重量级锁，GC标记
+
+![1585315408525](../图片/1585315408525.png)
+
+jdk的虚拟机工具：openjdk.java.net/groups/hotspot/docs/HotSpotGlossary
+
+maven repository：加载org.openjdk.jlo的jar包 (java layout)
